@@ -22,7 +22,7 @@
     <string name="built_in_ant_detected">Radio ANT integrada:</string>
     <string name="on_airplane_mode_list">Desactivado en modo avión:</string>
     <string name="on_toggeable_radio_list">Activable en modo avión:</string>
-    <string name="ant_support_version_info">Información de versións ANT</string>
+    <string name="ant_support_version_info">Información de versións</string>
     <string name="menu_test">Comprobar soporte ANT</string>
-    <string name="ant_capable">Soporta ANT</string>
+    <string name="ant_capable">Soporte ANT</string>
 </resources>
