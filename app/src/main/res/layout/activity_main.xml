@@ -1,264 +1,243 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".MainActivity">
-
-    <ScrollView
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-        <TableLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-            <TableRow>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="ANT Capable"
-                    android:textAppearance="?android:attr/textAppearanceLarge" />
-                <ImageView
-                    android:paddingLeft="15dip"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@android:drawable/ic_delete"
-                    android:layout_gravity="left"
-                    android:id="@+id/ant_capable_iv"/>
-            </TableRow>
-            <TableRow>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Built-in ANT detected:"
-                    android:textAppearance="?android:attr/textAppearanceMedium" />
-                <TextView
-                    android:paddingLeft="15dip"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="No"
-                    android:textColor="#cc0000"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:id="@+id/builtin_ant_detected_tv"/>
-            </TableRow>
-            <TableRow>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="USB On-The-Go support:"
-                    android:textAppearance="?android:attr/textAppearanceMedium" />
-                <TextView
-                    android:paddingLeft="15dip"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="No"
-                    android:textColor="#cc0000"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:id="@+id/usb_host_support_tv" />
-            </TableRow>
-            <TableRow android:gravity="center_vertical">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="ANT USB Service installed:"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:id="@+id/addon_adapter_support_label_tv" />
-                <TextView
-                    android:paddingLeft="15dip"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="No"
-                    android:textColor="#cc0000"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:id="@+id/addon_adapter_support_tv" />
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@mipmap/ic_action_download"
-                    android:id="@+id/addon_adapter_support_iv"/>
-            </TableRow>
-            <TableRow>
-                <TextView
-                    android:layout_span="2"
-                    android:paddingTop="30dip"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Airplane Mode"
-                    android:textAppearance="?android:attr/textAppearanceLarge" />
-            </TableRow>
-            <TableRow>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="On airplane mode list:"
-                    android:textAppearance="?android:attr/textAppearanceMedium" />
-                <TextView
-                    android:paddingLeft="15dip"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="No"
-                    android:textColor="#cc0000"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:id="@+id/on_airplane_mode_list_tv" />
-            </TableRow>
-            <TableRow>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="On toggeable radio list:"
-                    android:textAppearance="?android:attr/textAppearanceMedium" />
-                <TextView
-                    android:paddingLeft="15dip"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="No"
-                    android:textColor="#cc0000"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:id="@+id/on_toggeable_radio_list_tv" />
-            </TableRow>
-        </TableLayout>
-        <TableLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-            <TableRow>
-                <TextView
-                    android:layout_span="2"
-                    android:paddingTop="30dip"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="ANT support version info"
-                    android:textAppearance="?android:attr/textAppearanceLarge" />
-            </TableRow>
-            <TableRow android:gravity="center_vertical">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Built-in firmware:"
-                    android:textAppearance="?android:attr/textAppearanceMedium" />
-                <TextView
-                    android:paddingLeft="15dip"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="No"
-                    android:textColor="#cc0000"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:id="@+id/builtin_firmware_tv" />
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="10dip"
-                    android:src="@mipmap/ic_action_download"
-                    android:id="@+id/builtin_firmware_iv"/>
-            </TableRow>
-            <!--<TableRow>-->
-                <!--<TextView-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:text="ANT HAL:"-->
-                    <!--android:textAppearance="?android:attr/textAppearanceMedium" />-->
-                <!--<TextView-->
-                    <!--android:paddingLeft="15dip"-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:text="Not found"-->
-                    <!--android:textColor="#cc0000"-->
-                    <!--android:textAppearance="?android:attr/textAppearanceMedium"-->
-                    <!--android:id="@+id/ant_hal_tv"/>-->
-            <!--</TableRow>-->
-            <TableRow>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="ANT HAL service:"
-                    android:textAppearance="?android:attr/textAppearanceMedium" />
-                <TextView
-                    android:paddingLeft="15dip"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Not found"
-                    android:textColor="#cc0000"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:id="@+id/ant_hal_service_tv" />
-            </TableRow>
-            <TableRow android:baselineAligned="false"
-                android:gravity="center_vertical">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="ANT Radio Service:"
-                    android:textAppearance="?android:attr/textAppearanceMedium" />
-                <LinearLayout android:gravity="center_vertical">
-                <TextView
-                    android:paddingLeft="15dip"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Not found"
-                    android:textColor="#cc0000"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:id="@+id/ant_radio_service_tv" />
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="10dip"
-                    android:src="@mipmap/ic_action_download"
-                    android:id="@+id/ant_radio_service_iv"/>
-                </LinearLayout>
-            </TableRow>
-            <TableRow android:gravity="center_vertical">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="ANT USB Service:"
-                    android:textAppearance="?android:attr/textAppearanceMedium" />
-                <LinearLayout android:gravity="center_vertical">
-                <TextView
-                    android:paddingLeft="15dip"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Not found"
-                    android:textColor="#cc0000"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:id="@+id/ant_usb_service_tv"/>
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="10dip"
-                    android:src="@mipmap/ic_action_download"
-                    android:id="@+id/ant_usb_service_iv"/>
-                </LinearLayout>
-            </TableRow>
-            <TableRow android:gravity="center_vertical">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="ANT+ Plugins:"
-                    android:textAppearance="?android:attr/textAppearanceMedium" />
-                <LinearLayout android:gravity="center_vertical">
-                <TextView
-                    android:paddingLeft="15dip"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Not found"
-                    android:textColor="#cc0000"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:id="@+id/ant_plugins_tv" />
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="10dip"
-                    android:src="@mipmap/ic_action_download"
-                    android:id="@+id/ant_plugins_iv"/>
-                </LinearLayout>
-            </TableRow>
-        </TableLayout>
-        </LinearLayout>
-    </ScrollView>
-
-</RelativeLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+    <TableLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <TableRow>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/ant_capable"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
+            <ImageView
+                android:paddingLeft="15dip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@android:drawable/ic_delete"
+                android:layout_gravity="left"
+                android:id="@+id/ant_capable_iv"/>
+        </TableRow>
+        <TableRow>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/built_in_ant_detected"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+            <TextView
+                android:paddingLeft="15dip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/no"
+                android:textColor="#cc0000"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:id="@+id/builtin_ant_detected_tv"/>
+        </TableRow>
+        <TableRow>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/usb_on_the_go_support"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+            <TextView
+                android:paddingLeft="15dip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/no"
+                android:textColor="#cc0000"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:id="@+id/usb_host_support_tv" />
+        </TableRow>
+        <TableRow android:gravity="center_vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/ant_usb_service_installed"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:id="@+id/addon_adapter_support_label_tv" />
+            <TextView
+                android:paddingLeft="15dip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/no"
+                android:textColor="#cc0000"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:id="@+id/addon_adapter_support_tv" />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/ic_action_download"
+                android:id="@+id/addon_adapter_support_iv"/>
+        </TableRow>
+        <TableRow>
+            <TextView
+                android:layout_span="2"
+                android:paddingTop="30dip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/airplane_mode"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
+        </TableRow>
+        <TableRow>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/on_airplane_mode_list"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+            <TextView
+                android:paddingLeft="15dip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/no"
+                android:textColor="#cc0000"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:id="@+id/on_airplane_mode_list_tv" />
+        </TableRow>
+        <TableRow>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/on_toggeable_radio_list"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+            <TextView
+                android:paddingLeft="15dip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/no"
+                android:textColor="#cc0000"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:id="@+id/on_toggeable_radio_list_tv" />
+        </TableRow>
+    </TableLayout>
+    <TableLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <TableRow>
+            <TextView
+                android:layout_span="2"
+                android:paddingTop="30dip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/ant_support_version_info"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
+        </TableRow>
+        <TableRow android:gravity="center_vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/built_in_firmware"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+            <TextView
+                android:paddingLeft="15dip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/no"
+                android:textColor="#cc0000"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:id="@+id/builtin_firmware_tv" />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="10dip"
+                android:src="@mipmap/ic_action_download"
+                android:id="@+id/builtin_firmware_iv"/>
+        </TableRow>
+        <TableRow>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/ant_hal_service"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+            <TextView
+                android:paddingLeft="15dip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/not_found"
+                android:textColor="#cc0000"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:id="@+id/ant_hal_service_tv" />
+        </TableRow>
+        <TableRow android:baselineAligned="false"
+            android:gravity="center_vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/ant_radio_service"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+            <LinearLayout android:gravity="center_vertical">
+            <TextView
+                android:paddingLeft="15dip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/not_found"
+                android:textColor="#cc0000"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:id="@+id/ant_radio_service_tv" />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="10dip"
+                android:src="@mipmap/ic_action_download"
+                android:id="@+id/ant_radio_service_iv"/>
+            </LinearLayout>
+        </TableRow>
+        <TableRow android:gravity="center_vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/ant_usb_service"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+            <LinearLayout android:gravity="center_vertical">
+            <TextView
+                android:paddingLeft="15dip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/not_found"
+                android:textColor="#cc0000"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:id="@+id/ant_usb_service_tv"/>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="10dip"
+                android:src="@mipmap/ic_action_download"
+                android:id="@+id/ant_usb_service_iv"/>
+            </LinearLayout>
+        </TableRow>
+        <TableRow android:gravity="center_vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/ant_plugins"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+            <LinearLayout android:gravity="center_vertical">
+            <TextView
+                android:paddingLeft="15dip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/not_found"
+                android:textColor="#cc0000"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:id="@+id/ant_plugins_tv" />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="10dip"
+                android:src="@mipmap/ic_action_download"
+                android:id="@+id/ant_plugins_iv"/>
+            </LinearLayout>
+        </TableRow>
+    </TableLayout>
+    </LinearLayout>
+</ScrollView>
