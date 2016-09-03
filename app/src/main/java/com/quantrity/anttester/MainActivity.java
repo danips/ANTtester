@@ -186,7 +186,7 @@ public class MainActivity extends Activity {
         public void onServiceConnected(ComponentName name, IBinder service)
         {
             //Log.v(TAG, "onServiceConnected");
-            AntService mAntRadioService = new AntService(service);
+            /*AntService mAntRadioService = new AntService(service);
             try {
                 AntAdapterProvider antap = mAntRadioService.getAdapterProvider();
                 Log.v(TAG, "AdaptersInfo SIZE="+antap.getAdaptersInfo(getApplicationContext()).size() + " ---" + mAntRadioService.getChannelProvider().getNumChannelsAvailable());
@@ -195,7 +195,7 @@ public class MainActivity extends Activity {
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-            }
+            }*/
         }
 
         @Override
