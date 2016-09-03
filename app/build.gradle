@@ -8,8 +8,8 @@ android {
         applicationId "com.quantrity.anttester"
         minSdkVersion 7
         targetSdkVersion 24
-        versionCode 1
-        versionName "1.0"
+        versionCode 3
+        versionName "1.3"
     }
     buildTypes {
         release {
