@@ -185,7 +185,7 @@ public class MainActivity extends Activity {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service)
         {
-            Log.v(TAG, "onServiceConnected");
+            //Log.v(TAG, "onServiceConnected");
             AntService mAntRadioService = new AntService(service);
             try {
                 AntAdapterProvider antap = mAntRadioService.getAdapterProvider();
@@ -255,7 +255,7 @@ public class MainActivity extends Activity {
 
     private void testANTSupport() {
         boolean has_builtin_library = AntSupportChecker.hasAntFeature(this);
-        setTextView(builtin_ant_detected_tv, "Yes", "No", has_builtin_library);
+        setTextView(builtin_ant_detected_tv, R.string.yes, R.string.no, has_builtin_library);
 
 
         boolean usb_host_support = false;
@@ -286,11 +286,11 @@ public class MainActivity extends Activity {
 
 
 
-        setTextView(usb_host_support_tv, "Yes", "No", usb_host_support);
+        setTextView(usb_host_support_tv, R.string.yes, R.string.no, usb_host_support);
 
         boolean has_ant_addon_support = AntSupportChecker.hasAntAddOn(this);
         if (usb_host_support) {
-            setTextView(addon_adapter_support_tv, "Yes", "No", has_ant_addon_support);
+            setTextView(addon_adapter_support_tv, R.string.yes, R.string.no, has_ant_addon_support);
             if (has_ant_addon_support) {
                 addon_adapter_support_iv.setImageResource(R.mipmap.ic_action_about);
                 addon_adapter_support_iv.setTag(YES_TAG);
@@ -358,7 +358,7 @@ public class MainActivity extends Activity {
             }*/
 
         } catch (Exception e) {
-            ant_radio_service_tv.setText("N/A");
+            ant_radio_service_tv.setText(R.string.not_available);
             ant_radio_service_tv.setTextColor(RED);
             ant_radio_service_iv.setImageResource(R.mipmap.ic_action_download);
             ant_radio_service_tv.setTag(NO_TAG);
@@ -366,11 +366,11 @@ public class MainActivity extends Activity {
         }
 
         if (has_builtin_library) {
-            builtin_firmware_tv.setText("Requires ARS");
+            builtin_firmware_tv.setText(R.string.requires_ars);
             builtin_firmware_tv.setTextColor(YELLOW);
             builtin_firmware_iv.setVisibility(View.VISIBLE);
         } else {
-            builtin_firmware_tv.setText("No");
+            builtin_firmware_tv.setText(R.string.no);
             builtin_firmware_tv.setTextColor(RED);
             builtin_firmware_iv.setVisibility(View.GONE);
         }
@@ -391,29 +391,10 @@ public class MainActivity extends Activity {
                 ant_hal_service_tv.setText(version);
                 ant_hal_service_tv.setTextColor(GREEN);
             } catch (Exception e2) {
-                ant_hal_service_tv.setText("Not found");
+                ant_hal_service_tv.setText(R.string.not_found);
                 ant_hal_service_tv.setTextColor(RED);
             }
         }
-
-//        try {
-//            NativeLib nl = new NativeLib();
-//            if (nl != null) {
-//                String ver = nl.HalVersion();
-//                if (ver.equals("Failure to load libantradio.so")) throw new Exception();
-//                else {
-//                    ver = ver.replace("libantradio.so: ", "");
-//                    ver = ver.replace("TTY. ", "");
-//                    ver = ver.replace("Version ", "");
-//                    ant_hal_tv.setText(ver);
-//                    ant_hal_tv.setTextColor(GREEN);
-//                }
-//            }
-//            else throw new Exception();
-//        } catch (Exception exception) {
-//            ant_hal_tv.setText("Not found");
-//            ant_hal_tv.setTextColor(RED);
-//        }
 
 
         found = false;
@@ -421,20 +402,20 @@ public class MainActivity extends Activity {
             String list = android.provider.Settings.System.getString(getContentResolver(), "airplane_mode_radios");
             found = list.contains("ant");
         } catch (Exception ignored) { }
-        setTextView(on_airplane_mode_list_tv, "Yes", "No", found);
+        setTextView(on_airplane_mode_list_tv, R.string.yes, R.string.no, found);
 
         found = false;
         try {
             String list = android.provider.Settings.System.getString(getContentResolver(), "airplane_mode_toggleable_radios");
             found = list.contains("ant");
         } catch (Exception ignored) { }
-        setTextView(on_toggeable_radio_list_tv, "Yes", "No", found);
+        setTextView(on_toggeable_radio_list_tv, R.string.yes, R.string.no, found);
 
 
 
     }
 
-    public void setTextView(TextView tv, String text_true, String text_false, boolean bool) {
+    public void setTextView(TextView tv, int text_true, int text_false, boolean bool) {
         tv.setText((bool) ? text_true : text_false);
         tv.setTextColor((bool) ? GREEN : RED);
     }
@@ -447,7 +428,7 @@ public class MainActivity extends Activity {
             iv.setImageResource(R.mipmap.ic_action_about);
             iv.setTag(YES_TAG);
         } catch (Exception e) {
-            tv.setText("N/A");
+            tv.setText(R.string.not_available);
             tv.setTextColor(RED);
             iv.setImageResource(R.mipmap.ic_action_download);
             iv.setTag(NO_TAG);

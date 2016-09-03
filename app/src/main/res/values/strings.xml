@@ -4,11 +4,28 @@
     <string name="menu_about">About</string>
     <string name="menu_test">Test ANT Support</string>
 
-
     <string name="about_dialog_contact">Contact</string>
-    <string name="about_dialog_donate">Donate</string>
     <string name="about_dialog_rate">Rate</string>
     <string name="about_dialog_translate">Help translate</string>
-    <string name="about_dialog_text">You can show your support by rating the app in Google Play.</string>
+    <string name="about_dialog_text">You can show your support by rating the app in Google Play or help translating it into your own language.</string>
+
+    <string name="ant_capable">ANT Capable</string>
+    <string name="built_in_ant_detected">Built-in ANT detected:</string>
+    <string name="no">No</string>
+    <string name="yes">Yes</string>
+    <string name="usb_on_the_go_support">USB On-The-Go support:</string>
+    <string name="ant_usb_service_installed">ANT USB Service installed:</string>
+    <string name="not_found">Not found</string>
+    <string name="airplane_mode">Airplane Mode</string>
+    <string name="on_airplane_mode_list">On airplane mode list:</string>
+    <string name="on_toggeable_radio_list">On toggeable radio list:</string>
+    <string name="ant_support_version_info">ANT support version info</string>
+    <string name="built_in_firmware">Built-in firmware:</string>
+    <string name="ant_hal_service">ANT HAL service:</string>
+    <string name="ant_radio_service">ANT Radio Service:</string>
+    <string name="ant_usb_service">ANT USB Service:</string>
+    <string name="ant_plugins">ANT+ Plugins:</string>
+    <string name="not_available">N/A</string>
+    <string name="requires_ars">Requires ARS</string>
 
 </resources>
