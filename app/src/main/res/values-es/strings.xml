@@ -15,14 +15,12 @@
     <string name="ant_hal_service">Servicio ANT HAL:</string>
     <string name="ant_usb_service">Servicio ANT USB:</string>
     <string name="ant_capable">Soporte ANT</string>
-    <string name="airplane_mode">Modo avión</string>
     <string name="built_in_firmware">Firmware integrado:</string>
     <string name="not_available">N/D</string>
     <string name="not_found">No encontrado</string>
     <string name="menu_test">Comprobar soporte ANT</string>
     <string name="ant_usb_service_installed">Servicio ANT USB instalado:</string>
     <string name="built_in_ant_detected">Radio ANT integrada:</string>
-    <string name="on_airplane_mode_list">Desactivado en modo avión:</string>
-    <string name="on_toggeable_radio_list">Activable en modo avión:</string>
     <string name="ant_support_version_info">Información de versiones</string>
+    <string name="usb_devices">Dispositivos USB</string>
 </resources>

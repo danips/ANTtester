@@ -16,9 +16,6 @@
     <string name="usb_on_the_go_support">USB On-The-Go support:</string>
     <string name="ant_usb_service_installed">ANT USB Service installed:</string>
     <string name="not_found">Not found</string>
-    <string name="airplane_mode">Airplane Mode</string>
-    <string name="on_airplane_mode_list">On airplane mode list:</string>
-    <string name="on_toggeable_radio_list">On toggeable radio list:</string>
     <string name="ant_support_version_info">ANT support version info</string>
     <string name="built_in_firmware">Built-in firmware:</string>
     <string name="ant_hal_service">ANT HAL service:</string>
@@ -27,5 +24,7 @@
     <string name="ant_plugins">ANT+ Plugins:</string>
     <string name="not_available">N/A</string>
     <string name="requires_ars">Requires ARS</string>
+
+    <string name="usb_devices">USB Devices</string>
 
 </resources>
