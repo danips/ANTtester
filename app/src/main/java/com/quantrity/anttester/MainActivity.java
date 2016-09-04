@@ -11,6 +11,8 @@ import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.hardware.usb.UsbDevice;
+import android.hardware.usb.UsbManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -28,12 +30,12 @@ import android.widget.TextView;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.util.HashMap;
+import java.util.Iterator;
 
 import com.dsi.ant.AntService;
 import com.dsi.ant.AntSupportChecker;
 import com.dsi.ant.IAnt_6;
-import com.dsi.ant.channel.AdapterInfo;
-import com.dsi.ant.channel.AntAdapterProvider;
 
 
 public class MainActivity extends Activity {
@@ -49,8 +51,6 @@ public class MainActivity extends Activity {
     TextView usb_host_support_tv;
     TextView addon_adapter_support_label_tv;
     TextView addon_adapter_support_tv;
-    TextView on_airplane_mode_list_tv;
-    TextView on_toggeable_radio_list_tv;
     TextView builtin_firmware_tv;
     TextView ant_hal_service_tv;
     TextView ant_radio_service_tv;
@@ -61,11 +61,8 @@ public class MainActivity extends Activity {
     ImageView ant_radio_service_iv;
     ImageView ant_usb_service_iv;
     ImageView ant_plugins_iv;
-
-
-    /** Is the ANT Radio Proxy Service connected. */
-    //private static boolean sServiceConnected = false;
-    //private static String firmware_version = null;
+    TextView usb_devices_tv1;
+    TextView usb_devices_tv2;
 
     /** Class for interacting with the ANT interface. */
     private ServiceConnection sIAntConnection;
@@ -76,69 +73,6 @@ public class MainActivity extends Activity {
     private myOnClickListener ant_usb_service_ocl = new myOnClickListener("com.dsi.ant.usbservice");
     private myOnClickListener ant_radio_service_ocl = new myOnClickListener("com.dsi.ant.service.socket");
     private myOnClickListener ant_plugins_service_ocl = new myOnClickListener("com.dsi.ant.plugins.antplus");
-
-//    private void checkInfo() {
-//        UsbManager manager = (UsbManager) getSystemService(Context.USB_SERVICE);
-//        HashMap<String, UsbDevice> deviceList = manager.getDeviceList();
-//        Iterator<UsbDevice> deviceIterator = deviceList.values().iterator();
-//
-//        String i = "";
-//        while (deviceIterator.hasNext()) {
-//            UsbDevice device = deviceIterator.next();
-//            i += "\n" +
-//                    "DeviceID: " + device.getDeviceId() + "\n" +
-//                    "DeviceName: " + device.getDeviceName() + "\n" +
-//                    "DeviceClass: " + device.getDeviceClass() + " - "
-//                    + translateDeviceClass(device.getDeviceClass()) + "\n" +
-//                    "DeviceSubClass: " + device.getDeviceSubclass() + "\n" +
-//                    "VendorID: " + device.getVendorId() + "\n" +
-//                    "ProductID: " + device.getProductId() + "\n";
-//        }
-//
-//        Log.v(TAG, "iiiiiiiiiii "+i);
-//    }
-
-//    private String translateDeviceClass(int deviceClass) {
-//        switch (deviceClass) {
-//            case UsbConstants.USB_CLASS_APP_SPEC:
-//                return "Application specific USB class";
-//            case UsbConstants.USB_CLASS_AUDIO:
-//                return "USB class for audio devices";
-//            case UsbConstants.USB_CLASS_CDC_DATA:
-//                return "USB class for CDC devices (communications device class)";
-//            case UsbConstants.USB_CLASS_COMM:
-//                return "USB class for communication devices";
-//            case UsbConstants.USB_CLASS_CONTENT_SEC:
-//                return "USB class for content security devices";
-//            case UsbConstants.USB_CLASS_CSCID:
-//                return "USB class for content smart card devices";
-//            case UsbConstants.USB_CLASS_HID:
-//                return "USB class for human interface devices (for example, mice and keyboards)";
-//            case UsbConstants.USB_CLASS_HUB:
-//                return "USB class for USB hubs";
-//            case UsbConstants.USB_CLASS_MASS_STORAGE:
-//                return "USB class for mass storage devices";
-//            case UsbConstants.USB_CLASS_MISC:
-//                return "USB class for wireless miscellaneous devices";
-//            case UsbConstants.USB_CLASS_PER_INTERFACE:
-//                return "USB class indicating that the class is determined on a per-interface basis";
-//            case UsbConstants.USB_CLASS_PHYSICA:
-//                return "USB class for physical devices";
-//            case UsbConstants.USB_CLASS_PRINTER:
-//                return "USB class for printers";
-//            case UsbConstants.USB_CLASS_STILL_IMAGE:
-//                return "USB class for still image devices (digital cameras)";
-//            case UsbConstants.USB_CLASS_VENDOR_SPEC:
-//                return "Vendor specific USB class";
-//            case UsbConstants.USB_CLASS_VIDEO:
-//                return "USB class for video devices";
-//            case UsbConstants.USB_CLASS_WIRELESS_CONTROLLER:
-//                return "USB class for wireless controller devices";
-//            default:
-//                return "Unknown USB class!";
-//
-//        }
-//    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -151,10 +85,7 @@ public class MainActivity extends Activity {
         usb_host_support_tv = (TextView) findViewById(R.id.usb_host_support_tv);
         addon_adapter_support_label_tv = (TextView) findViewById(R.id.addon_adapter_support_label_tv);
         addon_adapter_support_tv = (TextView) findViewById(R.id.addon_adapter_support_tv);
-        on_airplane_mode_list_tv = (TextView) findViewById(R.id.on_airplane_mode_list_tv);
-        on_toggeable_radio_list_tv = (TextView) findViewById(R.id.on_toggeable_radio_list_tv);
         builtin_firmware_tv = (TextView) findViewById(R.id.builtin_firmware_tv);
-//        ant_hal_tv = (TextView) findViewById(R.id.ant_hal_tv);
         ant_hal_service_tv = (TextView) findViewById(R.id.ant_hal_service_tv);
         ant_radio_service_tv = (TextView) findViewById(R.id.ant_radio_service_tv);
         ant_usb_service_tv = (TextView) findViewById(R.id.ant_usb_service_tv);
@@ -176,7 +107,9 @@ public class MainActivity extends Activity {
         ant_plugins_iv.setTag(NO_TAG);
         ant_plugins_iv.setOnClickListener(ant_plugins_service_ocl);
 
-        //testANTSupport();
+        usb_devices_tv1 = (TextView) findViewById(R.id.usb_devices_tv1);
+        usb_devices_tv2 = (TextView) findViewById(R.id.usb_devices_tv2);
+
         doBindAntRadioService();
     }
 
@@ -185,23 +118,13 @@ public class MainActivity extends Activity {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service)
         {
-            //Log.v(TAG, "onServiceConnected");
-            /*AntService mAntRadioService = new AntService(service);
-            try {
-                AntAdapterProvider antap = mAntRadioService.getAdapterProvider();
-                Log.v(TAG, "AdaptersInfo SIZE="+antap.getAdaptersInfo(getApplicationContext()).size() + " ---" + mAntRadioService.getChannelProvider().getNumChannelsAvailable());
-                for (AdapterInfo ai : antap.getAdaptersInfo(getApplicationContext())) {
-                    Log.v(TAG, "AdapterInfo " + ai.getVersionString() + " .. " + ai.getAdapterId().toString() + " .. " + ai.isBuiltIn() + " .. " + ai.getCapabilities().toString());
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }*/
+            Log.v(TAG, "mAntRadioServiceConnection onServiceConnected");
         }
 
         @Override
         public void onServiceDisconnected(ComponentName name)
         {
-            Log.v(TAG, "Binder Died");
+            Log.v(TAG, "mAntRadioServiceConnection onServiceConnected");
         }
 
     };
@@ -263,8 +186,7 @@ public class MainActivity extends Activity {
 
         if (Build.VERSION.SDK_INT >= 12)
         {
-            usb_host_support = this.getPackageManager().hasSystemFeature(PackageManager.FEATURE_USB_ACCESSORY)
-                    | this.getPackageManager().hasSystemFeature(PackageManager.FEATURE_USB_HOST);
+            usb_host_support = this.getPackageManager().hasSystemFeature(PackageManager.FEATURE_USB_HOST);
         }
         else
         {
@@ -351,11 +273,6 @@ public class MainActivity extends Activity {
                 bindService(new Intent("com.dsi.ant.IAnt_6"), sIAntConnection, Context.BIND_AUTO_CREATE);
                 //Log.i(TAG, "initService(): Bound with ANT service: " + ret);
             //}
-            /* else {
-                builtin_firmware_tv.setText(firmware_version);
-                builtin_firmware_tv.setTextColor(GREEN);
-                firmware_version_set = true;
-            }*/
 
         } catch (Exception e) {
             ant_radio_service_tv.setText(R.string.not_available);
@@ -380,7 +297,6 @@ public class MainActivity extends Activity {
         getPackageVersion(ant_plugins_tv, "com.dsi.ant.plugins.antplus", ant_plugins_iv);
 
         String version;
-        boolean found;
         try {
             version = getPackageManager().getPackageInfo("com.dsi.ant.server", PackageManager.GET_META_DATA).versionName;
             ant_hal_service_tv.setText(version);
@@ -397,21 +313,39 @@ public class MainActivity extends Activity {
         }
 
 
-        found = false;
-        try {
-            String list = android.provider.Settings.System.getString(getContentResolver(), "airplane_mode_radios");
-            found = list.contains("ant");
-        } catch (Exception ignored) { }
-        setTextView(on_airplane_mode_list_tv, R.string.yes, R.string.no, found);
+        Boolean usb_devices = false;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR1)
+        {
+            UsbManager manager = (UsbManager) getSystemService(Context.USB_SERVICE);
+            if (manager != null) {
+                HashMap<String, UsbDevice> deviceList = manager.getDeviceList();
+                Iterator<UsbDevice> deviceIterator = deviceList.values().iterator();
 
-        found = false;
-        try {
-            String list = android.provider.Settings.System.getString(getContentResolver(), "airplane_mode_toggleable_radios");
-            found = list.contains("ant");
-        } catch (Exception ignored) { }
-        setTextView(on_toggeable_radio_list_tv, R.string.yes, R.string.no, found);
-
-
+                StringBuilder sb = new StringBuilder();
+                usb_devices = !deviceList.isEmpty();
+                while (deviceIterator.hasNext()) {
+                    UsbDevice device = deviceIterator.next();
+                    sb.append("DeviceID:  " + device.getDeviceId() + "\n" +
+                            "VendorID:  0x" + device.getVendorId() + "\n" +
+                            "ProductID: 0x" + device.getProductId() + "\n");
+                    if (Build.VERSION.SDK_INT >= 21) {
+                        sb.append("\n" +
+                                "ManufacturerName: " + device.getManufacturerName() + "\n" +
+                                "ProductName: " + device.getProductName() + "\n" +
+                                "SerialNumber: " + device.getSerialNumber() + "\n" +
+                                "DeviceName: " + device.getDeviceName() + "\n");
+                    }
+                    if (Build.VERSION.SDK_INT >= 23) {
+                        sb.append("\nVersion: " + device.getVersion() + "\n");
+                    }
+                    sb.append("\n");
+                }
+                if (sb.length() != 0) sb.setLength(sb.length() - 1);
+                usb_devices_tv2.setText(sb);
+            }
+        }
+        usb_devices_tv1.setVisibility(usb_devices ? View.VISIBLE: View.GONE);
+        usb_devices_tv2.setVisibility(usb_devices ? View.VISIBLE: View.GONE);
 
     }
 
