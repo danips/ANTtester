@@ -80,45 +80,6 @@
                 android:src="@mipmap/ic_action_download"
                 android:id="@+id/addon_adapter_support_iv"/>
         </TableRow>
-        <TableRow>
-            <TextView
-                android:layout_span="2"
-                android:paddingTop="30dip"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/airplane_mode"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
-        </TableRow>
-        <TableRow>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/on_airplane_mode_list"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
-            <TextView
-                android:paddingLeft="15dip"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/no"
-                android:textColor="#cc0000"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:id="@+id/on_airplane_mode_list_tv" />
-        </TableRow>
-        <TableRow>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/on_toggeable_radio_list"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
-            <TextView
-                android:paddingLeft="15dip"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/no"
-                android:textColor="#cc0000"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:id="@+id/on_toggeable_radio_list_tv" />
-        </TableRow>
     </TableLayout>
     <TableLayout
         android:layout_width="wrap_content"
@@ -126,7 +87,7 @@
         <TableRow>
             <TextView
                 android:layout_span="2"
-                android:paddingTop="30dip"
+                android:paddingTop="10dip"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/ant_support_version_info"
@@ -239,5 +200,18 @@
             </LinearLayout>
         </TableRow>
     </TableLayout>
+        <TextView
+            android:id="@+id/usb_devices_tv1"
+            android:paddingTop="10dip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/usb_devices"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:typeface="monospace"
+            android:id="@+id/usb_devices_tv2"/>
     </LinearLayout>
 </ScrollView>
