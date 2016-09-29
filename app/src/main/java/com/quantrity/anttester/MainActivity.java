@@ -482,6 +482,10 @@ public class MainActivity extends Activity {
                     startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/details?id=" + getPackageName())));
                 }
                 break;
+            case R.id.translate_button:
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.localize.im/projects/tB"));
+                startActivity(browserIntent);
+                break;
             default: Log.v(TAG, "Unknown " + view.toString());
         }
     }

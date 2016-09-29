@@ -23,4 +23,5 @@
     <string name="menu_test">Comprobar soporte ANT</string>
     <string name="ant_capable">Soporte ANT</string>
     <string name="usb_devices">Dispositivos USB</string>
+    <string name="about_dialog_translators"><b>Tradutor:</b> Daniel Piñeiro</string>
 </resources>
