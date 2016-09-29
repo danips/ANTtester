@@ -26,5 +26,6 @@
     <string name="requires_ars">Requires ARS</string>
 
     <string name="usb_devices">USB Devices</string>
+    <string name="about_dialog_translators"><b>Translator:</b> Daniel Piñeiro</string>
 
 </resources>
