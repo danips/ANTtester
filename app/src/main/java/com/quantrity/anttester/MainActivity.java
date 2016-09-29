@@ -326,8 +326,8 @@ public class MainActivity extends Activity {
                 while (deviceIterator.hasNext()) {
                     UsbDevice device = deviceIterator.next();
                     sb.append("DeviceID:  " + device.getDeviceId() + "\n" +
-                            "VendorID:  0x" + device.getVendorId() + "\n" +
-                            "ProductID: 0x" + device.getProductId() + "\n");
+                            "VendorID:  " + device.getVendorId() + " (0x" + Integer.toHexString(device.getVendorId()) + ")\n" +
+                            "ProductID: " + device.getProductId() + " (0x" + Integer.toHexString(device.getProductId()) + ")\n");
                     if (Build.VERSION.SDK_INT >= 21) {
                         sb.append("\n" +
                                 "ManufacturerName: " + device.getManufacturerName() + "\n" +
