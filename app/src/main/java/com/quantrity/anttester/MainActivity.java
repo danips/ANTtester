@@ -462,7 +462,10 @@ public class MainActivity extends Activity {
                 return true;
             case R.id.action_about:
                 Dialog settingsDialog = new Dialog(this);
-                settingsDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+                if (settingsDialog.getWindow() != null)
+                {
+                    settingsDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+                }
                 View v = getLayoutInflater().inflate(R.layout.about_dialog, null);
                 settingsDialog.setContentView(v);
                 settingsDialog.show();
