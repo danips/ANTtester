@@ -25,6 +25,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
+import android.widget.TableRow;
 import android.widget.TextView;
 
 import java.io.BufferedReader;
@@ -55,6 +56,7 @@ public class MainActivity extends Activity {
     TextView ant_hal_service_tv;
     TextView ant_radio_service_tv;
     TextView ant_usb_service_tv;
+    TableRow ant_usb_service_tr;
     TextView ant_plugins_tv;
     ImageView addon_adapter_support_iv;
     ImageView builtin_firmware_iv;
@@ -89,6 +91,7 @@ public class MainActivity extends Activity {
         ant_hal_service_tv = (TextView) findViewById(R.id.ant_hal_service_tv);
         ant_radio_service_tv = (TextView) findViewById(R.id.ant_radio_service_tv);
         ant_usb_service_tv = (TextView) findViewById(R.id.ant_usb_service_tv);
+        ant_usb_service_tr = (TableRow) findViewById(R.id.ant_usb_service_tr);
         ant_plugins_tv = (TextView) findViewById(R.id.ant_plugins_tv);
 
         addon_adapter_support_iv = (ImageView) findViewById(R.id.addon_adapter_support_iv);
@@ -292,8 +295,15 @@ public class MainActivity extends Activity {
             builtin_firmware_iv.setVisibility(View.GONE);
         }
 
-        //getPackageVersion(ant_radio_service_tv, "com.dsi.ant.service.socket");
-        getPackageVersion(ant_usb_service_tv, "com.dsi.ant.usbservice", ant_usb_service_iv);
+        if (!usb_host_support)
+        {
+            ant_usb_service_tr.setVisibility(View.GONE);
+        }
+        else
+        {
+            ant_usb_service_tr.setVisibility(View.VISIBLE);
+            getPackageVersion(ant_usb_service_tv, "com.dsi.ant.usbservice", ant_usb_service_iv);
+        }
         getPackageVersion(ant_plugins_tv, "com.dsi.ant.plugins.antplus", ant_plugins_iv);
 
         String version;
