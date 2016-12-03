@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="about_dialog_contact">Kontaktieren</string>
+	<string name="about_dialog_rate">Bewerten</string>
+	<string name="about_dialog_text">Sie können uns ihren Support schauen lassen, indem sie die App im Google Play Store bewerten und sie übersetzen in ihre Sprache.</string>
+	<string name="about_dialog_translate">Beim übersetzen helfen:</string>
+	<string name="about_dialog_translators"><b>Übersetzer:</b> sammysammy25</string>
+	<string name="ant_capable">ANT kompatibel:</string>
+	<string name="ant_hal_service">ANT HAL Service:</string>
+	<string name="ant_plugins">ANT+ Plugins:</string>
+	<string name="ant_radio_service">ANT Radio Service:</string>
+	<string name="ant_support_version_info">ANT Support Versionsinfo</string>
+	<string name="ant_usb_service">ANT USB Service:</string>
+	<string name="ant_usb_service_installed">ANT USB Service installiert:</string>
+	<string name="app_name">ANT Tester</string>
+	<string name="built_in_ant_detected">Eingebautes ANT gefunden:</string>
+	<string name="built_in_firmware">Eingebaute Chip-Firmware:</string>
+	<string name="menu_about">Über</string>
+	<string name="menu_test">ANT Support testen</string>
+	<string name="no">Nein</string>
+	<string name="not_available">N/A</string>
+	<string name="not_found">Nicht gefunden</string>
+	<string name="requires_ars">Benötigt ARS</string>
+	<string name="usb_devices">USB-Geräte:</string>
+	<string name="usb_on_the_go_support">USB-OTG Support:</string>
+	<string name="yes">Ja</string>
+</resources>
