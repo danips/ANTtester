@@ -2,7 +2,7 @@
 <resources>
 	<string name="about_dialog_contact">Kontaktieren</string>
 	<string name="about_dialog_rate">Bewerten</string>
-	<string name="about_dialog_text">Sie können uns ihren Support schauen lassen, indem sie die App im Google Play Store bewerten und sie übersetzen in ihre Sprache.</string>
+	<string name="about_dialog_text">Sie können uns unterstützen indem sie die App im Google Play Store bewerten oder in ihre Sprache übersetzen.</string>
 	<string name="about_dialog_translate">Beim übersetzen helfen:</string>
 	<string name="about_dialog_translators"><b>Übersetzer:</b> sammysammy25</string>
 	<string name="ant_capable">ANT kompatibel:</string>

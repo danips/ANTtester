@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="about_dialog_contact">รายชื่อติดต่อ</string>
+	<string name="about_dialog_rate">ให้คะแนนความชอบ</string>
+	<string name="about_dialog_text">คุณสามารถให้การสนับสนุนแอปนี้โดยให้คะแนนความชอบของแอปนี้ทางกูเกิลเพย์ หรือด้วยการช่วยแปลไปเป็นภาษาท้องถิ่นของท่าน</string>
+	<string name="about_dialog_translate">ช่วยแปล</string>
+	<string name="about_dialog_translators"><b>ผู้แปล:</b> Vichchy</string>
+	<string name="ant_capable">สนับสนุนอุปกรณ์ ANT</string>
+	<string name="ant_hal_service">รุ่นของ ANT HAL:</string>
+	<string name="ant_plugins">รุ่นปลั๊กอินของ ANT+:</string>
+	<string name="ant_radio_service">รุ่นของบริการ ANT Radio:</string>
+	<string name="ant_support_version_info">ข้อมูลรุ่นที่สนับสนุนของอุปกรณ์ ANT</string>
+	<string name="ant_usb_service">รุ่นของ ANT ชนิดยูเอสบี:</string>
+	<string name="ant_usb_service_installed">สนับสนุนอุปกรณ์ ANT แบบ USB:</string>
+	<string name="app_name">แอปทดสอบ ANT</string>
+	<string name="built_in_ant_detected">ตรวจพบอุปกรณ์ ANT:</string>
+	<string name="built_in_firmware">รุ่นเฟิรม์แวร์ที่ติดตั้ง:</string>
+	<string name="menu_about">เกี่ยวกับ</string>
+	<string name="menu_test">การทดสอบที่สนับสนุนอุปกรณ์ ANT</string>
+	<string name="no">ไม่</string>
+	<string name="not_available">ไม่พบคำตอบ</string>
+	<string name="not_found">ตรวจสอบไม่พบ</string>
+	<string name="requires_ars">ความต้องการของ ARS</string>
+	<string name="usb_devices">อุปกรณ์ยูเอสบี</string>
+	<string name="usb_on_the_go_support">สนับสนุนอุปกรณ์ USB On-The-Go:</string>
+	<string name="yes">ใช่</string>
+</resources>
