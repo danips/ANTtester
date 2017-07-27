@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="about_dialog_contact">Contacter</string>
+	<string name="about_dialog_rate">Noter</string>
+	<string name="about_dialog_text">Vous devez voir votre support pour noter l\'application sur Google Play ou aider a la traduction dans votre langue.</string>
+	<string name="about_dialog_translate">Aide a la traduction</string>
+	<string name="about_dialog_translators"><b>Traducteur:</b> Kévin Rodrigues</string>
+	<string name="ant_capable">Capacité ANT</string>
+	<string name="ant_hal_service">Service ANT HAL:</string>
+	<string name="ant_plugins">Plug-in ANT+:</string>
+	<string name="ant_radio_service">Service Radio ANT:</string>
+	<string name="ant_support_version_info">Information sur la version du support ANT</string>
+	<string name="ant_usb_service">Service USB ANT:</string>
+	<string name="ant_usb_service_installed">ANT USB Services installée:</string>
+	<string name="app_name">Tester ANT</string>
+	<string name="built_in_ant_detected">ANT intégré détecté:</string>
+	<string name="built_in_firmware">Firmware intégré:</string>
+	<string name="menu_about">A propos</string>
+	<string name="menu_test">Test du support ANT</string>
+	<string name="no">Non</string>
+	<string name="not_available">Non disponible</string>
+	<string name="not_found">Non trouvé</string>
+	<string name="requires_ars">ARS Requis</string>
+	<string name="usb_devices">Périphériques USB</string>
+	<string name="usb_on_the_go_support">Support USB On-The-Go:</string>
+	<string name="yes">Oui</string>
+</resources>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="about_dialog_contact">Contact</string>
+	<string name="about_dialog_rate">Beoordeel</string>
+	<string name="about_dialog_text">U kunt uw steun laten zien door de app in Google Play te beoordelen of het te vertalen in uw eigen taal.</string>
+	<string name="about_dialog_translate">Help vertalen</string>
+	<string name="about_dialog_translators"><b>Vertaler:</b> Cirino Schrijver</string>
+	<string name="ant_capable">ANT Mogelijk</string>
+	<string name="ant_hal_service">ANT HAL Service:</string>
+	<string name="ant_plugins">ANT+ Plugins:</string>
+	<string name="ant_radio_service">ANT Radio Service:</string>
+	<string name="ant_support_version_info">ANT Ondersteuning versie info</string>
+	<string name="ant_usb_service">ANT USB Service:</string>
+	<string name="ant_usb_service_installed">ANT USB Service geïnstalleerd:</string>
+	<string name="app_name">ANT Tester</string>
+	<string name="built_in_ant_detected">Ingebouwde ANT Gedetecteerd:</string>
+	<string name="built_in_firmware">Ingebouwde firmware:</string>
+	<string name="menu_about">Over</string>
+	<string name="menu_test">ANT Ondersteunings test</string>
+	<string name="no">Nee</string>
+	<string name="not_available">N/A</string>
+	<string name="not_found">Niet gevonden</string>
+	<string name="requires_ars">ARS Vereist</string>
+	<string name="usb_devices">USB Apparaten</string>
+	<string name="usb_on_the_go_support">USB Ondersteuning onderweg:</string>
+	<string name="yes">Ja</string>
+</resources>

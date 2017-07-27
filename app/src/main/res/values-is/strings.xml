@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="about_dialog_contact">Hafa samband</string>
+	<string name="about_dialog_rate">Gefa einkunn</string>
+	<string name="about_dialog_text">Þú getur sýnt þinn stuðning með því að gefa forritinu einkunn á Google Play eða hjálpa við að þýða það yfir á þitt tungumál.</string>
+	<string name="about_dialog_translate">Hjálpa við þýðingu</string>
+	<string name="about_dialog_translators"><b>Þýðandi:</b> Bergþór Þrastarson</string>
+	<string name="ant_capable">Styður ANT</string>
+	<string name="ant_hal_service">ANT HAL þjónusta:</string>
+	<string name="ant_plugins">ANT+ viðbætur:</string>
+	<string name="ant_radio_service">ANT útvarpsþjónusta:</string>
+	<string name="ant_support_version_info">Útgáfuupplýsingar ANT stuðnings</string>
+	<string name="ant_usb_service">ANT USB þjónusta:</string>
+	<string name="ant_usb_service_installed">ANT USB þjónusta uppsett:</string>
+	<string name="app_name">ANT prófari</string>
+	<string name="built_in_ant_detected">Innbyggt ANT fannst:</string>
+	<string name="built_in_firmware">Útgáfa vélbúnaðar:</string>
+	<string name="menu_about">Um forritið</string>
+	<string name="menu_test">Prófa stuðning á ANT</string>
+	<string name="no">Nei</string>
+	<string name="not_available">Ekki í boði</string>
+	<string name="not_found">Fannst ekki</string>
+	<string name="requires_ars">Krefst ARS</string>
+	<string name="usb_devices">USB tæki</string>
+	<string name="usb_on_the_go_support">Stuðningur við USB á ferðinni</string>
+	<string name="yes">Já</string>
+</resources>
