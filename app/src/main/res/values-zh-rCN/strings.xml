@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="about_dialog_contact">联系我们</string>
+	<string name="about_dialog_rate">评价</string>
+	<string name="about_dialog_text">您可以通过以您的语言评价此应用或在 Google Play 上评分以表示支持。</string>
+	<string name="about_dialog_translate">帮助翻译此应用程序</string>
+	<string name="about_dialog_translators"><b>翻译:</b> Elepover</string>
+	<string name="ant_capable">ANT 兼容</string>
+	<string name="ant_hal_service">ANT HAL 服务:</string>
+	<string name="ant_plugins">ANT+ 插件:</string>
+	<string name="ant_radio_service">ANT Radio 服务:</string>
+	<string name="ant_support_version_info">ANT 版本支持信息</string>
+	<string name="ant_usb_service">ANT USB 服务:</string>
+	<string name="ant_usb_service_installed">安装的 ANT USB 服务:</string>
+	<string name="app_name">ANT Tester</string>
+	<string name="built_in_ant_detected">检测到的内置 ANT 组件:</string>
+	<string name="built_in_firmware">内建固件:</string>
+	<string name="menu_about">关于</string>
+	<string name="menu_test">测试 ANT 支持</string>
+	<string name="no">否</string>
+	<string name="not_available">未知</string>
+	<string name="not_found">未找到</string>
+	<string name="requires_ars">要求 ARS</string>
+	<string name="usb_devices">USB 设备</string>
+	<string name="usb_on_the_go_support">支持 USB On-The-Go:</string>
+	<string name="yes">是</string>
+</resources>

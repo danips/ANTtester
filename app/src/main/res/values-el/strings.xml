@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="about_dialog_contact">Επαφή</string>
+	<string name="about_dialog_rate">Ψηφίστε</string>
+	<string name="about_dialog_text">Μπορείτε να δείξετε την υποστήριξή σας με το να ψηφήσετε την εφαρμογή στο Google Play είτε με το να βοηθήσετε στο να μεταφραστεί στη δική σας γλώσσα.</string>
+	<string name="about_dialog_translate">Βοηθήστε να μεταφραστεί η εφαρμογή</string>
+	<string name="about_dialog_translators"><b>Μεταφραστής:</b> Μαρία - Ελένη Σταμούλη</string>
+	<string name="ant_capable">Ικανό για ΑΝΤ</string>
+	<string name="ant_hal_service">Υπηρεσία ΑΝΤ HAL:</string>
+	<string name="ant_plugins">Συνδετικά ΑΝΤ+:</string>
+	<string name="ant_radio_service">Ραδιοφωνική Υπηρεσία ΑΝΤ:</string>
+	<string name="ant_support_version_info">Πληροφορίες για την εκδοχή υποστήριξης ΑΝΤ</string>
+	<string name="ant_usb_service">Υπηρεσία ANT USB:</string>
+	<string name="ant_usb_service_installed">Εγκατάσταση Υπηρεσίας ΑΝΤ USB:</string>
+	<string name="app_name">Δοκιμή ΑΝΤ</string>
+	<string name="built_in_ant_detected">Εντοπισμός ενσωματωμένου ΑΝΤ:</string>
+	<string name="built_in_firmware">Ενσωματωμένο firmware:</string>
+	<string name="menu_about">Σχετικά</string>
+	<string name="menu_test">Δοκιμή υποστήριξης ΑΝΤ</string>
+	<string name="no">Όχι</string>
+	<string name="not_available">Ο/Δ</string>
+	<string name="not_found">Δεν βρέθηκε</string>
+	<string name="requires_ars">Απαίτηση ARS</string>
+	<string name="usb_devices">Συσκευές USB</string>
+	<string name="usb_on_the_go_support">Υποστήριξη USB για το δρόμο:</string>
+	<string name="yes">Ναι</string>
+</resources>
