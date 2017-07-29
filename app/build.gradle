@@ -10,16 +10,16 @@ android {
         }
     }
 
-    compileSdkVersion 24
-    buildToolsVersion "24.0.2"
+    compileSdkVersion 25
+    buildToolsVersion "25.0.2"
 
     defaultConfig {
         applicationId "com.quantrity.anttester"
         minSdkVersion 7
         /* targetSdkVersion needs to be 20 or lower, or ANT Service will not work */
         targetSdkVersion 20
-        versionCode 8
-        versionName "1.8"
+        versionCode 9
+        versionName "1.9"
     }
     buildTypes {
         release {
