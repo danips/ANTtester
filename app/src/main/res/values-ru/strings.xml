@@ -24,4 +24,5 @@
 	<string name="usb_devices">USB устройства</string>
 	<string name="usb_on_the_go_support">Поддержка USB On-The-Go:</string>
 	<string name="yes">Да</string>
+    <string name="no_service">Нет сигнала</string>
 </resources>

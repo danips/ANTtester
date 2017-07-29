@@ -27,6 +27,7 @@ import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -58,6 +59,7 @@ public class MainActivity extends Activity {
     TextView ant_usb_service_tv;
     TableRow ant_usb_service_tr;
     TextView ant_plugins_tv;
+    ImageView builtin_ant_detected_iv;
     ImageView addon_adapter_support_iv;
     ImageView builtin_firmware_iv;
     ImageView ant_radio_service_iv;
@@ -94,6 +96,7 @@ public class MainActivity extends Activity {
         ant_usb_service_tr = (TableRow) findViewById(R.id.ant_usb_service_tr);
         ant_plugins_tv = (TextView) findViewById(R.id.ant_plugins_tv);
 
+        builtin_ant_detected_iv = (ImageView) findViewById(R.id.builtin_ant_detected_iv);
         addon_adapter_support_iv = (ImageView) findViewById(R.id.addon_adapter_support_iv);
         builtin_firmware_iv = (ImageView) findViewById(R.id.builtin_firmware_iv);
         builtin_firmware_iv.setTag(NO_TAG);
@@ -231,6 +234,7 @@ public class MainActivity extends Activity {
 
         ant_capable_iv.setImageResource((has_builtin_library || usb_host_support) ? R.mipmap.ic_ok : R.mipmap.ic_nok);
 
+        boolean has_ARS = false;
         try {
             String version = getPackageManager().getPackageInfo("com.dsi.ant.service.socket", PackageManager.GET_META_DATA).versionName;
             ant_radio_service_tv.setText(version);
@@ -238,45 +242,42 @@ public class MainActivity extends Activity {
             ant_radio_service_iv.setImageResource(R.mipmap.ic_action_about);
             ant_radio_service_iv.setTag(YES_TAG);
 
-            //if (firmware_version == null) {
-                sIAntConnection = new ServiceConnection() {
-                    // Flag to know if the ANT App was interrupted
-                    //private boolean antInterrupted = false;
+            sIAntConnection = new ServiceConnection() {
+                // Flag to know if the ANT App was interrupted
+                //private boolean antInterrupted = false;
 
-                    public void onServiceConnected(ComponentName pClassName, IBinder pService) {
-                        //Log.v(TAG, "sIAntConnection onServiceConnected()");
-                        sAntReceiver = IAnt_6.Stub.asInterface(pService);
-                        if (sAntReceiver == null) {
-                            //Log.e(TAG, "Failed to get ANT Receiver");
+                public void onServiceConnected(ComponentName pClassName, IBinder pService) {
+                    //Log.v(TAG, "sIAntConnection onServiceConnected()");
+                    sAntReceiver = IAnt_6.Stub.asInterface(pService);
+                    if (sAntReceiver == null) {
+                        //Log.e(TAG, "Failed to get ANT Receiver");
+                        return;
+                    }
+
+                    try {
+                        if (!sAntReceiver.claimInterface()) {
+                            //Log.e(TAG, "Failed to claim ANT interface");
                             return;
                         }
 
-                        try {
-                            if (!sAntReceiver.claimInterface()) {
-                                //Log.e(TAG, "Failed to claim ANT interface");
-                                return;
-                            }
+                        sAntReceiver.ANTResetSystem();
 
-                            sAntReceiver.ANTResetSystem();
-
-                            //Log.i(TAG, "resetting ANT OK");
-                        } catch (RemoteException e) {
-                            e.printStackTrace();
-                        }
-
-                        registerForAntIntents();
+                        //Log.i(TAG, "resetting ANT OK");
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
                     }
 
-                    public void onServiceDisconnected(ComponentName pClassName) {
-                        //Log.v(TAG, "sIAntConnection onServiceDisconnected()");
-                        sAntReceiver = null;
-                    }
-                };
+                    registerForAntIntents();
+                }
 
-                bindService(new Intent("com.dsi.ant.IAnt_6"), sIAntConnection, Context.BIND_AUTO_CREATE);
-                //Log.i(TAG, "initService(): Bound with ANT service: " + ret);
-            //}
+                public void onServiceDisconnected(ComponentName pClassName) {
+                    //Log.v(TAG, "sIAntConnection onServiceDisconnected()");
+                    sAntReceiver = null;
+                }
+            };
 
+            bindService(new Intent("com.dsi.ant.IAnt_6"), sIAntConnection, Context.BIND_AUTO_CREATE);
+            has_ARS = true;
         } catch (Exception e) {
             ant_radio_service_tv.setText(R.string.not_available);
             ant_radio_service_tv.setTextColor(RED);
@@ -286,13 +287,23 @@ public class MainActivity extends Activity {
         }
 
         if (has_builtin_library) {
-            builtin_firmware_tv.setText(R.string.requires_ars);
-            builtin_firmware_tv.setTextColor(YELLOW);
+            if (has_ARS)
+            {
+                builtin_firmware_tv.setText(R.string.no_service);
+                builtin_firmware_tv.setTextColor(RED);
+                builtin_ant_detected_iv.setVisibility(View.VISIBLE);
+            }
+            else {
+                builtin_firmware_tv.setText(R.string.requires_ars);
+                builtin_firmware_tv.setTextColor(YELLOW);
+                builtin_ant_detected_iv.setVisibility(View.GONE);
+            }
             builtin_firmware_iv.setVisibility(View.VISIBLE);
         } else {
             builtin_firmware_tv.setText(R.string.no);
             builtin_firmware_tv.setTextColor(RED);
             builtin_firmware_iv.setVisibility(View.GONE);
+            builtin_ant_detected_iv.setVisibility(View.GONE);
         }
 
         if (!usb_host_support)
@@ -434,6 +445,7 @@ public class MainActivity extends Activity {
                     builtin_firmware_tv.setText(new String(version));
                     builtin_firmware_tv.setTextColor(GREEN);
                     builtin_firmware_iv.setVisibility(View.GONE);
+                    builtin_ant_detected_iv.setVisibility(View.GONE);
 
                     //finalizar all
                     unregisterReceiver(statusReceiver);
@@ -499,6 +511,9 @@ public class MainActivity extends Activity {
                 Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.localize.im/projects/tB"));
                 startActivity(browserIntent);
                 break;
+            case R.id.builtin_ant_detected_iv:
+                Toast.makeText(getApplicationContext(), R.string.no_service, Toast.LENGTH_SHORT).show();
+                break;
             default: Log.v(TAG, "Unknown " + view.toString());
         }
     }
@@ -545,5 +560,4 @@ public class MainActivity extends Activity {
         }
         context.startActivity(intent);
     }
-
 }
