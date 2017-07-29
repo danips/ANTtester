@@ -29,7 +29,7 @@
                 android:layout_gravity="left"
                 android:id="@+id/ant_capable_iv"/>
         </TableRow>
-        <TableRow>
+        <TableRow android:gravity="center_vertical">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -43,6 +43,12 @@
                 android:textColor="#cc0000"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:id="@+id/builtin_ant_detected_tv"/>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/ic_action_error"
+                android:id="@+id/builtin_ant_detected_iv"
+                android:onClick="aboutClick"/>
         </TableRow>
         <TableRow>
             <TextView

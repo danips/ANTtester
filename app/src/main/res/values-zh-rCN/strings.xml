@@ -24,4 +24,5 @@
 	<string name="usb_devices">USB 设备</string>
 	<string name="usb_on_the_go_support">支持 USB On-The-Go:</string>
 	<string name="yes">是</string>
+    <string name="no_service">没有服务</string>
 </resources>

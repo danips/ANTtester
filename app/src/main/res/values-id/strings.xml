@@ -24,4 +24,5 @@
 	<string name="usb_devices">Perangkat USB</string>
 	<string name="usb_on_the_go_support">Dukungan USB On-The-Go:</string>
 	<string name="yes">Ya</string>
+    <string name="no_service">Tidak ada layanan</string>
 </resources>

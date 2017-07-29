@@ -24,4 +24,5 @@
 	<string name="usb_devices">Aparelhos USB</string>
 	<string name="usb_on_the_go_support">Suporte OTG:</string>
 	<string name="yes">Sim</string>
+    <string name="no_service">Sem serviço</string>
 </resources>

@@ -24,4 +24,5 @@
 	<string name="usb_devices">Συσκευές USB</string>
 	<string name="usb_on_the_go_support">Υποστήριξη USB για το δρόμο:</string>
 	<string name="yes">Ναι</string>
+    <string name="no_service">Δίκτυο μη διαθέσιμο</string>
 </resources>

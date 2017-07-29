@@ -24,4 +24,5 @@
 	<string name="usb_devices">USB Eszközök</string>
 	<string name="usb_on_the_go_support">\"USB Az Útra\" támogatás:</string>
 	<string name="yes">Igen</string>
+    <string name="no_service">Nincs szolgáltatás</string>
 </resources>
