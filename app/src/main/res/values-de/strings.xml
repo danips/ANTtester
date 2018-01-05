@@ -18,11 +18,11 @@
 	<string name="menu_about">Über</string>
 	<string name="menu_test">ANT Support testen</string>
 	<string name="no">Nein</string>
+	<string name="no_service">Kein Dienst</string>
 	<string name="not_available">N/A</string>
 	<string name="not_found">Nicht gefunden</string>
 	<string name="requires_ars">Benötigt ARS</string>
 	<string name="usb_devices">USB-Geräte:</string>
 	<string name="usb_on_the_go_support">USB-OTG Support:</string>
 	<string name="yes">Ja</string>
-    <string name="no_service">Kein Dienst</string>
 </resources>

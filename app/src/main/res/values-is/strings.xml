@@ -18,11 +18,11 @@
 	<string name="menu_about">Um forritið</string>
 	<string name="menu_test">Prófa stuðning á ANT</string>
 	<string name="no">Nei</string>
+	<string name="no_service">Ekkert símasamband</string>
 	<string name="not_available">Ekki í boði</string>
 	<string name="not_found">Fannst ekki</string>
 	<string name="requires_ars">Krefst ARS</string>
 	<string name="usb_devices">USB tæki</string>
 	<string name="usb_on_the_go_support">Stuðningur við USB á ferðinni</string>
 	<string name="yes">Já</string>
-    <string name="no_service">Ekkert símasamband</string>
 </resources>

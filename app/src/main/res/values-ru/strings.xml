@@ -2,15 +2,15 @@
 <resources>
 	<string name="about_dialog_contact">Контакты</string>
 	<string name="about_dialog_rate">Оценка</string>
-	<string name="about_dialog_text">Ты можешь помочь с переводом на твой язык или поставить хорошую оценку.</string>
-	<string name="about_dialog_translate">Помощь с переводом</string>
-	<string name="about_dialog_translators"><b>Перевод:</b> Руслан Купчинский</string>
+	<string name="about_dialog_text">Вы можете оказать поддержку переводом на свой язык или поставив хорошую оценку.</string>
+	<string name="about_dialog_translate">Помощь в переводе</string>
+	<string name="about_dialog_translators"><b>Перевод:</b> Руслан Купчинский; Егор Киреев</string>
 	<string name="ant_capable">Ant поддержка</string>
-	<string name="ant_hal_service">ANT HAL сервис:</string>
+	<string name="ant_hal_service">ANT HAL служба:</string>
 	<string name="ant_plugins">ANT+ плагин:</string>
 	<string name="ant_radio_service">ANT радиомодуль:</string>
 	<string name="ant_support_version_info">ANT версия</string>
-	<string name="ant_usb_service">ANT USB сервис:</string>
+	<string name="ant_usb_service">ANT USB служба:</string>
 	<string name="ant_usb_service_installed">Установленные ANT USB сервисы:</string>
 	<string name="app_name">ANT тест</string>
 	<string name="built_in_ant_detected">Встроенный ANT:</string>
@@ -18,11 +18,11 @@
 	<string name="menu_about">Информация</string>
 	<string name="menu_test">ANT тест</string>
 	<string name="no">Нет</string>
+	<string name="no_service">Нет сигнала</string>
 	<string name="not_available">н/д</string>
 	<string name="not_found">Не обнаружено</string>
 	<string name="requires_ars">Требуется ANT радиомодуль</string>
 	<string name="usb_devices">USB устройства</string>
 	<string name="usb_on_the_go_support">Поддержка USB On-The-Go:</string>
 	<string name="yes">Да</string>
-    <string name="no_service">Нет сигнала</string>
 </resources>

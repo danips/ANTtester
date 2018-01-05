@@ -18,11 +18,11 @@
 	<string name="menu_about">Σχετικά</string>
 	<string name="menu_test">Δοκιμή υποστήριξης ΑΝΤ</string>
 	<string name="no">Όχι</string>
+	<string name="no_service">Δίκτυο μη διαθέσιμο</string>
 	<string name="not_available">Ο/Δ</string>
 	<string name="not_found">Δεν βρέθηκε</string>
 	<string name="requires_ars">Απαίτηση ARS</string>
 	<string name="usb_devices">Συσκευές USB</string>
 	<string name="usb_on_the_go_support">Υποστήριξη USB για το δρόμο:</string>
 	<string name="yes">Ναι</string>
-    <string name="no_service">Δίκτυο μη διαθέσιμο</string>
 </resources>

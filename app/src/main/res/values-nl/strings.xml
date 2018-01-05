@@ -18,11 +18,11 @@
 	<string name="menu_about">Over</string>
 	<string name="menu_test">ANT Ondersteunings test</string>
 	<string name="no">Nee</string>
+	<string name="no_service">Geen service</string>
 	<string name="not_available">N/A</string>
 	<string name="not_found">Niet gevonden</string>
 	<string name="requires_ars">ARS Vereist</string>
 	<string name="usb_devices">USB Apparaten</string>
 	<string name="usb_on_the_go_support">USB Ondersteuning onderweg:</string>
 	<string name="yes">Ja</string>
-    <string name="no_service">Geen service</string>
 </resources>

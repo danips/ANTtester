@@ -18,11 +18,11 @@
 	<string name="menu_about">เกี่ยวกับ</string>
 	<string name="menu_test">การทดสอบที่สนับสนุนอุปกรณ์ ANT</string>
 	<string name="no">ไม่</string>
+	<string name="no_service">ไม่มีบริการ</string>
 	<string name="not_available">ไม่พบคำตอบ</string>
 	<string name="not_found">ตรวจสอบไม่พบ</string>
 	<string name="requires_ars">ความต้องการของ ARS</string>
 	<string name="usb_devices">อุปกรณ์ยูเอสบี</string>
 	<string name="usb_on_the_go_support">สนับสนุนอุปกรณ์ USB On-The-Go:</string>
 	<string name="yes">ใช่</string>
-    <string name="no_service">ไม่มีบริการ</string>
 </resources>

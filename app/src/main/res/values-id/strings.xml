@@ -18,11 +18,11 @@
 	<string name="menu_about">Tentang</string>
 	<string name="menu_test">Uji Dukungan ANT</string>
 	<string name="no">Tidak</string>
+	<string name="no_service">Tidak ada layanan</string>
 	<string name="not_available">Kosong</string>
 	<string name="not_found">Tidak ditemukan</string>
 	<string name="requires_ars">Memerlukan ARS</string>
 	<string name="usb_devices">Perangkat USB</string>
 	<string name="usb_on_the_go_support">Dukungan USB On-The-Go:</string>
 	<string name="yes">Ya</string>
-    <string name="no_service">Tidak ada layanan</string>
 </resources>

@@ -18,11 +18,11 @@
 	<string name="menu_about">关于</string>
 	<string name="menu_test">测试 ANT 支持</string>
 	<string name="no">否</string>
+	<string name="no_service">没有服务</string>
 	<string name="not_available">未知</string>
 	<string name="not_found">未找到</string>
 	<string name="requires_ars">要求 ARS</string>
 	<string name="usb_devices">USB 设备</string>
 	<string name="usb_on_the_go_support">支持 USB On-The-Go:</string>
 	<string name="yes">是</string>
-    <string name="no_service">没有服务</string>
 </resources>
