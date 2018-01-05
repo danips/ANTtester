@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="about_dialog_contact">İletişim</string>
+	<string name="about_dialog_rate">Değerlendir</string>
+	<string name="about_dialog_text">Uygulamayı Play Store\' da derecelendirerek ve kendi dilinize çevirerek bize destek olun.</string>
+	<string name="about_dialog_translate">Çeviriye yardım edin</string>
+	<string name="about_dialog_translators"><b>Çevirmen:</b> Melih Aksu</string>
+	<string name="ant_capable">ANT Yeteneği</string>
+	<string name="ant_hal_service">ANT HAL Servisi:</string>
+	<string name="ant_plugins">ANT+ Eklentileri:</string>
+	<string name="ant_radio_service">ANT Radio Servisi:</string>
+	<string name="ant_support_version_info">ANT destek sürümü bilgisi</string>
+	<string name="ant_usb_service">ANT USB Servisi:</string>
+	<string name="ant_usb_service_installed">ANT USB hizmeti yüklü:</string>
+	<string name="app_name">ANT Tester</string>
+	<string name="built_in_ant_detected">Dahili ANT tespit edildi:</string>
+	<string name="built_in_firmware">Kurulu yazilim sürümü:</string>
+	<string name="menu_about">Hakkında</string>
+	<string name="menu_test">ANT desteğini sına</string>
+	<string name="no">Yok</string>
+	<string name="no_service">Servis yüklü değil</string>
+	<string name="not_available">Mevcut Değil</string>
+	<string name="not_found">Bulunamadı</string>
+	<string name="requires_ars">ARS Gerekirir</string>
+	<string name="usb_devices">USB Aygıtları</string>
+	<string name="usb_on_the_go_support">OTG Desteği:</string>
+	<string name="yes">Var</string>
+</resources>

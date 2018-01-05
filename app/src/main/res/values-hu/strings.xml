@@ -18,11 +18,11 @@
 	<string name="menu_about">Infó</string>
 	<string name="menu_test">ANT Támogatás Tesztelése</string>
 	<string name="no">Nem</string>
+	<string name="no_service">Nincs szolgáltatás</string>
 	<string name="not_available">Nem elérhető</string>
 	<string name="not_found">Nincs találat</string>
 	<string name="requires_ars">Szükséges a(z) ARS</string>
 	<string name="usb_devices">USB Eszközök</string>
 	<string name="usb_on_the_go_support">\"USB Az Útra\" támogatás:</string>
 	<string name="yes">Igen</string>
-    <string name="no_service">Nincs szolgáltatás</string>
 </resources>

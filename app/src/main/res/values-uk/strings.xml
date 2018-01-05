@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="about_dialog_contact">Контакт</string>
+	<string name="about_dialog_rate">Оцінити</string>
+	<string name="about_dialog_text">Ви можете продемонструвати свою підтримку, оцінюючи додаток у Google Play або допомагаючи перекладати його на свою мову.</string>
+	<string name="about_dialog_translate">Допомога у перекладі</string>
+	<string name="about_dialog_translators"><b>Перевод:</b> Кірєєв Єгор</string>
+	<string name="ant_capable">ANT можливості</string>
+	<string name="ant_hal_service">Служба ANT HAL:</string>
+	<string name="ant_plugins">ANT+ Модулі:</string>
+	<string name="ant_radio_service">ANT радіомодуль:</string>
+	<string name="ant_support_version_info">Інфо про версію ANT</string>
+	<string name="ant_usb_service">ANT USB служба:</string>
+	<string name="ant_usb_service_installed">ANT USB службу встановлено:</string>
+	<string name="app_name">ANT тестер</string>
+	<string name="built_in_ant_detected">Вбудований ANT виявлено:</string>
+	<string name="built_in_firmware">Вбудоване прошивка:</string>
+	<string name="menu_about">Про це</string>
+	<string name="menu_test">Тест підтримки ANT</string>
+	<string name="no">Ні</string>
+	<string name="no_service">Немає служби</string>
+	<string name="not_available">н/д</string>
+	<string name="not_found">не знайдено</string>
+	<string name="requires_ars">Потрібен ARS</string>
+	<string name="usb_devices">USB пристрої</string>
+	<string name="usb_on_the_go_support">Підтримка USB-On-The-Go:</string>
+	<string name="yes">Так</string>
+</resources>
