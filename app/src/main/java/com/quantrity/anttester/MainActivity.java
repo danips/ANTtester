@@ -3,11 +3,9 @@ package com.quantrity.anttester;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.ActivityNotFoundException;
-import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -16,8 +14,8 @@ import android.hardware.usb.UsbManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
-import android.os.RemoteException;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.Menu;
@@ -37,7 +35,7 @@ import java.util.Iterator;
 
 import com.dsi.ant.AntService;
 import com.dsi.ant.AntSupportChecker;
-import com.dsi.ant.IAnt_6;
+import com.dsi.ant.channel.AdapterInfo;
 
 
 public class MainActivity extends Activity {
@@ -68,12 +66,6 @@ public class MainActivity extends Activity {
     TextView usb_devices_tv1;
     TextView usb_devices_tv2;
 
-    /** Class for interacting with the ANT interface. */
-    private ServiceConnection sIAntConnection;
-
-    /** Inter-process communication with the ANT Radio Proxy Service. */
-    private static IAnt_6 sAntReceiver = null;
-
     private myOnClickListener ant_usb_service_ocl = new myOnClickListener("com.dsi.ant.usbservice");
     private myOnClickListener ant_radio_service_ocl = new myOnClickListener("com.dsi.ant.service.socket");
     private myOnClickListener ant_plugins_service_ocl = new myOnClickListener("com.dsi.ant.plugins.antplus");
@@ -84,25 +76,25 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
 
 
-        ant_capable_iv = (ImageView) findViewById(R.id.ant_capable_iv);
-        builtin_ant_detected_tv = (TextView) findViewById(R.id.builtin_ant_detected_tv);
-        usb_host_support_tv = (TextView) findViewById(R.id.usb_host_support_tv);
-        addon_adapter_support_label_tv = (TextView) findViewById(R.id.addon_adapter_support_label_tv);
-        addon_adapter_support_tv = (TextView) findViewById(R.id.addon_adapter_support_tv);
-        builtin_firmware_tv = (TextView) findViewById(R.id.builtin_firmware_tv);
-        ant_hal_service_tv = (TextView) findViewById(R.id.ant_hal_service_tv);
-        ant_radio_service_tv = (TextView) findViewById(R.id.ant_radio_service_tv);
-        ant_usb_service_tv = (TextView) findViewById(R.id.ant_usb_service_tv);
-        ant_usb_service_tr = (TableRow) findViewById(R.id.ant_usb_service_tr);
-        ant_plugins_tv = (TextView) findViewById(R.id.ant_plugins_tv);
+        ant_capable_iv = findViewById(R.id.ant_capable_iv);
+        builtin_ant_detected_tv = findViewById(R.id.builtin_ant_detected_tv);
+        usb_host_support_tv = findViewById(R.id.usb_host_support_tv);
+        addon_adapter_support_label_tv = findViewById(R.id.addon_adapter_support_label_tv);
+        addon_adapter_support_tv = findViewById(R.id.addon_adapter_support_tv);
+        builtin_firmware_tv = findViewById(R.id.builtin_firmware_tv);
+        ant_hal_service_tv = findViewById(R.id.ant_hal_service_tv);
+        ant_radio_service_tv = findViewById(R.id.ant_radio_service_tv);
+        ant_usb_service_tv = findViewById(R.id.ant_usb_service_tv);
+        ant_usb_service_tr = findViewById(R.id.ant_usb_service_tr);
+        ant_plugins_tv = findViewById(R.id.ant_plugins_tv);
 
-        builtin_ant_detected_iv = (ImageView) findViewById(R.id.builtin_ant_detected_iv);
-        addon_adapter_support_iv = (ImageView) findViewById(R.id.addon_adapter_support_iv);
-        builtin_firmware_iv = (ImageView) findViewById(R.id.builtin_firmware_iv);
+        builtin_ant_detected_iv = findViewById(R.id.builtin_ant_detected_iv);
+        addon_adapter_support_iv = findViewById(R.id.addon_adapter_support_iv);
+        builtin_firmware_iv = findViewById(R.id.builtin_firmware_iv);
         builtin_firmware_iv.setTag(NO_TAG);
-        ant_radio_service_iv = (ImageView) findViewById(R.id.ant_radio_service_iv);
-        ant_usb_service_iv = (ImageView) findViewById(R.id.ant_usb_service_iv);
-        ant_plugins_iv = (ImageView) findViewById(R.id.ant_plugins_iv);
+        ant_radio_service_iv = findViewById(R.id.ant_radio_service_iv);
+        ant_usb_service_iv = findViewById(R.id.ant_usb_service_iv);
+        ant_plugins_iv = findViewById(R.id.ant_plugins_iv);
 
         addon_adapter_support_iv.setOnClickListener(ant_usb_service_ocl);
         builtin_firmware_iv.setOnClickListener(ant_radio_service_ocl);
@@ -113,10 +105,10 @@ public class MainActivity extends Activity {
         ant_plugins_iv.setTag(NO_TAG);
         ant_plugins_iv.setOnClickListener(ant_plugins_service_ocl);
 
-        usb_devices_tv1 = (TextView) findViewById(R.id.usb_devices_tv1);
-        usb_devices_tv2 = (TextView) findViewById(R.id.usb_devices_tv2);
+        usb_devices_tv1 = findViewById(R.id.usb_devices_tv1);
+        usb_devices_tv2 = findViewById(R.id.usb_devices_tv2);
 
-        doBindAntRadioService();
+        testANTSupport();
     }
 
     private ServiceConnection mAntRadioServiceConnection = new ServiceConnection()
@@ -124,15 +116,33 @@ public class MainActivity extends Activity {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service)
         {
-            Log.v(TAG, "mAntRadioServiceConnection onServiceConnected");
+            final AntService test = new AntService(service);
+            final Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        int found_timeout = 30;
+                                        do {
+                                            try {
+                                                Iterator i = test.getAdapterProvider().getAdaptersInfo(MainActivity.this).iterator();
+                                                if (i.hasNext()) {
+                                                    AdapterInfo ai = (AdapterInfo) i.next();
+                                                    builtin_firmware_tv.setText(ai.getVersionString());
+                                                    builtin_firmware_tv.setTextColor(GREEN);
+                                                    builtin_firmware_iv.setVisibility(View.GONE);
+                                                    builtin_ant_detected_iv.setVisibility(View.GONE);
+                                                    return;
+                                                }
+                                                found_timeout--;
+                                                Thread.sleep(100);
+                                            } catch (Exception e) {}
+                                        } while (found_timeout != 0);
+                                    }
+                                }, 100);
         }
 
         @Override
-        public void onServiceDisconnected(ComponentName name)
-        {
-            Log.v(TAG, "mAntRadioServiceConnection onServiceConnected");
-        }
-
+        public void onServiceDisconnected(ComponentName name) {}
     };
 
     private boolean mAntRadioServiceBound;
@@ -172,17 +182,10 @@ public class MainActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-        testANTSupport();
-
-//        Log.v(TAG, "A " + AntLibVersionInfo.ANTLIB_VERSION_STRING + " .... " + AntLibVersionInfo.ANTLIB_VERSION_CODE);
-//        Log.v(TAG, "B " + AntSupportChecker.hasAntAddOn(this) + " ... " + AntSupportChecker.hasAntFeature(this));
-//        Log.v(TAG, "C " + AntService.getVersionName(this) + " ... "
-//                + AntService.hasAdapterProviderSupport() + " ... " +AntService.hasAdapterWideConfigurationSupport()
-//                + " ... " + AntService.hasContinuousScanSupport() + " ... " + AntService.requiresBundle());
-
     }
 
     private void testANTSupport() {
+        doUnbindAntRadioService();
         boolean has_builtin_library = AntSupportChecker.hasAntFeature(this);
         setTextView(builtin_ant_detected_tv, R.string.yes, R.string.no, has_builtin_library);
 
@@ -239,45 +242,11 @@ public class MainActivity extends Activity {
             String version = getPackageManager().getPackageInfo("com.dsi.ant.service.socket", PackageManager.GET_META_DATA).versionName;
             ant_radio_service_tv.setText(version);
             ant_radio_service_tv.setTextColor(GREEN);
-            ant_radio_service_iv.setImageResource(R.mipmap.ic_action_about);
-            ant_radio_service_iv.setTag(YES_TAG);
 
-            sIAntConnection = new ServiceConnection() {
-                // Flag to know if the ANT App was interrupted
-                //private boolean antInterrupted = false;
-
-                public void onServiceConnected(ComponentName pClassName, IBinder pService) {
-                    //Log.v(TAG, "sIAntConnection onServiceConnected()");
-                    sAntReceiver = IAnt_6.Stub.asInterface(pService);
-                    if (sAntReceiver == null) {
-                        //Log.e(TAG, "Failed to get ANT Receiver");
-                        return;
-                    }
-
-                    try {
-                        if (!sAntReceiver.claimInterface()) {
-                            //Log.e(TAG, "Failed to claim ANT interface");
-                            return;
-                        }
-
-                        sAntReceiver.ANTResetSystem();
-
-                        //Log.i(TAG, "resetting ANT OK");
-                    } catch (RemoteException e) {
-                        e.printStackTrace();
-                    }
-
-                    registerForAntIntents();
-                }
-
-                public void onServiceDisconnected(ComponentName pClassName) {
-                    //Log.v(TAG, "sIAntConnection onServiceDisconnected()");
-                    sAntReceiver = null;
-                }
-            };
-
-            bindService(new Intent("com.dsi.ant.IAnt_6"), sIAntConnection, Context.BIND_AUTO_CREATE);
             has_ARS = true;
+
+            builtin_firmware_iv.setTag(YES_TAG);
+            builtin_firmware_iv.setImageResource(R.mipmap.ic_action_settings);
         } catch (Exception e) {
             ant_radio_service_tv.setText(R.string.not_available);
             ant_radio_service_tv.setTextColor(RED);
@@ -368,6 +337,7 @@ public class MainActivity extends Activity {
         usb_devices_tv1.setVisibility(usb_devices ? View.VISIBLE: View.GONE);
         usb_devices_tv2.setVisibility(usb_devices ? View.VISIBLE: View.GONE);
 
+        doBindAntRadioService();
     }
 
     public void setTextView(TextView tv, int text_true, int text_false, boolean bool) {
@@ -389,80 +359,6 @@ public class MainActivity extends Activity {
             iv.setTag(NO_TAG);
         }
     }
-
-    public void registerForAntIntents() {
-        //Log.i(TAG, "Registering for ant intents.");
-        // Register for ANT intent broadcasts.
-        IntentFilter statusIntentFilter = new IntentFilter();
-        statusIntentFilter.addAction("com.dsi.ant.intent.action.ANT_ENABLED");
-        statusIntentFilter.addAction("com.dsi.ant.intent.action.ANT_DISABLED");
-        statusIntentFilter.addAction("com.dsi.ant.intent.action.ANT_INTERFACE_CLAIMED_ACTION");
-        statusIntentFilter.addAction("com.dsi.ant.intent.action.ANT_RESET");
-        registerReceiver(statusReceiver, statusIntentFilter);
-
-        IntentFilter dataIntentFilter = new IntentFilter();
-        dataIntentFilter.addAction("com.dsi.ant.intent.action.ANT_RX_MESSAGE_ACTION");
-        registerReceiver(dataReceiver, dataIntentFilter);
-    }
-
-    /** Receives and logs all status ANT intents. */
-    private final BroadcastReceiver statusReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            //String antAction = intent.getAction();
-            //Log.i(TAG, "enter status onReceive" + antAction);
-
-            byte msg[] = {(byte) 0x03, (byte) 0x4D, (byte) 0x00, (byte) 0x3E};
-            try {
-                sAntReceiver.ANTTxMessage(msg);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    };
-
-    /*private String messageToString(byte[] message) {
-        StringBuilder out = new StringBuilder();
-        for (byte b : message) {
-            out.append(String.format("%s%02x", (out.length() == 0 ? "" : " "), b));
-        }
-        return out.toString();
-    }*/
-
-    /** Receives all data ANT intents. */
-    private final BroadcastReceiver dataReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String antAction = intent.getAction();
-
-            if (antAction.equals("com.dsi.ant.intent.action.ANT_RX_MESSAGE_ACTION")) {
-                byte[] antMessage = intent.getByteArrayExtra("com.dsi.ant.intent.ANT_MESSAGE");
-                //Log.v(TAG, "dataReceiver onReceive " + messageToString(antMessage));
-
-                if (antMessage[1] == 0x3e) {
-                    byte[] version = new byte[antMessage[0] - 1];
-                    System.arraycopy(antMessage, 2, version, 0, version.length);
-                    builtin_firmware_tv.setText(new String(version));
-                    builtin_firmware_tv.setTextColor(GREEN);
-                    builtin_firmware_iv.setVisibility(View.GONE);
-                    builtin_ant_detected_iv.setVisibility(View.GONE);
-
-                    //finalizar all
-                    unregisterReceiver(statusReceiver);
-                    unregisterReceiver(dataReceiver);
-                    unbindService(sIAntConnection);
-                    sIAntConnection = null;
-                    //Log.v(TAG, "releaseService() unbound.");
-                }
-                /*int len = antMessage[0];
-                if (len != antMessage.length - 2 || antMessage.length <= 2) {
-                    Log.e(TAG, "Invalid message: " + messageToString(antMessage));
-                    return;
-                }
-                 Log.v(TAG, "dataReceiver onReceive " + messageToString(antMessage));*/
-            }
-        }
-    };
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
