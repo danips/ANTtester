@@ -7,10 +7,9 @@ android {
     defaultConfig {
         applicationId "com.quantrity.anttester"
         minSdkVersion 7
-        /* targetSdkVersion needs to be 20 or lower, or ANT Service will not work */
         targetSdkVersion 27
-        versionCode 9
-        versionName "1.9"
+        versionCode 10
+        versionName "1.10"
     }
     buildTypes {
         release {
