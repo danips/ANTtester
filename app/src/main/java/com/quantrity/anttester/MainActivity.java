@@ -238,20 +238,24 @@ public class MainActivity extends Activity {
         ant_capable_iv.setImageResource((has_builtin_library || usb_host_support) ? R.mipmap.ic_ok : R.mipmap.ic_nok);
 
         boolean has_ARS = false;
+        String version = null;
         try {
-            String version = getPackageManager().getPackageInfo("com.dsi.ant.service.socket", PackageManager.GET_META_DATA).versionName;
+            version = getPackageManager().getPackageInfo("com.dsi.ant.service.socket", PackageManager.GET_META_DATA).versionName;
             ant_radio_service_tv.setText(version);
             ant_radio_service_tv.setTextColor(GREEN);
+            ant_radio_service_iv.setImageResource(R.mipmap.ic_action_about);
 
             has_ARS = true;
 
             builtin_firmware_iv.setTag(YES_TAG);
             builtin_firmware_iv.setImageResource(R.mipmap.ic_action_settings);
         } catch (Exception e) {
-            ant_radio_service_tv.setText(R.string.not_available);
-            ant_radio_service_tv.setTextColor(RED);
-            ant_radio_service_iv.setImageResource(R.mipmap.ic_action_download);
-            ant_radio_service_tv.setTag(NO_TAG);
+            if (version == null) {
+                ant_radio_service_tv.setText(R.string.not_available);
+                ant_radio_service_tv.setTextColor(RED);
+                ant_radio_service_iv.setImageResource(R.mipmap.ic_action_download);
+                ant_radio_service_tv.setTag(NO_TAG);
+            }
             e.printStackTrace();
         }
 
@@ -286,7 +290,6 @@ public class MainActivity extends Activity {
         }
         getPackageVersion(ant_plugins_tv, "com.dsi.ant.plugins.antplus", ant_plugins_iv);
 
-        String version;
         try {
             version = getPackageManager().getPackageInfo("com.dsi.ant.server", PackageManager.GET_META_DATA).versionName;
             ant_hal_service_tv.setText(version);
