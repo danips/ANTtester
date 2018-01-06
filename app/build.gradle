@@ -17,8 +17,8 @@ android {
         applicationId "com.quantrity.anttester"
         minSdkVersion 7
         targetSdkVersion 27
-        versionCode 10
-        versionName "1.10"
+        versionCode 12
+        versionName "1.12"
     }
     buildTypes {
         release {
