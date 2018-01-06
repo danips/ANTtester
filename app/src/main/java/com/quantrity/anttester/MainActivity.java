@@ -111,34 +111,50 @@ public class MainActivity extends Activity {
         testANTSupport();
     }
 
+    private class MyRunnable implements Runnable
+    {
+        int countdown;
+        AntService as;
+        MyRunnable(int countdown, AntService as)
+        {
+            this.countdown = countdown;
+            this.as = as;
+        }
+
+        @Override
+        public void run() {
+            if (countdown == 0) return;
+
+            countdown--;
+            try
+            {
+                Iterator i = as.getAdapterProvider().getAdaptersInfo(MainActivity.this).iterator();
+                if (i.hasNext()) {
+                    AdapterInfo ai = (AdapterInfo) i.next();
+                    builtin_firmware_tv.setText(ai.getVersionString());
+                    builtin_firmware_tv.setTextColor(GREEN);
+                    builtin_firmware_iv.setVisibility(View.GONE);
+                    builtin_ant_detected_iv.setVisibility(View.GONE);
+                }
+            }
+            catch (Exception e)
+            {
+                Log.v(TAG, "MyRunnable run " + countdown);
+                final Handler handler = new Handler();
+                handler.postDelayed(new MyRunnable(countdown, as), 250);
+            }
+        }
+    }
+
     private ServiceConnection mAntRadioServiceConnection = new ServiceConnection()
     {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service)
         {
-            final AntService test = new AntService(service);
+            final AntService as = new AntService(service);
             final Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        int found_timeout = 30;
-                                        do {
-                                            try {
-                                                Iterator i = test.getAdapterProvider().getAdaptersInfo(MainActivity.this).iterator();
-                                                if (i.hasNext()) {
-                                                    AdapterInfo ai = (AdapterInfo) i.next();
-                                                    builtin_firmware_tv.setText(ai.getVersionString());
-                                                    builtin_firmware_tv.setTextColor(GREEN);
-                                                    builtin_firmware_iv.setVisibility(View.GONE);
-                                                    builtin_ant_detected_iv.setVisibility(View.GONE);
-                                                    return;
-                                                }
-                                                found_timeout--;
-                                                Thread.sleep(100);
-                                            } catch (Exception e) {}
-                                        } while (found_timeout != 0);
-                                    }
-                                }, 100);
+            int countdown = 20;
+            handler.postDelayed(new MyRunnable(countdown, as), 250);
         }
 
         @Override
@@ -182,6 +198,7 @@ public class MainActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
+        testANTSupport();
     }
 
     private void testANTSupport() {
@@ -212,7 +229,9 @@ public class MainActivity extends Activity {
                     }
                     rd.close();
                 }
-            } catch (Exception ignored) { }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
 
@@ -244,6 +263,7 @@ public class MainActivity extends Activity {
             ant_radio_service_tv.setText(version);
             ant_radio_service_tv.setTextColor(GREEN);
             ant_radio_service_iv.setImageResource(R.mipmap.ic_action_about);
+            ant_radio_service_iv.setTag(YES_TAG);
 
             has_ARS = true;
 
@@ -265,11 +285,13 @@ public class MainActivity extends Activity {
                 builtin_firmware_tv.setText(R.string.no_service);
                 builtin_firmware_tv.setTextColor(RED);
                 builtin_ant_detected_iv.setVisibility(View.VISIBLE);
+                builtin_firmware_iv.setTag(YES_TAG);
             }
             else {
                 builtin_firmware_tv.setText(R.string.requires_ars);
                 builtin_firmware_tv.setTextColor(YELLOW);
                 builtin_ant_detected_iv.setVisibility(View.GONE);
+                builtin_firmware_iv.setTag(NO_TAG);
             }
             builtin_firmware_iv.setVisibility(View.VISIBLE);
         } else {
@@ -318,18 +340,12 @@ public class MainActivity extends Activity {
                 usb_devices = !deviceList.isEmpty();
                 while (deviceIterator.hasNext()) {
                     UsbDevice device = deviceIterator.next();
-                    sb.append("DeviceID:  " + device.getDeviceId() + "\n" +
-                            "VendorID:  " + device.getVendorId() + " (0x" + Integer.toHexString(device.getVendorId()) + ")\n" +
-                            "ProductID: " + device.getProductId() + " (0x" + Integer.toHexString(device.getProductId()) + ")\n");
+                    sb.append("DeviceID:  ").append(device.getDeviceId()).append("\n").append("VendorID:  ").append(device.getVendorId()).append(" (0x").append(Integer.toHexString(device.getVendorId())).append(")\n").append("ProductID: ").append(device.getProductId()).append(" (0x").append(Integer.toHexString(device.getProductId())).append(")\n");
                     if (Build.VERSION.SDK_INT >= 21) {
-                        sb.append("\n" +
-                                "ManufacturerName: " + device.getManufacturerName() + "\n" +
-                                "ProductName: " + device.getProductName() + "\n" +
-                                "SerialNumber: " + device.getSerialNumber() + "\n" +
-                                "DeviceName: " + device.getDeviceName() + "\n");
+                        sb.append("\n" + "ManufacturerName: ").append(device.getManufacturerName()).append("\n").append("ProductName: ").append(device.getProductName()).append("\n").append("SerialNumber: ").append(device.getSerialNumber()).append("\n").append("DeviceName: ").append(device.getDeviceName()).append("\n");
                     }
                     if (Build.VERSION.SDK_INT >= 23) {
-                        sb.append("\nVersion: " + device.getVersion() + "\n");
+                        sb.append("\nVersion: ").append(device.getVersion()).append("\n");
                     }
                     sb.append("\n");
                 }
