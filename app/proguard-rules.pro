@@ -17,3 +17,4 @@
 #}
 
 -keepattributes EnclosingMethod
+-keep class com.dsi.ant.**
