@@ -5,7 +5,7 @@ android {
         config {
             keyAlias 'MyAndroidKey'
             keyPassword 'd3f3p3s3'
-            storeFile file('/home/daniel/Desktop/KeyStore.jks')
+            storeFile file('/home/daniel/Desktop/ANDROID/KeyStore.jks')
             storePassword 'd3f3p3s3'
         }
     }
@@ -17,8 +17,8 @@ android {
         applicationId "com.quantrity.anttester"
         minSdkVersion 7
         targetSdkVersion 27
-        versionCode 12
-        versionName "1.12"
+        versionCode 13
+        versionName "1.13"
     }
     buildTypes {
         release {
