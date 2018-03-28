@@ -423,7 +423,7 @@ public class MainActivity extends Activity {
                 }
                 break;
             case R.id.translate_button:
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.localize.im/projects/tB"));
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://localize.quantrity.com/projects/3"));
                 startActivity(browserIntent);
                 break;
             case R.id.builtin_ant_detected_iv:
