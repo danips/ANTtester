@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
 	<string name="about_dialog_contact">Kontaktieren</string>
 	<string name="about_dialog_rate">Bewerten</string>
 	<string name="about_dialog_text">Sie können uns unterstützen indem sie die App im Google Play Store bewerten oder in ihre Sprache übersetzen.</string>
@@ -15,6 +15,8 @@
 	<string name="app_name">ANT Tester</string>
 	<string name="built_in_ant_detected">Eingebautes ANT gefunden:</string>
 	<string name="built_in_firmware">Eingebaute Chip-Firmware:</string>
+	<string name="googleplay_listing_full_description">With this application you can check the different ANT capabilities your device supports.\nIt also offers links to download/uninstall the different ANT packages.</string>
+	<string name="googleplay_listing_short_description">Test your device for ANT capabilities</string>
 	<string name="menu_about">Über</string>
 	<string name="menu_test">ANT Support testen</string>
 	<string name="no">Nein</string>

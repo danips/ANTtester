@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
 	<string name="about_dialog_contact">联系我们</string>
 	<string name="about_dialog_rate">评价</string>
 	<string name="about_dialog_text">您可以通过以您的语言评价此应用或在 Google Play 上评分以表示支持。</string>
@@ -15,6 +15,8 @@
 	<string name="app_name">ANT Tester</string>
 	<string name="built_in_ant_detected">检测到的内置 ANT 组件:</string>
 	<string name="built_in_firmware">内建固件:</string>
+	<string name="googleplay_listing_full_description">With this application you can check the different ANT capabilities your device supports.\nIt also offers links to download/uninstall the different ANT packages.</string>
+	<string name="googleplay_listing_short_description">Test your device for ANT capabilities</string>
 	<string name="menu_about">关于</string>
 	<string name="menu_test">测试 ANT 支持</string>
 	<string name="no">否</string>
