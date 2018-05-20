@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
 	<string name="about_dialog_contact">İletişim</string>
 	<string name="about_dialog_rate">Değerlendir</string>
 	<string name="about_dialog_text">Uygulamayı Play Store\' da derecelendirerek ve kendi dilinize çevirerek bize destek olun.</string>
@@ -15,6 +15,8 @@
 	<string name="app_name">ANT Tester</string>
 	<string name="built_in_ant_detected">Dahili ANT tespit edildi:</string>
 	<string name="built_in_firmware">Kurulu yazilim sürümü:</string>
+	<string name="googleplay_listing_full_description">Bu uygulama ile cihazınızın desteklediği farklı ANT özelliklerini kontrol edebilirsiniz.\nAyrıca, farklı ANT paketlerini indirmek / kaldırmak için bağlantılar da sunmaktadır.</string>
+	<string name="googleplay_listing_short_description">Cihazınızı ANT özellikleri için test edin</string>
 	<string name="menu_about">Hakkında</string>
 	<string name="menu_test">ANT desteğini sına</string>
 	<string name="no">Yok</string>

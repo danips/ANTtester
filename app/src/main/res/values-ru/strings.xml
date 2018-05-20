@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
 	<string name="about_dialog_contact">Контакты</string>
 	<string name="about_dialog_rate">Оценка</string>
 	<string name="about_dialog_text">Вы можете оказать поддержку переводом на свой язык или поставив хорошую оценку.</string>
@@ -15,6 +15,8 @@
 	<string name="app_name">ANT тест</string>
 	<string name="built_in_ant_detected">Встроенный ANT:</string>
 	<string name="built_in_firmware">Встроенная прошивка:</string>
+	<string name="googleplay_listing_full_description">С помощью этого приложения вы можете проверить различные возможности ANT, поддерживаемые вашим устройством.\nТакже предлагаются ссылки для загрузки / удаления различных пакетов ANT.</string>
+	<string name="googleplay_listing_short_description">Тест устройства на возможности ANT</string>
 	<string name="menu_about">Информация</string>
 	<string name="menu_test">ANT тест</string>
 	<string name="no">Нет</string>

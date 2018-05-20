@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+	<string name="about_dialog_contact">聯繫</string>
+	<string name="about_dialog_rate">給于評價</string>
+	<string name="about_dialog_text">您可以通過在Google Play中對應用進行評分或幫助將其翻譯成您自己的語言來顯示您的支持。</string>
+	<string name="about_dialog_translate">幫助翻譯</string>
+	<string name="about_dialog_translators"><b>翻譯：</b> Han,C</string>
+	<string name="ant_capable">有ANT功能</string>
+	<string name="ant_hal_service">ANT HAL服務：</string>
+	<string name="ant_plugins">ANT+插件:</string>
+	<string name="ant_radio_service">ANT無線服務</string>
+	<string name="ant_support_version_info">ANT支援版本訊息</string>
+	<string name="ant_usb_service">ANT USB服務：</string>
+	<string name="ant_usb_service_installed">安裝ANT USB服務：</string>
+	<string name="app_name">ANT測試程序</string>
+	<string name="built_in_ant_detected">偵測到內置ANT：</string>
+	<string name="built_in_firmware">內置固件硬體：</string>
+	<string name="googleplay_listing_full_description">有了這個應用程序，你可以檢查你的設備支持不同的ANT功能。\n它還提供了下載/卸載不同ANT軟件包的鏈接。</string>
+	<string name="googleplay_listing_short_description">測試您的設備的ANT功能</string>
+	<string name="menu_about">關於</string>
+	<string name="menu_test">支援測試ANT</string>
+	<string name="no">否</string>
+	<string name="no_service">沒有服務</string>
+	<string name="not_available">錯誤</string>
+	<string name="not_found">找不到</string>
+	<string name="requires_ars">需要ARS</string>
+	<string name="usb_devices">USB設備</string>
+	<string name="usb_on_the_go_support">支援USB On-The-Go(OTG)：</string>
+	<string name="yes">是</string>
+</resources>

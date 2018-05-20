@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
 	<string name="about_dialog_contact">Contactar</string>
 	<string name="about_dialog_rate">Puntuar</string>
 	<string name="about_dialog_text">Puedes mostar tu apoyo a la aplicación votándola en Google Play o ayudando en la traducción a tu propio idioma.</string>
@@ -15,6 +15,8 @@
 	<string name="app_name">ANT Tester</string>
 	<string name="built_in_ant_detected">Radio ANT integrada:</string>
 	<string name="built_in_firmware">Firmware integrado:</string>
+	<string name="googleplay_listing_full_description">Con esta aplicación se puede comprobar las diferentes funcionalidades ANT que soporta el dispositivo.\nTambién ofrece enlaces para descargar/desinstalar los diferentes paquetes ANT.</string>
+	<string name="googleplay_listing_short_description">Comprueba la funcionalidad ANT de tu dispositivo</string>
 	<string name="menu_about">Acerca de</string>
 	<string name="menu_test">Comprobar soporte ANT</string>
 	<string name="no">No</string>

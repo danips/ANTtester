@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
 	<string name="about_dialog_contact">Επαφή</string>
 	<string name="about_dialog_rate">Ψηφίστε</string>
 	<string name="about_dialog_text">Μπορείτε να δείξετε την υποστήριξή σας με το να ψηφήσετε την εφαρμογή στο Google Play είτε με το να βοηθήσετε στο να μεταφραστεί στη δική σας γλώσσα.</string>
@@ -15,6 +15,8 @@
 	<string name="app_name">Δοκιμή ΑΝΤ</string>
 	<string name="built_in_ant_detected">Εντοπισμός ενσωματωμένου ΑΝΤ:</string>
 	<string name="built_in_firmware">Ενσωματωμένο firmware:</string>
+	<string name="googleplay_listing_full_description">With this application you can check the different ANT capabilities your device supports.\nIt also offers links to download/uninstall the different ANT packages.</string>
+	<string name="googleplay_listing_short_description">Test your device for ANT capabilities</string>
 	<string name="menu_about">Σχετικά</string>
 	<string name="menu_test">Δοκιμή υποστήριξης ΑΝΤ</string>
 	<string name="no">Όχι</string>

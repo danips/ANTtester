@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
 	<string name="about_dialog_contact">Контакт</string>
 	<string name="about_dialog_rate">Оцінити</string>
 	<string name="about_dialog_text">Ви можете продемонструвати свою підтримку, оцінюючи додаток у Google Play або допомагаючи перекладати його на свою мову.</string>
@@ -15,6 +15,8 @@
 	<string name="app_name">ANT тестер</string>
 	<string name="built_in_ant_detected">Вбудований ANT виявлено:</string>
 	<string name="built_in_firmware">Вбудоване прошивка:</string>
+	<string name="googleplay_listing_full_description">За допомогою цієї програми ви можете перевірити різні можливості ANT, які підтримує ваш пристрій.\nВона також пропонує посилання на завантаження / видалення різних ANT-пакетів.</string>
+	<string name="googleplay_listing_short_description">Тест ANT-можливостей вашого пристрою</string>
 	<string name="menu_about">Про це</string>
 	<string name="menu_test">Тест підтримки ANT</string>
 	<string name="no">Ні</string>
