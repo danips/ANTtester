@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+	<string name="about_dialog_contact">اتصل</string>
+	<string name="about_dialog_rate">قيم</string>
+	<string name="about_dialog_text">يمكنك إظهار دعمك من خلال تقييم التطبيق في Google Play أو المساعدة في ترجمته إلى لغتك الخاصة.</string>
+	<string name="about_dialog_translate">ساعد في الترجمة</string>
+	<string name="about_dialog_translators"><b>ترجمة:</b> محمد عارف</string>
+	<string name="ant_capable">قابلية ANT</string>
+	<string name="ant_hal_service">خدمة ANT HAL</string>
+	<string name="ant_plugins">إضافات ANT+</string>
+	<string name="ant_radio_service">خدمة راديو ANT</string>
+	<string name="ant_support_version_info">معلومات اصدار دعم ANT</string>
+	<string name="ant_usb_service">خدمة ANT USB</string>
+	<string name="ant_usb_service_installed">خوادم ANT USB مثبته</string>
+	<string name="app_name">مختبر ANT</string>
+	<string name="built_in_ant_detected">مكتشف ANT مدمج</string>
+	<string name="built_in_firmware">مدمج مع البرامج الثابته</string>
+	<string name="googleplay_listing_full_description">مع هذا التطبيق يمكنك التحقق من قدرات ANT المختلفة التي يدعمها جهازك.\nكما يقدم روابط لتنزيل / إلغاء تثبيت حزم ANT المختلفة.</string>
+	<string name="googleplay_listing_short_description">اختبر جهازك لقابلية ANT</string>
+	<string name="menu_about">حول</string>
+	<string name="menu_test">اختبار دعم ANT</string>
+	<string name="no">لا</string>
+	<string name="no_service">لا توجد خدمه</string>
+	<string name="not_available">غير موجود</string>
+	<string name="not_found">لم نجده</string>
+	<string name="requires_ars">يتطلب ARS</string>
+	<string name="usb_devices">أجهزة يو اس بي</string>
+	<string name="usb_on_the_go_support">دعم ناقل OTG</string>
+	<string name="yes">نعم</string>
+</resources>

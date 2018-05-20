@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+	<string name="about_dialog_contact">Kontakt</string>
+	<string name="about_dialog_rate">Ohodnotit</string>
+	<string name="about_dialog_text">Můžete aplikaci projevit podporu ohodnocením v Google Play nebo přeložením do Vašeho rodného jazyka.</string>
+	<string name="about_dialog_translate">Pomozte přeložit</string>
+	<string name="about_dialog_translators"><b>Přeložil:</b> Kryštof Píštěk</string>
+	<string name="ant_capable">Podporuje ANT</string>
+	<string name="ant_hal_service">ANT HAL Služba:</string>
+	<string name="ant_plugins">Pluginy ANT+:</string>
+	<string name="ant_radio_service">Služba pro rádia ANT:</string>
+	<string name="ant_support_version_info">Verze podpory ANT</string>
+	<string name="ant_usb_service">ANT USB Služba:</string>
+	<string name="ant_usb_service_installed">Detekována ANT USB Služba:</string>
+	<string name="app_name">ANT Tester</string>
+	<string name="built_in_ant_detected">Detekováno zabudované ANT:</string>
+	<string name="built_in_firmware">Zabudovaný firmware:</string>
+	<string name="googleplay_listing_full_description">Touto aplikací můžete zjistit, které služby ANT vaše zařízení podporuje.\nAplikace také poskytuje odkazy na stažení nebo odinstalaci různých služeb ANT.</string>
+	<string name="googleplay_listing_short_description">Otestujte své zařízení na podporu ANT</string>
+	<string name="menu_about">O aplikaci</string>
+	<string name="menu_test">Otestovat podporu ANT</string>
+	<string name="no">Ne</string>
+	<string name="no_service">Bez služby</string>
+	<string name="not_available">N/A</string>
+	<string name="not_found">Nenalezeno</string>
+	<string name="requires_ars">Potřebuje ARS</string>
+	<string name="usb_devices">USB zařízení</string>
+	<string name="usb_on_the_go_support">Podpora USB OTG:</string>
+	<string name="yes">Ano</string>
+</resources>
