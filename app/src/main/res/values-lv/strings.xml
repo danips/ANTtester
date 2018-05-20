@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+	<string name="about_dialog_contact">Kontaki</string>
+	<string name="about_dialog_rate">Likme</string>
+	<string name="about_dialog_text">Varat rādīt savu atbalstu, novērtējot lietotni pakalpojumā Google Play vai palīdzot to tulkot savā valodā.</string>
+	<string name="about_dialog_translate">Palīdziet tulkot</string>
+	<string name="about_dialog_translators"><b>Translator:</b> Andrejs Boroduļins</string>
+	<string name="ant_capable">ANT spējīgs</string>
+	<string name="ant_hal_service">ANT HAL pakalpojums:</string>
+	<string name="ant_plugins">ANT+ spraudņi:</string>
+	<string name="ant_radio_service">ANT Radio pakalpojums:</string>
+	<string name="ant_support_version_info">ANT atbalsta versijas informācija</string>
+	<string name="ant_usb_service">ANT USB pakalpojums:</string>
+	<string name="ant_usb_service_installed">ANT USB pakalpojums ir instalēts:</string>
+	<string name="app_name">ANT Tester</string>
+	<string name="built_in_ant_detected">Atrastais Built-in ANT:</string>
+	<string name="built_in_firmware">Iebūvēta programmaparatūra:</string>
+	<string name="googleplay_listing_full_description">Ar šo programmu jūs varat pārbaudīt dažādās ANT iespējas, ko atbalsta jūsu ierīce.\nTas piedāvā arī saites, lai lejupielādētu / atinstalētu dažādus ANT pakotnes.</string>
+	<string name="googleplay_listing_short_description">Parbaudi iekartu uz ANT saderību</string>
+	<string name="menu_about">Par mums</string>
+	<string name="menu_test">ANT atbalsta Tests</string>
+	<string name="no">Nav</string>
+	<string name="no_service">Nav apkalpojams</string>
+	<string name="not_available">Nav pieejams</string>
+	<string name="not_found">Nav atrasts</string>
+	<string name="requires_ars">ARS prasības</string>
+	<string name="usb_devices">USB iekārtas</string>
+	<string name="usb_on_the_go_support">USB On-The-Go atbalsts:</string>
+	<string name="yes">JĀ</string>
+</resources>
