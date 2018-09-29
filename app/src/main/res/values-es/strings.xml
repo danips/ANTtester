@@ -2,7 +2,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
 	<string name="about_dialog_contact">Contactar</string>
 	<string name="about_dialog_rate">Puntuar</string>
-	<string name="about_dialog_text">Puedes mostar tu apoyo a la aplicación votándola en Google Play o ayudando en la traducción a tu propio idioma.</string>
+	<string name="about_dialog_text">Puedes mostrar tu apoyo a la aplicación votándola en Google Play o ayudando en la traducción a tu propio idioma.</string>
 	<string name="about_dialog_translate">Ayuda traduciendo</string>
 	<string name="about_dialog_translators"><b>Traductor:</b> Daniel Piñeiro</string>
 	<string name="ant_capable">Soporte ANT</string>
