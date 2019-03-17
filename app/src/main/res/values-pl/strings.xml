@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+	<string name="about_dialog_contact">Kontakt</string>
+	<string name="about_dialog_rate">Oceniać</string>
+	<string name="about_dialog_text">Możesz pokazać swoje wsparcie, oceniając aplikację w Google Play lub pomagając przetłumaczyć ją na swój język.</string>
+	<string name="about_dialog_translate">Pomóż w tłumaczeniu</string>
+	<string name="about_dialog_translators"><b>Tłumacz:</b> kolya2012662</string>
+	<string name="ant_capable">ANT Zdolny</string>
+	<string name="ant_hal_service">Usługa ANT HAL:</string>
+	<string name="ant_plugins">Wtyczki ANT+:</string>
+	<string name="ant_radio_service">Usługa radiowa ANT:</string>
+	<string name="ant_support_version_info">Informacje o wersji pomocy technicznej ANT</string>
+	<string name="ant_usb_service">Usługa ANT USB:</string>
+	<string name="ant_usb_service_installed">Zainstalowana usługa ANT USB:</string>
+	<string name="app_name">ANT Tester</string>
+	<string name="built_in_ant_detected">Wbudowany wykrywany ANT:</string>
+	<string name="built_in_firmware">Wbudowane oprogramowanie układowe:</string>
+	<string name="googleplay_listing_full_description">Dzięki tej aplikacji możesz sprawdzić różne funkcje ANT obsługiwane przez twoje urządzenie.\nOferuje także łącza do pobierania / odinstalowywania różnych pakietów ANT.</string>
+	<string name="googleplay_listing_short_description">Przetestuj swoje urządzenie pod kątem możliwości ANT</string>
+	<string name="menu_about">O nas</string>
+	<string name="menu_test">Przetestuj wsparcie ANT</string>
+	<string name="no">Nie</string>
+	<string name="no_service">Nie ma usługi</string>
+	<string name="not_available">Niedostępne</string>
+	<string name="not_found">Nie znaleziono</string>
+	<string name="requires_ars">Wymaga ARS</string>
+	<string name="usb_devices">Urządzenia USB</string>
+	<string name="usb_on_the_go_support">Obsługa USB On-The-Go:</string>
+	<string name="yes">Tak</string>
+</resources>
