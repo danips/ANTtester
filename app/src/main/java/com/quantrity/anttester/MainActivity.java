@@ -328,7 +328,7 @@ public class MainActivity extends Activity {
         }
 
 
-        Boolean usb_devices = false;
+        boolean usb_devices = false;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR1)
         {
             UsbManager manager = (UsbManager) getSystemService(Context.USB_SERVICE);
@@ -423,8 +423,12 @@ public class MainActivity extends Activity {
                 }
                 break;
             case R.id.translate_button:
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://localize.quantrity.com/projects/3"));
-                startActivity(browserIntent);
+                try {
+                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://localize.quantrity.com/projects/3"));
+                    startActivity(browserIntent);
+                } catch (ActivityNotFoundException e) {
+                    e.printStackTrace();
+                }
                 break;
             case R.id.builtin_ant_detected_iv:
                 Toast.makeText(getApplicationContext(), R.string.no_service, Toast.LENGTH_SHORT).show();
