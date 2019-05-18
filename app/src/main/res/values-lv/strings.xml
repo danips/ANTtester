@@ -15,8 +15,8 @@
 	<string name="app_name">ANT Tester</string>
 	<string name="built_in_ant_detected">Atrastais Built-in ANT:</string>
 	<string name="built_in_firmware">Iebūvēta programmaparatūra:</string>
-	<string name="googleplay_listing_full_description">Ar šo programmu jūs varat pārbaudīt dažādās ANT iespējas, ko atbalsta jūsu ierīce.\nTas piedāvā arī saites, lai lejupielādētu / atinstalētu dažādus ANT pakotnes.</string>
-	<string name="googleplay_listing_short_description">Parbaudi iekartu uz ANT saderību</string>
+	<string name="googleplay_listing_full_description">Ar šo programmu jūs varat pārbaudīt dažādās ANT+™ iespējas, ko atbalsta jūsu ierīce.\nTas piedāvā arī saites, lai lejupielādētu / atinstalētu dažādus ANT+™ pakotnes.</string>
+	<string name="googleplay_listing_short_description">Parbaudi iekartu uz ANT+™ saderību</string>
 	<string name="menu_about">Par mums</string>
 	<string name="menu_test">ANT atbalsta Tests</string>
 	<string name="no">Nav</string>

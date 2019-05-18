@@ -15,8 +15,8 @@
 	<string name="app_name">Penguji ANT</string>
 	<string name="built_in_ant_detected">ANT bawaan terdeteksi:</string>
 	<string name="built_in_firmware">Firmware bawaan:</string>
-	<string name="googleplay_listing_full_description">With this application you can check the different ANT capabilities your device supports.\nIt also offers links to download/uninstall the different ANT packages.</string>
-	<string name="googleplay_listing_short_description">Test your device for ANT capabilities</string>
+	<string name="googleplay_listing_full_description">With this application you can check the different ANT+™ capabilities your device supports.\nIt also offers links to download/uninstall the different ANT+™ packages.</string>
+	<string name="googleplay_listing_short_description">Test your device for ANT+™ capabilities</string>
 	<string name="menu_about">Tentang</string>
 	<string name="menu_test">Uji Dukungan ANT</string>
 	<string name="no">Tidak</string>

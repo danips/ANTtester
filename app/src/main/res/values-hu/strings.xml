@@ -15,8 +15,8 @@
 	<string name="app_name">ANT Tesztelő</string>
 	<string name="built_in_ant_detected">Beépített ANT felismerve:</string>
 	<string name="built_in_firmware">Beépített firmware:</string>
-	<string name="googleplay_listing_full_description">With this application you can check the different ANT capabilities your device supports.\nIt also offers links to download/uninstall the different ANT packages.</string>
-	<string name="googleplay_listing_short_description">Test your device for ANT capabilities</string>
+	<string name="googleplay_listing_full_description">With this application you can check the different ANT+™ capabilities your device supports.\nIt also offers links to download/uninstall the different ANT+™ packages.</string>
+	<string name="googleplay_listing_short_description">Test your device for ANT+™ capabilities</string>
 	<string name="menu_about">Infó</string>
 	<string name="menu_test">ANT Támogatás Tesztelése</string>
 	<string name="no">Nem</string>

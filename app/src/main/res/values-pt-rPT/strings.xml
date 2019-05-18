@@ -15,8 +15,8 @@
 	<string name="app_name">ANT Tester</string>
 	<string name="built_in_ant_detected">ANT embutido detectado:</string>
 	<string name="built_in_firmware">Firmware incorporado:</string>
-	<string name="googleplay_listing_full_description">Com este aplicativo pode verificar os diferentes recursos ANT suportados pelo seu dispositivo. \nTambém oferece links para descarregar / desinstalar os diferentes pacotes ANT.</string>
-	<string name="googleplay_listing_short_description">Teste o seu dispositivo para as capacidades do ANT</string>
+	<string name="googleplay_listing_full_description">Com este aplicativo pode verificar os diferentes recursos ANT+™ suportados pelo seu dispositivo. \nTambém oferece links para descarregar / desinstalar os diferentes pacotes ANT+™.</string>
+	<string name="googleplay_listing_short_description">Teste o seu dispositivo para as capacidades do ANT+™</string>
 	<string name="menu_about">Sobre</string>
 	<string name="menu_test">Testar suporte ANT</string>
 	<string name="no">Não</string>

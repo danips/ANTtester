@@ -15,8 +15,8 @@
 	<string name="app_name">ANT тестер</string>
 	<string name="built_in_ant_detected">Вбудований ANT виявлено:</string>
 	<string name="built_in_firmware">Вбудоване прошивка:</string>
-	<string name="googleplay_listing_full_description">За допомогою цієї програми ви можете перевірити різні можливості ANT, які підтримує ваш пристрій.\nВона також пропонує посилання на завантаження / видалення різних ANT-пакетів.</string>
-	<string name="googleplay_listing_short_description">Тест ANT-можливостей вашого пристрою</string>
+	<string name="googleplay_listing_full_description">За допомогою цієї програми ви можете перевірити різні можливості ANT+™, які підтримує ваш пристрій.\nВона також пропонує посилання на завантаження / видалення різних ANT+™-пакетів.</string>
+	<string name="googleplay_listing_short_description">Тест ANT+™-можливостей вашого пристрою</string>
 	<string name="menu_about">Про це</string>
 	<string name="menu_test">Тест підтримки ANT</string>
 	<string name="no">Ні</string>

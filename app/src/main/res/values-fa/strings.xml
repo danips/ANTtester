@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+	<string name="about_dialog_contact">تماس با ما</string>
+	<string name="about_dialog_rate">امتیاز</string>
+	<string name="about_dialog_text">شما میتوانید با امتیاز دادن به ما در پلی استور و یا با کمک به ترجمه این برنامه به زبان خود از ما حمایت کنید.</string>
+	<string name="about_dialog_translate">کمک ترجمه</string>
+	<string name="about_dialog_translators"><b>Translator:</b> Daniel Piñeiro</string>
+	<string name="ant_capable">توانایی ANT</string>
+	<string name="ant_hal_service">سرویس HAL ANT:</string>
+	<string name="ant_plugins">ANT+افزایه هایش:</string>
+	<string name="ant_radio_service">سرویس Radio ANT:</string>
+	<string name="ant_support_version_info">اطلاعات نسخه حمایت از ANT</string>
+	<string name="ant_usb_service">سرویس ANT USB:</string>
+	<string name="ant_usb_service_installed">سرویس ANT USB نصب شد:</string>
+	<string name="app_name">تستر ANT</string>
+	<string name="built_in_ant_detected">آنتن واخلی پیدا شد:</string>
+	<string name="built_in_firmware">در سیستم عامل ساخته شده است:</string>
+	<string name="googleplay_listing_full_description">با این نرم افزار شما میتوانید دستگاه خود را از نظر حمایت از قابلیت های مختلف ANT+™ تست کنید.\nهمچنین به شما لینکهایی برای دانلود و یا حذف بسته های مختلف ANT+™ پیشنهاد میکند.</string>
+	<string name="googleplay_listing_short_description">دستگاه خود را از نظر داشتن قابلیت ANT+™ تست کنید</string>
+	<string name="menu_about">درباره</string>
+	<string name="menu_test">امتحان راهنمای صفحه ها</string>
+	<string name="no">نه</string>
+	<string name="no_service">سرویس در دسترس نیست</string>
+	<string name="not_available">خارج از دسترس</string>
+	<string name="not_found">پیدا نشد</string>
+	<string name="requires_ars">نیازمند ARS</string>
+	<string name="usb_devices">ابزار usb</string>
+	<string name="usb_on_the_go_support">پشتیبانی از حافظه خارجی:</string>
+	<string name="yes">بله</string>
+</resources>

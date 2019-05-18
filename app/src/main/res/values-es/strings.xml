@@ -15,8 +15,8 @@
 	<string name="app_name">ANT Tester</string>
 	<string name="built_in_ant_detected">Radio ANT integrada:</string>
 	<string name="built_in_firmware">Firmware integrado:</string>
-	<string name="googleplay_listing_full_description">Con esta aplicación se puede comprobar las diferentes funcionalidades ANT que soporta el dispositivo.\nTambién ofrece enlaces para descargar/desinstalar los diferentes paquetes ANT.</string>
-	<string name="googleplay_listing_short_description">Comprueba la funcionalidad ANT de tu dispositivo</string>
+	<string name="googleplay_listing_full_description">Con esta aplicación se puede comprobar las diferentes funcionalidades ANT+™ que soporta el dispositivo.\nTambién ofrece enlaces para descargar/desinstalar los diferentes paquetes ANT+™.</string>
+	<string name="googleplay_listing_short_description">Comprueba la funcionalidad ANT+™ de tu dispositivo</string>
 	<string name="menu_about">Acerca de</string>
 	<string name="menu_test">Comprobar soporte ANT</string>
 	<string name="no">No</string>

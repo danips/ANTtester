@@ -15,8 +15,8 @@
 	<string name="app_name">مختبر ANT</string>
 	<string name="built_in_ant_detected">مكتشف ANT مدمج</string>
 	<string name="built_in_firmware">مدمج مع البرامج الثابته</string>
-	<string name="googleplay_listing_full_description">مع هذا التطبيق يمكنك التحقق من قدرات ANT المختلفة التي يدعمها جهازك.\nكما يقدم روابط لتنزيل / إلغاء تثبيت حزم ANT المختلفة.</string>
-	<string name="googleplay_listing_short_description">اختبر جهازك لقابلية ANT</string>
+	<string name="googleplay_listing_full_description">مع هذا التطبيق يمكنك التحقق من قدرات ANT+™ المختلفة التي يدعمها جهازك.\nكما يقدم روابط لتنزيل / إلغاء تثبيت حزم ANT+™ المختلفة.</string>
+	<string name="googleplay_listing_short_description">اختبر جهازك لقابلية ANT+™</string>
 	<string name="menu_about">حول</string>
 	<string name="menu_test">اختبار دعم ANT</string>
 	<string name="no">لا</string>
