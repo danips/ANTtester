@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbManager;
 import android.net.Uri;
@@ -243,10 +244,11 @@ public class MainActivity extends Activity {
         if (usb_host_support) {
             setTextView(addon_adapter_support_tv, R.string.yes, R.string.no, has_ant_addon_support);
             if (has_ant_addon_support) {
-                addon_adapter_support_iv.setImageResource(R.mipmap.ic_action_about);
+                addon_adapter_support_iv.setImageResource(R.drawable.ic_info_outline_white_24dp);
+                addon_adapter_support_iv.setColorFilter(Color.DKGRAY, PorterDuff.Mode.MULTIPLY);
                 addon_adapter_support_iv.setTag(YES_TAG);
             } else {
-                addon_adapter_support_iv.setImageResource(R.mipmap.ic_action_download);
+                addon_adapter_support_iv.setImageResource(R.drawable.ic_file_download_black_24dp);
                 addon_adapter_support_iv.setTag(NO_TAG);
             }
         } else {
@@ -255,7 +257,7 @@ public class MainActivity extends Activity {
             addon_adapter_support_iv.setVisibility(View.GONE);
         }
 
-        ant_capable_iv.setImageResource((has_builtin_library || usb_host_support) ? R.mipmap.ic_ok : R.mipmap.ic_nok);
+        ant_capable_iv.setImageResource((has_builtin_library || usb_host_support) ? R.drawable.ic_ok_green_36dp : R.drawable.ic_nok_red_36dp);
 
         boolean has_ARS = false;
         String version = null;
@@ -263,18 +265,19 @@ public class MainActivity extends Activity {
             version = getPackageManager().getPackageInfo("com.dsi.ant.service.socket", PackageManager.GET_META_DATA).versionName;
             ant_radio_service_tv.setText(version);
             ant_radio_service_tv.setTextColor(GREEN);
-            ant_radio_service_iv.setImageResource(R.mipmap.ic_action_about);
+            ant_radio_service_iv.setImageResource(R.drawable.ic_info_outline_white_24dp);
+            ant_radio_service_iv.setColorFilter(Color.DKGRAY, PorterDuff.Mode.MULTIPLY);
             ant_radio_service_iv.setTag(YES_TAG);
 
             has_ARS = true;
 
             builtin_firmware_iv.setTag(YES_TAG);
-            builtin_firmware_iv.setImageResource(R.mipmap.ic_action_settings);
+            builtin_firmware_iv.setImageResource(R.drawable.ic_settings_black_24dp);
         } catch (Exception e) {
             if (version == null) {
                 ant_radio_service_tv.setText(R.string.not_available);
                 ant_radio_service_tv.setTextColor(RED);
-                ant_radio_service_iv.setImageResource(R.mipmap.ic_action_download);
+                ant_radio_service_iv.setImageResource(R.drawable.ic_file_download_black_24dp);
                 ant_radio_service_tv.setTag(NO_TAG);
             }
             e.printStackTrace();
@@ -370,12 +373,13 @@ public class MainActivity extends Activity {
             String version = getPackageManager().getPackageInfo(name, PackageManager.GET_META_DATA).versionName;
             tv.setText(version);
             tv.setTextColor(GREEN);
-            iv.setImageResource(R.mipmap.ic_action_about);
+            iv.setImageResource(R.drawable.ic_info_outline_white_24dp);
+            iv.setColorFilter(Color.DKGRAY, PorterDuff.Mode.MULTIPLY);
             iv.setTag(YES_TAG);
         } catch (Exception e) {
             tv.setText(R.string.not_available);
             tv.setTextColor(RED);
-            iv.setImageResource(R.mipmap.ic_action_download);
+            iv.setImageResource(R.drawable.ic_file_download_black_24dp);
             iv.setTag(NO_TAG);
         }
     }

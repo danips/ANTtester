@@ -48,7 +48,7 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@mipmap/ic_action_error"
+                    android:src="@drawable/ic_error_red_24dp"
                     android:id="@+id/builtin_ant_detected_iv"
                     android:onClick="aboutClick"/>
             </TableRow>
@@ -85,7 +85,7 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@mipmap/ic_action_download"
+                    android:src="@drawable/ic_file_download_black_24dp"
                     android:id="@+id/addon_adapter_support_iv"/>
             </TableRow>
         </TableLayout>
@@ -120,7 +120,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingLeft="10dip"
-                        android:src="@mipmap/ic_action_download"
+                        android:src="@drawable/ic_file_download_black_24dp"
                         android:id="@+id/builtin_firmware_iv"/>
                 </LinearLayout>
             </TableRow>
@@ -159,7 +159,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingLeft="10dip"
-                    android:src="@mipmap/ic_action_download"
+                    android:src="@drawable/ic_file_download_black_24dp"
                     android:id="@+id/ant_radio_service_iv"/>
                 </LinearLayout>
             </TableRow>
@@ -183,7 +183,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingLeft="10dip"
-                    android:src="@mipmap/ic_action_download"
+                    android:src="@drawable/ic_file_download_black_24dp"
                     android:id="@+id/ant_usb_service_iv"/>
                 </LinearLayout>
             </TableRow>
@@ -206,7 +206,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingLeft="10dip"
-                    android:src="@mipmap/ic_action_download"
+                    android:src="@drawable/ic_file_download_black_24dp"
                     android:id="@+id/ant_plugins_iv"/>
                 </LinearLayout>
             </TableRow>

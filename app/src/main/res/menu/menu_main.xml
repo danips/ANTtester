@@ -2,11 +2,11 @@
     xmlns:yourapp="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/action_about"
-        android:icon="@mipmap/ic_action_about_white"
+        android:icon="@drawable/ic_info_outline_white_24dp"
         android:title="@string/menu_about"
         android:showAsAction="always|withText"/>
     <item android:id="@+id/action_test"
-        android:icon="@mipmap/ic_action_refresh"
+        android:icon="@drawable/ic_update_white_24dp"
         android:title="@string/menu_test"
         android:showAsAction="always|withText" />
 </menu>

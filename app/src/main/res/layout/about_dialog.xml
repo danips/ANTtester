@@ -8,7 +8,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-
     <ImageView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -38,7 +37,7 @@
     <Button
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:drawableLeft="@mipmap/ic_rate"
+        android:drawableLeft="@drawable/ic_star"
         android:drawablePadding="20dp"
         android:paddingRight="20dp"
         android:text="@string/about_dialog_rate"
@@ -48,7 +47,7 @@
     <Button
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:drawableLeft="@mipmap/ic_translate"
+        android:drawableLeft="@drawable/ic_translate"
         android:drawablePadding="20dp"
         android:paddingRight="20dp"
         android:text="@string/about_dialog_translate"
