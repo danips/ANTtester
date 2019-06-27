@@ -27,4 +27,5 @@
 	<string name="usb_devices">Urządzenia USB</string>
 	<string name="usb_on_the_go_support">Obsługa USB On-The-Go:</string>
 	<string name="yes">Tak</string>
+    <string name="error_title">Błąd</string>
 </resources>

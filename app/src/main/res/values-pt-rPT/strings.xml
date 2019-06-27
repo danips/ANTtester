@@ -27,4 +27,6 @@
 	<string name="usb_devices">Dispositivos USB</string>
 	<string name="usb_on_the_go_support">Suporte USB On-The-Go:</string>
 	<string name="yes">Sim</string>
+    <string name="error_title">Erro</string>
+	<string name="use_ant_harware_permission">✘ Permissões > Permissões adicionais > utilizar hardware ANT</string>
 </resources>

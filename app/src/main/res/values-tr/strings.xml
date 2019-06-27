@@ -27,4 +27,5 @@
 	<string name="usb_devices">USB Aygıtları</string>
 	<string name="usb_on_the_go_support">OTG Desteği:</string>
 	<string name="yes">Var</string>
+    <string name="error_title">Hata</string>
 </resources>

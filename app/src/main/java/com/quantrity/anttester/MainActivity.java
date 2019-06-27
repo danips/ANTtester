@@ -1,12 +1,15 @@
 package com.quantrity.anttester;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
@@ -63,6 +66,7 @@ public class MainActivity extends Activity {
     ImageView addon_adapter_support_iv;
     ImageView builtin_firmware_iv;
     ImageView ant_radio_service_iv;
+    ImageView ant_radio_service_lock_iv, ant_radio_service_lock2_iv;
     ImageView ant_usb_service_iv;
     ImageView ant_plugins_iv;
     TextView usb_devices_tv1;
@@ -95,6 +99,8 @@ public class MainActivity extends Activity {
         builtin_firmware_iv = findViewById(R.id.builtin_firmware_iv);
         builtin_firmware_iv.setTag(NO_TAG);
         ant_radio_service_iv = findViewById(R.id.ant_radio_service_iv);
+        ant_radio_service_lock_iv = findViewById(R.id.ant_radio_service_lock_iv);
+        ant_radio_service_lock2_iv = findViewById(R.id.ant_radio_service_lock2_iv);
         ant_usb_service_iv = findViewById(R.id.ant_usb_service_iv);
         ant_plugins_iv = findViewById(R.id.ant_plugins_iv);
 
@@ -273,12 +279,35 @@ public class MainActivity extends Activity {
 
             builtin_firmware_iv.setTag(YES_TAG);
             builtin_firmware_iv.setImageResource(R.drawable.ic_settings_black_24dp);
+
+            //Check ANT Radio Service permissions
+            if (Build.VERSION.SDK_INT >= 16) {
+                try {
+                    PackageInfo pi = getApplicationContext().getPackageManager().getPackageInfo("com.dsi.ant.service.socket", PackageManager.GET_PERMISSIONS);
+                    final String[] requestedPermissions = pi.requestedPermissions;
+                    boolean enabled = false;
+                    for (int i = 0, len = requestedPermissions.length; i < len; i++) {
+                        if (requestedPermissions[i].startsWith("com.dsi.ant.permission.ANT") &&
+                                ((pi.requestedPermissionsFlags[i] & PackageInfo.REQUESTED_PERMISSION_GRANTED) != 0))
+                        {
+                            enabled = true;
+                            break;
+                        }
+                    }
+                    ant_radio_service_lock_iv.setVisibility(enabled ? View.GONE : View.VISIBLE);
+                    ant_radio_service_lock2_iv.setVisibility(enabled ? View.GONE : View.VISIBLE);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
         } catch (Exception e) {
             if (version == null) {
                 ant_radio_service_tv.setText(R.string.not_available);
                 ant_radio_service_tv.setTextColor(RED);
                 ant_radio_service_iv.setImageResource(R.drawable.ic_file_download_black_24dp);
                 ant_radio_service_tv.setTag(NO_TAG);
+                ant_radio_service_lock_iv.setVisibility(View.GONE);
+                ant_radio_service_lock2_iv.setVisibility(View.GONE);
             }
             e.printStackTrace();
         }
@@ -438,6 +467,20 @@ public class MainActivity extends Activity {
                 break;
             case R.id.builtin_ant_detected_iv:
                 Toast.makeText(getApplicationContext(), R.string.no_service, Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.ant_radio_service_lock_iv:
+            case R.id.ant_radio_service_lock2_iv:
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+                builder.setIcon(R.drawable.ic_lock_red_24dp)
+                        .setTitle(R.string.error_title)
+                        .setMessage(R.string.use_ant_harware_permission)
+                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                showInstalledAppDetails(MainActivity.this, "com.dsi.ant.service.socket");
+                            }
+                        }).create().show();
                 break;
             default: Log.v(TAG, "Unknown " + view.toString());
         }

@@ -122,6 +122,14 @@
                         android:paddingLeft="10dip"
                         android:src="@drawable/ic_file_download_black_24dp"
                         android:id="@+id/builtin_firmware_iv"/>
+                    <ImageView
+                        android:visibility="gone"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="10dip"
+                        android:src="@drawable/ic_lock_red_24dp"
+                        android:id="@+id/ant_radio_service_lock_iv"
+                        android:onClick="aboutClick"/>
                 </LinearLayout>
             </TableRow>
             <TableRow>
@@ -147,20 +155,28 @@
                     android:text="@string/ant_radio_service"
                     android:textAppearance="?android:attr/textAppearanceMedium" />
                 <LinearLayout android:gravity="center_vertical">
-                <TextView
-                    android:paddingLeft="15dip"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/not_found"
-                    android:textColor="#cc0000"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:id="@+id/ant_radio_service_tv" />
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="10dip"
-                    android:src="@drawable/ic_file_download_black_24dp"
-                    android:id="@+id/ant_radio_service_iv"/>
+                    <TextView
+                        android:paddingLeft="15dip"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/not_found"
+                        android:textColor="#cc0000"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:id="@+id/ant_radio_service_tv" />
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="10dip"
+                        android:src="@drawable/ic_file_download_black_24dp"
+                        android:id="@+id/ant_radio_service_iv"/>
+                    <ImageView
+                        android:visibility="gone"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="10dip"
+                        android:src="@drawable/ic_lock_red_24dp"
+                        android:id="@+id/ant_radio_service_lock2_iv"
+                        android:onClick="aboutClick"/>
                 </LinearLayout>
             </TableRow>
             <TableRow android:gravity="center_vertical"

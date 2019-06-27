@@ -27,4 +27,5 @@
 	<string name="usb_devices">USB iekārtas</string>
 	<string name="usb_on_the_go_support">USB On-The-Go atbalsts:</string>
 	<string name="yes">JĀ</string>
+    <string name="error_title">Kļūda</string>
 </resources>

@@ -27,4 +27,5 @@
 	<string name="usb_devices">อุปกรณ์ยูเอสบี</string>
 	<string name="usb_on_the_go_support">สนับสนุนอุปกรณ์ USB On-The-Go:</string>
 	<string name="yes">ใช่</string>
+    <string name="error_title">ข้อผิดพลาด</string>
 </resources>

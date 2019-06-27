@@ -27,4 +27,5 @@
 	<string name="usb_devices">USB tæki</string>
 	<string name="usb_on_the_go_support">Stuðningur við USB á ferðinni</string>
 	<string name="yes">Já</string>
+    <string name="error_title">Villa</string>
 </resources>

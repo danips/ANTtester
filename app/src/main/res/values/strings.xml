@@ -15,6 +15,7 @@
 	<string name="app_name">ANT Tester</string>
 	<string name="built_in_ant_detected">Built-in ANT detected:</string>
 	<string name="built_in_firmware">Built-in firmware:</string>
+	<string name="error_title">Error</string>
 	<string name="googleplay_listing_full_description">With this application you can check the different ANT+™ capabilities your device supports.\nIt also offers links to download/uninstall the different ANT+™ packages.</string>
 	<string name="googleplay_listing_short_description">Test your device for ANT+™ capabilities</string>
 	<string name="menu_about">About</string>
@@ -26,5 +27,6 @@
 	<string name="requires_ars">Requires ARS</string>
 	<string name="usb_devices">USB Devices</string>
 	<string name="usb_on_the_go_support">USB On-The-Go support:</string>
+	<string name="use_ant_harware_permission">✘ Permission > Additional permission > use ANT hardware</string>
 	<string name="yes">Yes</string>
 </resources>

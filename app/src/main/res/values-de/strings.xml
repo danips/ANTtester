@@ -27,4 +27,6 @@
 	<string name="usb_devices">USB-Geräte:</string>
 	<string name="usb_on_the_go_support">USB-OTG Support:</string>
 	<string name="yes">Ja</string>
+    <string name="error_title">Fehler</string>
+    <string name="use_ant_harware_permission">✘ Berechtigungen > Zusätzliche Berechtigungen > ANT-Hardware verwenden</string>
 </resources>
