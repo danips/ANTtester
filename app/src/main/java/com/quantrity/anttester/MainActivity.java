@@ -375,7 +375,12 @@ public class MainActivity extends Activity {
                     UsbDevice device = deviceIterator.next();
                     sb.append("DeviceID:  ").append(device.getDeviceId()).append("\n").append("VendorID:  ").append(device.getVendorId()).append(" (0x").append(Integer.toHexString(device.getVendorId())).append(")\n").append("ProductID: ").append(device.getProductId()).append(" (0x").append(Integer.toHexString(device.getProductId())).append(")\n");
                     if (Build.VERSION.SDK_INT >= 21) {
-                        sb.append("\n" + "ManufacturerName: ").append(device.getManufacturerName()).append("\n").append("ProductName: ").append(device.getProductName()).append("\n").append("SerialNumber: ").append(device.getSerialNumber()).append("\n").append("DeviceName: ").append(device.getDeviceName()).append("\n");
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                            sb.append("\n" + "ManufacturerName: ").append(device.getManufacturerName()).append("\n").append("ProductName: ").append(device.getProductName()).append("\n").append("DeviceName: ").append(device.getDeviceName()).append("\n");
+                        }
+                        else {
+                            sb.append("\n" + "ManufacturerName: ").append(device.getManufacturerName()).append("\n").append("ProductName: ").append(device.getProductName()).append("\n").append("SerialNumber: ").append(device.getSerialNumber()).append("\n").append("DeviceName: ").append(device.getDeviceName()).append("\n");
+                        }
                     }
                     if (Build.VERSION.SDK_INT >= 23) {
                         sb.append("\nVersion: ").append(device.getVersion()).append("\n");
