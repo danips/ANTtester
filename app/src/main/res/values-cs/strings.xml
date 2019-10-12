@@ -15,6 +15,7 @@
 	<string name="app_name">ANT Tester</string>
 	<string name="built_in_ant_detected">Detekováno zabudované ANT:</string>
 	<string name="built_in_firmware">Zabudovaný firmware:</string>
+	<string name="error_title">Chyba</string>
 	<string name="googleplay_listing_full_description">Touto aplikací můžete zjistit, které služby ANT+™ vaše zařízení podporuje.\nAplikace také poskytuje odkazy na stažení nebo odinstalaci různých služeb ANT+™.</string>
 	<string name="googleplay_listing_short_description">Otestujte své zařízení na podporu ANT+™</string>
 	<string name="menu_about">O aplikaci</string>
@@ -27,5 +28,4 @@
 	<string name="usb_devices">USB zařízení</string>
 	<string name="usb_on_the_go_support">Podpora USB OTG:</string>
 	<string name="yes">Ano</string>
-    <string name="error_title">Chyba</string>
 </resources>

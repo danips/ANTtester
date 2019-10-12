@@ -15,17 +15,17 @@
 	<string name="app_name">ANT тестер</string>
 	<string name="built_in_ant_detected">Вбудований ANT виявлено:</string>
 	<string name="built_in_firmware">Вбудоване прошивка:</string>
+	<string name="error_title">Помилка</string>
 	<string name="googleplay_listing_full_description">За допомогою цієї програми ви можете перевірити різні можливості ANT+™, які підтримує ваш пристрій.\nВона також пропонує посилання на завантаження / видалення різних ANT+™-пакетів.</string>
 	<string name="googleplay_listing_short_description">Тест ANT+™-можливостей вашого пристрою</string>
 	<string name="menu_about">Про це</string>
 	<string name="menu_test">Тест підтримки ANT</string>
 	<string name="no">Ні</string>
 	<string name="no_service">Немає служби</string>
-	<string name="not_available">н/д</string>
-	<string name="not_found">не знайдено</string>
+	<string name="not_available">Не підтримується</string>
+	<string name="not_found">Не знайдено</string>
 	<string name="requires_ars">Потрібен ARS</string>
 	<string name="usb_devices">USB пристрої</string>
 	<string name="usb_on_the_go_support">Підтримка USB-On-The-Go:</string>
 	<string name="yes">Так</string>
-    <string name="error_title">Помилка</string>
 </resources>

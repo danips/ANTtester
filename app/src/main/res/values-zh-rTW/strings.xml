@@ -15,6 +15,7 @@
 	<string name="app_name">ANT測試程序</string>
 	<string name="built_in_ant_detected">偵測到內置ANT：</string>
 	<string name="built_in_firmware">內置固件硬體：</string>
+	<string name="error_title">錯誤</string>
 	<string name="googleplay_listing_full_description">有了這個應用程序，你可以檢查你的設備支持不同的ANT+™功能。\n它還提供了下載/卸載不同ANT+™軟件包的鏈接。</string>
 	<string name="googleplay_listing_short_description">測試您的設備的ANT+™功能</string>
 	<string name="menu_about">關於</string>
@@ -27,5 +28,4 @@
 	<string name="usb_devices">USB設備</string>
 	<string name="usb_on_the_go_support">支援USB On-The-Go(OTG)：</string>
 	<string name="yes">是</string>
-    <string name="error_title">錯誤</string>
 </resources>

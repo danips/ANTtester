@@ -15,6 +15,7 @@
 	<string name="app_name">ANT Tester</string>
 	<string name="built_in_ant_detected">Wbudowany wykrywany ANT:</string>
 	<string name="built_in_firmware">Wbudowane oprogramowanie układowe:</string>
+	<string name="error_title">Błąd</string>
 	<string name="googleplay_listing_full_description">Dzięki tej aplikacji możesz sprawdzić różne funkcje ANT+™ obsługiwane przez twoje urządzenie.\nOferuje także łącza do pobierania / odinstalowywania różnych pakietów ANT+™.</string>
 	<string name="googleplay_listing_short_description">Przetestuj swoje urządzenie pod kątem możliwości ANT+™</string>
 	<string name="menu_about">O nas</string>
@@ -27,5 +28,4 @@
 	<string name="usb_devices">Urządzenia USB</string>
 	<string name="usb_on_the_go_support">Obsługa USB On-The-Go:</string>
 	<string name="yes">Tak</string>
-    <string name="error_title">Błąd</string>
 </resources>

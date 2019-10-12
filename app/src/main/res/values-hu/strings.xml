@@ -15,6 +15,7 @@
 	<string name="app_name">ANT Tesztelő</string>
 	<string name="built_in_ant_detected">Beépített ANT felismerve:</string>
 	<string name="built_in_firmware">Beépített firmware:</string>
+	<string name="error_title">Hiba</string>
 	<string name="googleplay_listing_full_description">With this application you can check the different ANT+™ capabilities your device supports.\nIt also offers links to download/uninstall the different ANT+™ packages.</string>
 	<string name="googleplay_listing_short_description">Test your device for ANT+™ capabilities</string>
 	<string name="menu_about">Infó</string>
@@ -27,5 +28,4 @@
 	<string name="usb_devices">USB Eszközök</string>
 	<string name="usb_on_the_go_support">\"USB Az Útra\" támogatás:</string>
 	<string name="yes">Igen</string>
-    <string name="error_title">Hiba</string>
 </resources>

@@ -15,6 +15,7 @@
 	<string name="app_name">ANT Tester</string>
 	<string name="built_in_ant_detected">Dahili ANT tespit edildi:</string>
 	<string name="built_in_firmware">Kurulu yazilim sürümü:</string>
+	<string name="error_title">Hata</string>
 	<string name="googleplay_listing_full_description">Bu uygulama ile cihazınızın desteklediği farklı ANT+™ özelliklerini kontrol edebilirsiniz.\nAyrıca, farklı ANT+™ paketlerini indirmek / kaldırmak için bağlantılar da sunmaktadır.</string>
 	<string name="googleplay_listing_short_description">Cihazınızı ANT+™ özellikleri için test edin</string>
 	<string name="menu_about">Hakkında</string>
@@ -27,5 +28,4 @@
 	<string name="usb_devices">USB Aygıtları</string>
 	<string name="usb_on_the_go_support">OTG Desteği:</string>
 	<string name="yes">Var</string>
-    <string name="error_title">Hata</string>
 </resources>

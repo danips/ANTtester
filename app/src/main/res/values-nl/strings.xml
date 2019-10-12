@@ -15,6 +15,7 @@
 	<string name="app_name">ANT Tester</string>
 	<string name="built_in_ant_detected">Ingebouwde ANT Gedetecteerd:</string>
 	<string name="built_in_firmware">Ingebouwde firmware:</string>
+	<string name="error_title">Fout</string>
 	<string name="googleplay_listing_full_description">Met deze app kun je de ANT+™ mogelijkheden testen die jouw apparaat ondersteunt. Hij bevat ook links naar verschillende ANT+™ packages om te downloaden/ deinstalleren</string>
 	<string name="googleplay_listing_short_description">Test of jouw apparaat ANT+™ mogelijkheden heeft.</string>
 	<string name="menu_about">Over</string>
@@ -26,7 +27,6 @@
 	<string name="requires_ars">ARS Vereist</string>
 	<string name="usb_devices">USB Apparaten</string>
 	<string name="usb_on_the_go_support">USB Ondersteuning onderweg:</string>
+	<string name="use_ant_harware_permission">✘ Toestemmingen > Aanvullende rechten > ANT-hardware gebruiken</string>
 	<string name="yes">Ja</string>
-    <string name="error_title">Fout</string>
-    <string name="use_ant_harware_permission">✘ Toestemmingen > Aanvullende rechten > ANT-hardware gebruiken</string>
 </resources>

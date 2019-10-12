@@ -15,6 +15,7 @@
 	<string name="app_name">ANT Tester</string>
 	<string name="built_in_ant_detected">Eingebautes ANT gefunden:</string>
 	<string name="built_in_firmware">Eingebaute Chip-Firmware:</string>
+	<string name="error_title">Fehler</string>
 	<string name="googleplay_listing_full_description">Mit dieser Anwendung können Sie die verschiedenen ANT+™-Funktionen überprüfen, die Ihr Gerät unterstützt.\nEs enthält auch Links zum Herunterladen / Deinstallieren der verschiedenen ANT+™-Pakete.</string>
 	<string name="googleplay_listing_short_description">Testen Sie Ihr Gerät auf ANT+™-Funktionen</string>
 	<string name="menu_about">Über</string>
@@ -26,7 +27,6 @@
 	<string name="requires_ars">Benötigt ARS</string>
 	<string name="usb_devices">USB-Geräte:</string>
 	<string name="usb_on_the_go_support">USB-OTG Support:</string>
+	<string name="use_ant_harware_permission">✘ Berechtigungen > Zusätzliche Berechtigungen > ANT-Hardware verwenden</string>
 	<string name="yes">Ja</string>
-    <string name="error_title">Fehler</string>
-    <string name="use_ant_harware_permission">✘ Berechtigungen > Zusätzliche Berechtigungen > ANT-Hardware verwenden</string>
 </resources>
