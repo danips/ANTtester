@@ -25,7 +25,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TableRow;
@@ -442,8 +441,7 @@ public class MainActivity extends Activity {
                 {
                     settingsDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
                 }
-                ViewGroup viewGroup = (ViewGroup) ((ViewGroup) (findViewById(android.R.id.content))).getChildAt(0);
-                View v = getLayoutInflater().inflate(R.layout.about_dialog, viewGroup,false);
+                View v = getLayoutInflater().inflate(R.layout.about_dialog, null);
                 settingsDialog.setContentView(v);
                 settingsDialog.show();
                 return true;
