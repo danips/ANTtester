@@ -366,28 +366,29 @@ public class MainActivity extends Activity {
             UsbManager manager = (UsbManager) getSystemService(Context.USB_SERVICE);
             if (manager != null) {
                 HashMap<String, UsbDevice> deviceList = manager.getDeviceList();
-                Iterator<UsbDevice> deviceIterator = deviceList.values().iterator();
+                if (deviceList != null) {
+                    Iterator<UsbDevice> deviceIterator = deviceList.values().iterator();
 
-                StringBuilder sb = new StringBuilder();
-                usb_devices = !deviceList.isEmpty();
-                while (deviceIterator.hasNext()) {
-                    UsbDevice device = deviceIterator.next();
-                    sb.append("DeviceID:  ").append(device.getDeviceId()).append("\n").append("VendorID:  ").append(device.getVendorId()).append(" (0x").append(Integer.toHexString(device.getVendorId())).append(")\n").append("ProductID: ").append(device.getProductId()).append(" (0x").append(Integer.toHexString(device.getProductId())).append(")\n");
-                    if (Build.VERSION.SDK_INT >= 21) {
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                            sb.append("\n" + "ManufacturerName: ").append(device.getManufacturerName()).append("\n").append("ProductName: ").append(device.getProductName()).append("\n").append("DeviceName: ").append(device.getDeviceName()).append("\n");
+                    StringBuilder sb = new StringBuilder();
+                    usb_devices = !deviceList.isEmpty();
+                    while (deviceIterator.hasNext()) {
+                        UsbDevice device = deviceIterator.next();
+                        sb.append("DeviceID:  ").append(device.getDeviceId()).append("\n").append("VendorID:  ").append(device.getVendorId()).append(" (0x").append(Integer.toHexString(device.getVendorId())).append(")\n").append("ProductID: ").append(device.getProductId()).append(" (0x").append(Integer.toHexString(device.getProductId())).append(")\n");
+                        if (Build.VERSION.SDK_INT >= 21) {
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                                sb.append("\n" + "ManufacturerName: ").append(device.getManufacturerName()).append("\n").append("ProductName: ").append(device.getProductName()).append("\n").append("DeviceName: ").append(device.getDeviceName()).append("\n");
+                            } else {
+                                sb.append("\n" + "ManufacturerName: ").append(device.getManufacturerName()).append("\n").append("ProductName: ").append(device.getProductName()).append("\n").append("SerialNumber: ").append(device.getSerialNumber()).append("\n").append("DeviceName: ").append(device.getDeviceName()).append("\n");
+                            }
                         }
-                        else {
-                            sb.append("\n" + "ManufacturerName: ").append(device.getManufacturerName()).append("\n").append("ProductName: ").append(device.getProductName()).append("\n").append("SerialNumber: ").append(device.getSerialNumber()).append("\n").append("DeviceName: ").append(device.getDeviceName()).append("\n");
+                        if (Build.VERSION.SDK_INT >= 23) {
+                            sb.append("\nVersion: ").append(device.getVersion()).append("\n");
                         }
+                        sb.append("\n");
                     }
-                    if (Build.VERSION.SDK_INT >= 23) {
-                        sb.append("\nVersion: ").append(device.getVersion()).append("\n");
-                    }
-                    sb.append("\n");
+                    if (sb.length() != 0) sb.setLength(sb.length() - 1);
+                    usb_devices_tv2.setText(sb);
                 }
-                if (sb.length() != 0) sb.setLength(sb.length() - 1);
-                usb_devices_tv2.setText(sb);
             }
         }
         usb_devices_tv1.setVisibility(usb_devices ? View.VISIBLE: View.GONE);
