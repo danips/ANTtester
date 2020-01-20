@@ -10,11 +10,11 @@
 
     <ImageView
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:src="@mipmap/ic_launcher"
+        android:layout_height="80dp"
         android:layout_gravity="center_horizontal"
         android:contentDescription="@string/app_name"
-        android:paddingTop="10dp"/>
+        android:paddingTop="10dp"
+        android:src="@drawable/ic_launcher" />
 
     <TextView
         android:layout_width="fill_parent"
