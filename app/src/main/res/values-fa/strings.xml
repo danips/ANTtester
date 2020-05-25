@@ -28,4 +28,5 @@
 	<string name="usb_devices">ابزار usb</string>
 	<string name="usb_on_the_go_support">پشتیبانی از حافظه خارجی:</string>
 	<string name="yes">بله</string>
+    <string name="use_ant_hardware_permission">✘ Permission > Additional permission > use ANT hardware</string>
 </resources>

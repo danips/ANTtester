@@ -27,6 +27,6 @@
 	<string name="requires_ars">Memerlukan ARS</string>
 	<string name="usb_devices">Perangkat USB</string>
 	<string name="usb_on_the_go_support">Dukungan USB On-The-Go:</string>
-	<string name="use_ant_harware_permission">✘ Izin > Izin tambahan > gunakan perangkat keras ANT</string>
+	<string name="use_ant_hardware_permission">✘ Izin > Izin tambahan > gunakan perangkat keras ANT</string>
 	<string name="yes">Ya</string>
 </resources>

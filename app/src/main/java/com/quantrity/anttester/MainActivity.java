@@ -44,36 +44,37 @@ import com.dsi.ant.channel.AdapterInfo;
 
 public class MainActivity extends Activity {
     private static final String TAG = "MainActivity";
-    private static int RED = Color.parseColor("#cc0000");
-    private static int GREEN = Color.parseColor("#009900");
-    private static int YELLOW = Color.parseColor("#999900");
+    private static final int RED = Color.parseColor("#cc0000");
+    private static final int GREEN = Color.parseColor("#009900");
+    private static final int YELLOW = Color.parseColor("#999900");
     private static final String YES_TAG = "Y";
     private static final String NO_TAG = "N";
 
-    ImageView ant_capable_iv;
-    TextView builtin_ant_detected_tv;
-    TextView usb_host_support_tv;
-    TextView addon_adapter_support_label_tv;
-    TextView addon_adapter_support_tv;
-    TextView builtin_firmware_tv;
-    TextView ant_hal_service_tv;
-    TextView ant_radio_service_tv;
-    TextView ant_usb_service_tv;
-    TableRow ant_usb_service_tr;
-    TextView ant_plugins_tv;
-    ImageView builtin_ant_detected_iv;
-    ImageView addon_adapter_support_iv;
-    ImageView builtin_firmware_iv;
-    ImageView ant_radio_service_iv;
-    ImageView ant_radio_service_lock_iv, ant_radio_service_lock2_iv;
-    ImageView ant_usb_service_iv;
-    ImageView ant_plugins_iv;
-    TextView usb_devices_tv1;
-    TextView usb_devices_tv2;
+    private ImageView ant_capable_iv;
+    private TextView builtin_ant_detected_tv;
+    private TextView usb_host_support_tv;
+    private TextView addon_adapter_support_label_tv;
+    private TextView addon_adapter_support_tv;
+    private TextView builtin_firmware_tv;
+    private TextView ant_hal_service_tv;
+    private TextView ant_radio_service_tv;
+    private TextView ant_usb_service_tv;
+    private TableRow ant_usb_service_tr;
+    private TextView ant_plugins_tv;
+    private ImageView builtin_ant_detected_iv;
+    private ImageView addon_adapter_support_iv;
+    private ImageView builtin_firmware_iv;
+    private ImageView ant_radio_service_iv;
+    private ImageView ant_radio_service_lock_iv;
+    private ImageView ant_radio_service_lock2_iv;
+    private ImageView ant_usb_service_iv;
+    private ImageView ant_plugins_iv;
+    private TextView usb_devices_tv1;
+    private TextView usb_devices_tv2;
 
-    private myOnClickListener ant_usb_service_ocl = new myOnClickListener("com.dsi.ant.usbservice");
-    private myOnClickListener ant_radio_service_ocl = new myOnClickListener("com.dsi.ant.service.socket");
-    private myOnClickListener ant_plugins_service_ocl = new myOnClickListener("com.dsi.ant.plugins.antplus");
+    private final myOnClickListener ant_usb_service_ocl = new myOnClickListener("com.dsi.ant.usbservice");
+    private final myOnClickListener ant_radio_service_ocl = new myOnClickListener("com.dsi.ant.service.socket");
+    private final myOnClickListener ant_plugins_service_ocl = new myOnClickListener("com.dsi.ant.plugins.antplus");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,7 +122,7 @@ public class MainActivity extends Activity {
     private class MyRunnable implements Runnable
     {
         int countdown;
-        AntService as;
+        final AntService as;
         MyRunnable(int countdown, AntService as)
         {
             this.countdown = countdown;
@@ -142,6 +143,8 @@ public class MainActivity extends Activity {
                     builtin_firmware_tv.setTextColor(GREEN);
                     builtin_firmware_iv.setVisibility(View.GONE);
                     builtin_ant_detected_iv.setVisibility(View.GONE);
+                    ant_radio_service_lock_iv.setVisibility(View.GONE);
+                    ant_radio_service_lock2_iv.setVisibility(View.GONE);
                 }
             }
             catch (Exception e)
@@ -153,7 +156,7 @@ public class MainActivity extends Activity {
         }
     }
 
-    private ServiceConnection mAntRadioServiceConnection = new ServiceConnection()
+    private final ServiceConnection mAntRadioServiceConnection = new ServiceConnection()
     {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service)
@@ -397,12 +400,12 @@ public class MainActivity extends Activity {
         doBindAntRadioService();
     }
 
-    public void setTextView(TextView tv, int text_true, int text_false, boolean bool) {
+    private void setTextView(TextView tv, int text_true, int text_false, boolean bool) {
         tv.setText((bool) ? text_true : text_false);
         tv.setTextColor((bool) ? GREEN : RED);
     }
 
-    void getPackageVersion(TextView tv, String name, ImageView iv) {
+    private void getPackageVersion(TextView tv, String name, ImageView iv) {
         try {
             String version = getPackageManager().getPackageInfo(name, PackageManager.GET_META_DATA).versionName;
             tv.setText(version);
@@ -478,7 +481,7 @@ public class MainActivity extends Activity {
 
                 builder.setIcon(R.drawable.ic_lock_red_24dp)
                         .setTitle(R.string.error_title)
-                        .setMessage(R.string.use_ant_harware_permission)
+                        .setMessage(R.string.use_ant_hardware_permission)
                         .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -491,7 +494,7 @@ public class MainActivity extends Activity {
     }
 
     class myOnClickListener implements View.OnClickListener {
-        private String pkg;
+        private final String pkg;
 
         myOnClickListener(String pkg) {
             this.pkg = pkg;
@@ -518,7 +521,7 @@ public class MainActivity extends Activity {
     private static final String APP_PKG_NAME_22 = "pkg";
     private static final String APP_DETAILS_PACKAGE_NAME = "com.android.settings";
     private static final String APP_DETAILS_CLASS_NAME = "com.android.settings.InstalledAppDetails";
-    public static void showInstalledAppDetails(Context context, String packageName) {
+    private static void showInstalledAppDetails(Context context, String packageName) {
         Intent intent = new Intent();
         if (Build.VERSION.SDK_INT >= 9) { // above 2.3
             intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);

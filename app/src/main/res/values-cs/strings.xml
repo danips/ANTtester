@@ -28,4 +28,5 @@
 	<string name="usb_devices">USB zařízení</string>
 	<string name="usb_on_the_go_support">Podpora USB OTG:</string>
 	<string name="yes">Ano</string>
+    <string name="use_ant_hardware_permission">✘ Permission > Additional permission > use ANT hardware</string>
 </resources>

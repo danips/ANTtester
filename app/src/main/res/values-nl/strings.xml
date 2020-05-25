@@ -27,6 +27,6 @@
 	<string name="requires_ars">ARS Vereist</string>
 	<string name="usb_devices">USB Apparaten</string>
 	<string name="usb_on_the_go_support">USB Ondersteuning onderweg:</string>
-	<string name="use_ant_harware_permission">✘ Toestemmingen > Aanvullende rechten > ANT-hardware gebruiken</string>
+	<string name="use_ant_hardware_permission">✘ Toestemmingen > Aanvullende rechten > ANT-hardware gebruiken</string>
 	<string name="yes">Ja</string>
 </resources>

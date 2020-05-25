@@ -27,6 +27,6 @@
 	<string name="requires_ars">يتطلب ARS</string>
 	<string name="usb_devices">أجهزة يو اس بي</string>
 	<string name="usb_on_the_go_support">دعم ناقل OTG</string>
-	<string name="use_ant_harware_permission">✘ الأذونات > أذونات إضافية >  استخدام جهاز ANT</string>
+	<string name="use_ant_hardware_permission">✘ الأذونات > أذونات إضافية >  استخدام جهاز ANT</string>
 	<string name="yes">نعم</string>
 </resources>
