@@ -27,6 +27,6 @@
 	<string name="requires_ars">Требуется ANT радиомодуль</string>
 	<string name="usb_devices">USB устройства</string>
 	<string name="usb_on_the_go_support">Поддержка USB On-The-Go:</string>
+	<string name="use_ant_hardware_permission">✘ Permission > Additional permission > use ANT hardware</string>
 	<string name="yes">Да</string>
-    <string name="use_ant_hardware_permission">✘ Permission > Additional permission > use ANT hardware</string>
 </resources>

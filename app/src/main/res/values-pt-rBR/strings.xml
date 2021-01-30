@@ -27,6 +27,6 @@
 	<string name="requires_ars">Requer ARS</string>
 	<string name="usb_devices">Aparelhos USB</string>
 	<string name="usb_on_the_go_support">Suporte OTG:</string>
-	<string name="use_ant_hardware_permission">✘ Permissões > Autorizações adicionais > utilizar hardware ANT</string>
+	<string name="use_ant_hardware_permission">✘ Permisos > Permisos adicionais > usar hardware ANT</string>
 	<string name="yes">Sim</string>
 </resources>

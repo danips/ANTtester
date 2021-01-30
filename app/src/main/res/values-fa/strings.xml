@@ -15,7 +15,7 @@
 	<string name="app_name">تستر ANT</string>
 	<string name="built_in_ant_detected">آنتن واخلی پیدا شد:</string>
 	<string name="built_in_firmware">در سیستم عامل ساخته شده است:</string>
-	<string name="error_title">خطا</string>
+	<string name="error_title">مشکل</string>
 	<string name="googleplay_listing_full_description">با این نرم افزار شما میتوانید دستگاه خود را از نظر حمایت از قابلیت های مختلف ANT+™ تست کنید.\nهمچنین به شما لینکهایی برای دانلود و یا حذف بسته های مختلف ANT+™ پیشنهاد میکند.</string>
 	<string name="googleplay_listing_short_description">دستگاه خود را از نظر داشتن قابلیت ANT+™ تست کنید</string>
 	<string name="menu_about">درباره</string>
@@ -27,6 +27,6 @@
 	<string name="requires_ars">نیازمند ARS</string>
 	<string name="usb_devices">ابزار usb</string>
 	<string name="usb_on_the_go_support">پشتیبانی از حافظه خارجی:</string>
+	<string name="use_ant_hardware_permission">✘ Permission > Additional permission > use ANT hardware</string>
 	<string name="yes">بله</string>
-    <string name="use_ant_hardware_permission">✘ Permission > Additional permission > use ANT hardware</string>
 </resources>

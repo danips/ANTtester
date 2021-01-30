@@ -136,9 +136,9 @@ public class MainActivity extends Activity {
             countdown--;
             try
             {
-                Iterator i = as.getAdapterProvider().getAdaptersInfo(MainActivity.this).iterator();
+                Iterator<AdapterInfo> i = as.getAdapterProvider().getAdaptersInfo(MainActivity.this).iterator();
                 if (i.hasNext()) {
-                    AdapterInfo ai = (AdapterInfo) i.next();
+                    AdapterInfo ai = i.next();
                     builtin_firmware_tv.setText(ai.getVersionString());
                     builtin_firmware_tv.setTextColor(GREEN);
                     builtin_firmware_iv.setVisibility(View.GONE);
@@ -214,7 +214,8 @@ public class MainActivity extends Activity {
     private void testANTSupport() {
         doUnbindAntRadioService();
         boolean has_builtin_library = AntSupportChecker.hasAntFeature(this);
-        setTextView(builtin_ant_detected_tv, R.string.yes, R.string.no, has_builtin_library);
+        builtin_ant_detected_tv.setText((has_builtin_library) ? R.string.yes : R.string.no);
+        builtin_ant_detected_tv.setTextColor((has_builtin_library) ? GREEN : RED);
 
 
         boolean usb_host_support = false;
@@ -245,12 +246,13 @@ public class MainActivity extends Activity {
         }
 
 
-
-        setTextView(usb_host_support_tv, R.string.yes, R.string.no, usb_host_support);
+        usb_host_support_tv.setText((usb_host_support) ? R.string.yes : R.string.no);
+        usb_host_support_tv.setTextColor((usb_host_support) ? GREEN : RED);
 
         boolean has_ant_addon_support = AntSupportChecker.hasAntAddOn(this);
         if (usb_host_support) {
-            setTextView(addon_adapter_support_tv, R.string.yes, R.string.no, has_ant_addon_support);
+            addon_adapter_support_tv.setText((has_ant_addon_support) ? R.string.yes : R.string.no);
+            addon_adapter_support_tv.setTextColor((has_ant_addon_support) ? GREEN : RED);
             if (has_ant_addon_support) {
                 addon_adapter_support_iv.setImageResource(R.drawable.ic_info_outline_white_24dp);
                 addon_adapter_support_iv.setColorFilter(Color.DKGRAY, PorterDuff.Mode.MULTIPLY);
@@ -400,11 +402,6 @@ public class MainActivity extends Activity {
         doBindAntRadioService();
     }
 
-    private void setTextView(TextView tv, int text_true, int text_false, boolean bool) {
-        tv.setText((bool) ? text_true : text_false);
-        tv.setTextColor((bool) ? GREEN : RED);
-    }
-
     private void getPackageVersion(TextView tv, String name, ImageView iv) {
         try {
             String version = getPackageManager().getPackageInfo(name, PackageManager.GET_META_DATA).versionName;
@@ -436,60 +433,56 @@ public class MainActivity extends Activity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_test: testANTSupport();
-                return true;
-            case R.id.action_about:
-                Dialog settingsDialog = new Dialog(this);
-                if (settingsDialog.getWindow() != null)
-                {
-                    settingsDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-                }
-                View v = getLayoutInflater().inflate(R.layout.about_dialog, null);
-                settingsDialog.setContentView(v);
-                settingsDialog.show();
-                return true;
-            default: return super.onOptionsItemSelected(item);
+        int itemId = item.getItemId();
+        if (itemId == R.id.action_test) {
+            testANTSupport();
+            return true;
+        } else if (itemId == R.id.action_about) {
+            Dialog settingsDialog = new Dialog(this);
+            if (settingsDialog.getWindow() != null) {
+                settingsDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+            }
+            View v = View.inflate(this, R.layout.about_dialog, null);
+            settingsDialog.setContentView(v);
+            settingsDialog.show();
+            return true;
         }
+        return super.onOptionsItemSelected(item);
     }
 
     public void aboutClick(View view) {
-        switch (view.getId()) {
-            case R.id.rate_button:
-                Uri uri = Uri.parse("market://details?id=" + getPackageName());
-                Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
-                try {
-                    startActivity(goToMarket);
-                } catch (ActivityNotFoundException e) {
-                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/details?id=" + getPackageName())));
-                }
-                break;
-            case R.id.translate_button:
-                try {
-                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://localize.quantrity.com/projects/3"));
-                    startActivity(browserIntent);
-                } catch (ActivityNotFoundException e) {
-                    e.printStackTrace();
-                }
-                break;
-            case R.id.builtin_ant_detected_iv:
-                Toast.makeText(getApplicationContext(), R.string.no_service, Toast.LENGTH_SHORT).show();
-                break;
-            case R.id.ant_radio_service_lock_iv:
-            case R.id.ant_radio_service_lock2_iv:
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        int id = view.getId();
+        if (id == R.id.rate_button) {
+            Uri uri = Uri.parse("market://details?id=" + getPackageName());
+            Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
+            try {
+                startActivity(goToMarket);
+            } catch (ActivityNotFoundException e) {
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/details?id=" + getPackageName())));
+            }
+        } else if (id == R.id.translate_button) {
+            try {
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://localize.quantrity.com/projects/3"));
+                startActivity(browserIntent);
+            } catch (ActivityNotFoundException e) {
+                e.printStackTrace();
+            }
+        } else if (id == R.id.builtin_ant_detected_iv) {
+            Toast.makeText(getApplicationContext(), R.string.no_service, Toast.LENGTH_SHORT).show();
+        } else if (id == R.id.ant_radio_service_lock_iv || id == R.id.ant_radio_service_lock2_iv) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-                builder.setIcon(R.drawable.ic_lock_red_24dp)
-                        .setTitle(R.string.error_title)
-                        .setMessage(R.string.use_ant_hardware_permission)
-                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                showInstalledAppDetails(MainActivity.this, "com.dsi.ant.service.socket");
-                            }
-                        }).create().show();
-                break;
-            default: Log.v(TAG, "Unknown " + view.toString());
+            builder.setIcon(R.drawable.ic_lock_red_24dp)
+                    .setTitle(R.string.error_title)
+                    .setMessage(R.string.use_ant_hardware_permission)
+                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            showInstalledAppDetails(MainActivity.this, "com.dsi.ant.service.socket");
+                        }
+                    }).create().show();
+        } else {
+            Log.v(TAG, "Unknown " + view.toString());
         }
     }
 
