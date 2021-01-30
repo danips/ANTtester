@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+	<string name="about_dialog_contact">Hubungi</string>
+	<string name="about_dialog_rate">Nilai</string>
+	<string name="about_dialog_text">Anda dapat menunjukkan dukungan anda dengan menilai aplikasi kami di Google Play atau bantu menerjemahkannya dalam bahasa anda.</string>
+	<string name="about_dialog_translate">Bantu Terjemahan</string>
+	<string name="about_dialog_translators"><b>Penerjemah:</b> Mienz Louveinski</string>
+	<string name="ant_capable">Kemampuan ANT</string>
+	<string name="ant_hal_service">Layanan ANT HAL:</string>
+	<string name="ant_plugins">Colok-Masuk ANT+:</string>
+	<string name="ant_radio_service">Layanan ANT Radio:</string>
+	<string name="ant_support_version_info">Info versi dukungan ANT</string>
+	<string name="ant_usb_service">Layanan ANT USB:</string>
+	<string name="ant_usb_service_installed">Layanan ANT USB Terpasang:</string>
+	<string name="app_name">Penguji ANT</string>
+	<string name="built_in_ant_detected">ANT bawaan terdeteksi:</string>
+	<string name="built_in_firmware">Firmware bawaan:</string>
+	<string name="error_title">Kesalahan</string>
+	<string name="googleplay_listing_full_description">With this application you can check the different ANT+™ capabilities your device supports.\nIt also offers links to download/uninstall the different ANT+™ packages.</string>
+	<string name="googleplay_listing_short_description">Test your device for ANT+™ capabilities</string>
+	<string name="menu_about">Tentang</string>
+	<string name="menu_test">Uji Dukungan ANT</string>
+	<string name="no">Tidak</string>
+	<string name="no_service">Tidak ada layanan</string>
+	<string name="not_available">Kosong</string>
+	<string name="not_found">Tidak ditemukan</string>
+	<string name="requires_ars">Memerlukan ARS</string>
+	<string name="usb_devices">Perangkat USB</string>
+	<string name="usb_on_the_go_support">Dukungan USB On-The-Go:</string>
+	<string name="use_ant_hardware_permission">✘ Izin > Izin tambahan > gunakan perangkat keras ANT</string>
+	<string name="yes">Ya</string>
+</resources>
