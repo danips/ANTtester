@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+	<string name="about_dialog_contact">Contacta</string>
+	<string name="about_dialog_rate">Valora\'ns</string>
+	<string name="about_dialog_text">Pots ajudar puntuant l\'app a Google Play o ajudant a traduir-la a la vostra llengua.</string>
+	<string name="about_dialog_translate">Ajuda a la traducció</string>
+	<string name="about_dialog_translators"><b>Translator:</b> Jordi Cucala</string>
+	<string name="ant_capable">Suport ANT</string>
+	<string name="ant_hal_service">Servei ANT HAL:</string>
+	<string name="ant_plugins">Plugins ANT+:</string>
+	<string name="ant_radio_service">Servei ANT Radio:</string>
+	<string name="ant_support_version_info">Informació de la versió de suport ANT</string>
+	<string name="ant_usb_service">Servei ANT USB:</string>
+	<string name="ant_usb_service_installed">Servei ANT USB instal·lat:</string>
+	<string name="app_name">ANT Tester</string>
+	<string name="built_in_ant_detected">ANT integrat detectat:</string>
+	<string name="built_in_firmware">Firmware integrat:</string>
+	<string name="error_title">Error</string>
+	<string name="googleplay_listing_full_description">Amb aquesta app pots comprovar les diferents funcionalitats que suporta el teu dispositiu.\nTambé ofereix els enllaços per a descarregar/desinstal·lar els diferents paquets ANT+.</string>
+	<string name="googleplay_listing_short_description">Comproveu si el dispositiu té funcionabilitats ANT+™</string>
+	<string name="menu_about">Quan a</string>
+	<string name="menu_test">Comprovar Suport  ANT</string>
+	<string name="no">No</string>
+	<string name="no_service">Sense servei</string>
+	<string name="not_available">N/D</string>
+	<string name="not_found">No trobat</string>
+	<string name="requires_ars">Requereix ARS</string>
+	<string name="usb_devices">Dispositius USB</string>
+	<string name="usb_on_the_go_support">Suport USB On-The-Go:</string>
+	<string name="use_ant_hardware_permission">✘ Permisos > Permisos adicionals > us ANT Hardware</string>
+	<string name="yes">Si</string>
+</resources>
