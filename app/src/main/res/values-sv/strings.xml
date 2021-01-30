@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+	<string name="about_dialog_contact">Kontakt</string>
+	<string name="about_dialog_rate">Betyg</string>
+	<string name="about_dialog_text">Du kan visa ditt stöd genom att betygsätta appen i Google Play eller hjälpa till att översätta den till ditt eget språk.</string>
+	<string name="about_dialog_translate">Hjälp med att översätta</string>
+	<string name="about_dialog_translators"><b>Översättare:</b> Mikael Persson</string>
+	<string name="ant_capable">ANT kapabel</string>
+	<string name="ant_hal_service">ANT HAL service:</string>
+	<string name="ant_plugins">ANT+ Pluginer:</string>
+	<string name="ant_radio_service">ANT Radio Service:</string>
+	<string name="ant_support_version_info">ANT support versionsinformation</string>
+	<string name="ant_usb_service">ANT USB Service:</string>
+	<string name="ant_usb_service_installed">ANT USB Service installerad:</string>
+	<string name="app_name">ANT Tester</string>
+	<string name="built_in_ant_detected">Inbyggd ANT upptäckt:</string>
+	<string name="built_in_firmware">Inbyggd Firmware</string>
+	<string name="error_title">Fel</string>
+	<string name="googleplay_listing_full_description">Med den här applikationen kan du kontrollera de olika ANT+™ -funktionerna som din enhet stöder.\nDet erbjuder också länkar för att ladda ner / avinstallera de olika ANT+™ -paketen.</string>
+	<string name="googleplay_listing_short_description">Testa din enhet för ANT+™ stöd</string>
+	<string name="menu_about">Om</string>
+	<string name="menu_test">Testa ANT Stöd</string>
+	<string name="no">Nej</string>
+	<string name="no_service">Ingen service</string>
+	<string name="not_available">Ej tillgänglig</string>
+	<string name="not_found">Hittades ej</string>
+	<string name="requires_ars">Kräver ARS</string>
+	<string name="usb_devices">USB Enheter</string>
+	<string name="usb_on_the_go_support">USB On-The-Go support:</string>
+	<string name="use_ant_hardware_permission">✘ Behörighet > Ytterligare tillstånd > Använd ANT-hårdvara</string>
+	<string name="yes">Ja</string>
+</resources>
