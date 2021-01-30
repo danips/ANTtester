@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+	<string name="about_dialog_contact">Contatto</string>
+	<string name="about_dialog_rate">Valutazione</string>
+	<string name="about_dialog_text">Potete mostrare il vostro sostegno valutando l\'app in Google Play o aiutare a tradurla nella vostra lingua.</string>
+	<string name="about_dialog_translate">Aiuta a tradurre</string>
+	<string name="about_dialog_translators"><b>Traduttore:</b> Andy Pichler</string>
+	<string name="ant_capable">ANT compatibile</string>
+	<string name="ant_hal_service">ANT HAL service:</string>
+	<string name="ant_plugins">ANT+ Plugins:</string>
+	<string name="ant_radio_service">ANT Radio Service:</string>
+	<string name="ant_support_version_info">Info sulla versione di supporto ANT</string>
+	<string name="ant_usb_service">ANT USB Service:</string>
+	<string name="ant_usb_service_installed">ANT USB Service installato:</string>
+	<string name="app_name">ANT Tester</string>
+	<string name="built_in_ant_detected">Rilevato ANT incorporato:</string>
+	<string name="built_in_firmware">Firmware incorporato:</string>
+	<string name="error_title">Errore</string>
+	<string name="googleplay_listing_full_description">Con questa applicazione è possibile verificare le diverse funzionalità ANT+™ supportate dal dispositivo.\nOffre anche link per scaricare/disinstallare i diversi pacchetti ANT+™.</string>
+	<string name="googleplay_listing_short_description">Testa il tuo dispositivo per verificare le funzioni ANT+™</string>
+	<string name="menu_about">Info</string>
+	<string name="menu_test">Test supporto ANT:</string>
+	<string name="no">No</string>
+	<string name="no_service">Nessun servizio</string>
+	<string name="not_available">Non disponibile</string>
+	<string name="not_found">Non trovato</string>
+	<string name="requires_ars">ARS requisiti</string>
+	<string name="usb_devices">Dispositivi USB</string>
+	<string name="usb_on_the_go_support">Supporto USB-OTG:</string>
+	<string name="use_ant_hardware_permission">✘ Autorizzazione > Autorizzazione aggiuntiva > Utilizza hardware ANT</string>
+	<string name="yes">Si</string>
+</resources>
