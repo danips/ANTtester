@@ -1,15 +1,20 @@
-apply plugin: 'com.android.application'
+plugins {
+    id 'com.android.application'
+}
 
 android {
-    compileSdkVersion 30
+    namespace 'com.quantrity.anttester'
+    compileSdk 34
+
     defaultConfig {
         applicationId "com.quantrity.anttester"
-        minSdkVersion 7
-        targetSdkVersion 30
-        versionCode 26
-        versionName "1.26"
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        minSdk 7
+        targetSdk 34
+        versionCode 27
+        versionName "1.27"
+        //testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
+
     buildTypes {
         release {
             minifyEnabled true
@@ -20,8 +25,8 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-    testImplementation 'junit:junit:4.13.1'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+    implementation fileTree(dir: 'libs', include: ['*.aar'])
+    //testImplementation 'junit:junit:4.13.2'
+    //androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    //androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 }
