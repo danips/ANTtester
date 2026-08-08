@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace 'com.quantrity.anttester'
+    namespace = 'com.quantrity.anttester'
     compileSdk = 36
 
     buildFeatures {
@@ -26,6 +26,27 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+}
+
+def antLibFile = file('libs/android_antlib_4-16-0.aar')
+tasks.register('verifyAntLibChecksum') {
+    doLast {
+        def expected = '944fab1871b18f2b191228af720aaa2eb7057312ffa18d7150f96d1859562d17'
+        def digest = java.security.MessageDigest.getInstance('SHA-256')
+        antLibFile.withInputStream { input ->
+            byte[] buffer = new byte[8192]
+            int count
+            while ((count = input.read(buffer)) != -1) digest.update(buffer, 0, count)
+        }
+        def actual = digest.digest().collect { String.format('%02x', it & 0xff) }.join()
+        if (actual != expected) {
+            throw new GradleException("ANTLib checksum mismatch: expected ${expected}, got ${actual}")
+        }
+    }
+}
+
+tasks.whenTaskAdded { task ->
+    if (task.name == 'assembleRelease') task.dependsOn('verifyAntLibChecksum')
 }
 
 dependencies {

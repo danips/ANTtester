@@ -7,6 +7,8 @@ on:
 jobs:
   verify:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-java@v4
@@ -15,4 +17,4 @@ jobs:
           java-version: '21'
       - uses: android-actions/setup-android@v3
       - run: sdkmanager "platforms;android-36"
-      - run: ./gradlew assembleRelease lintDebug testDebugUnitTest
+      - run: ./gradlew verifyAntLibChecksum assembleDebug assembleRelease lintDebug lintRelease testDebugUnitTest --warning-mode all
