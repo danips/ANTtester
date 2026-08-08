@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" xmlns:tools="http://schemas.android.com/tools">
 	<string name="about_dialog_rate">Rate</string>
 	<string name="about_dialog_text">You can show your support by rating the app in Google Play or help translating it into your own language.</string>
 	<string name="about_dialog_translate">Help translate</string>
@@ -15,6 +15,7 @@
 	<string name="built_in_ant_detected">Built-in ANT detected:</string>
 	<string name="built_in_firmware">Built-in firmware:</string>
 	<string name="error_title">Error</string>
+	<string name="external_ant_adapters" tools:ignore="MissingTranslation">External ANT adapters:</string>
 	<string name="menu_about">About</string>
 	<string name="menu_test">Test ANT Support</string>
 	<string name="no">No</string>

@@ -118,6 +118,28 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:text="@string/external_ant_adapters" />
+
+                <TextView
+                    android:id="@+id/external_adapters_tv"
+                    style="@style/TextAppearance.AntTester.StatusValue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone" />
+
+                <View style="@style/Widget.AntTester.ActionIcon" />
+            </LinearLayout>
+
+            <LinearLayout
+                style="@style/Widget.AntTester.StatusRow"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    style="@style/TextAppearance.AntTester.RowLabel"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:text="@string/usb_on_the_go_support" />
 
                 <TextView

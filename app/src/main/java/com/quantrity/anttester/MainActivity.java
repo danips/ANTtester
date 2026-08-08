@@ -34,6 +34,8 @@ import android.widget.Toast;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -54,6 +56,7 @@ public class MainActivity extends Activity {
     private TextView usb_host_support_tv;
     private TextView addon_adapter_support_tv;
     private TextView builtin_firmware_tv;
+    private TextView external_adapters_tv;
     private TextView ant_hal_service_tv;
     private TextView ant_radio_service_tv;
     private TextView ant_usb_service_tv;
@@ -100,16 +103,37 @@ public class MainActivity extends Activity {
             }
 
             try {
-                Iterator<AdapterInfo> adapters = mAntRadioService.getAdapterProvider()
-                        .getAdaptersInfo(MainActivity.this).iterator();
-                if (adapters.hasNext()) {
-                    AdapterInfo adapter = adapters.next();
-                    builtin_firmware_tv.setText(adapter.getVersionString());
-                    builtin_firmware_tv.setTextColor(statusSuccessColor);
-                    builtin_firmware_iv.setVisibility(View.INVISIBLE);
-                    builtin_ant_detected_iv.setVisibility(View.INVISIBLE);
-                    ant_radio_service_lock_iv.setVisibility(View.INVISIBLE);
-                    ant_radio_service_lock2_iv.setVisibility(View.INVISIBLE);
+                Collection<AdapterInfo> adapterInfos = mAntRadioService.getAdapterProvider()
+                        .getAdaptersInfo(MainActivity.this);
+                ArrayList<AntAdapterSnapshot> adapterSnapshots = new ArrayList<AntAdapterSnapshot>();
+                if (adapterInfos != null) {
+                    for (AdapterInfo adapter : adapterInfos) {
+                        adapterSnapshots.add(AntAdapterSnapshot.from(adapter));
+                    }
+                }
+                boolean foundBuiltIn = false;
+                StringBuilder externalAdapters = new StringBuilder();
+                for (AntAdapterSnapshot adapter : AntAdapterSorter.sort(adapterSnapshots)) {
+                    if (adapter.builtIn) {
+                        foundBuiltIn = true;
+                        builtin_firmware_tv.setText(adapter.firmwareVersion);
+                        builtin_firmware_tv.setTextColor(statusSuccessColor);
+                        builtin_firmware_iv.setVisibility(View.INVISIBLE);
+                        builtin_ant_detected_iv.setVisibility(View.INVISIBLE);
+                    } else {
+                        if (externalAdapters.length() > 0) externalAdapters.append('\n');
+                        externalAdapters.append(adapter.displayName).append(": ")
+                                .append(adapter.firmwareVersion);
+                    }
+                }
+                if (externalAdapters.length() > 0) {
+                    external_adapters_tv.setText(externalAdapters.toString());
+                    external_adapters_tv.setTextColor(statusSuccessColor);
+                    external_adapters_tv.setVisibility(View.VISIBLE);
+                } else {
+                    external_adapters_tv.setVisibility(View.GONE);
+                }
+                if (foundBuiltIn) {
                     return;
                 }
             } catch (Exception e) {
@@ -149,6 +173,7 @@ public class MainActivity extends Activity {
         usb_host_support_tv = findViewById(R.id.usb_host_support_tv);
         addon_adapter_support_tv = findViewById(R.id.addon_adapter_support_tv);
         builtin_firmware_tv = findViewById(R.id.builtin_firmware_tv);
+        external_adapters_tv = findViewById(R.id.external_adapters_tv);
         ant_hal_service_tv = findViewById(R.id.ant_hal_service_tv);
         ant_radio_service_tv = findViewById(R.id.ant_radio_service_tv);
         ant_usb_service_tv = findViewById(R.id.ant_usb_service_tv);
