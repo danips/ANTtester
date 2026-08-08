@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="AppTheme" parent="android:style/Theme.Holo.Light">
+    <style name="AppTheme" parent="android:style/Theme">
         <item name="android:windowBackground">@color/screen_background</item>
         <item name="android:colorBackground">@color/screen_background</item>
         <item name="android:textColorPrimary">@color/text_primary</item>
         <item name="android:textColorSecondary">@color/text_secondary</item>
-        <item name="android:windowActionBar">false</item>
         <item name="android:windowNoTitle">true</item>
     </style>
 </resources>

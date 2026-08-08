@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Legacy launcher icon used on Android 7.1 and earlier. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="55dp"
+    android:height="55dp"
+    android:viewportWidth="55"
+    android:viewportHeight="55">
+    <path
+        android:fillColor="#22498c"
+        android:pathData="M1.8101,27.5a25.6899,25.6899 0,1 0,51.3798 0a25.6899,25.6899 0,1 0,-51.3798 0z"
+        android:strokeColor="#22498c"
+        android:strokeLineCap="butt"
+        android:strokeLineJoin="bevel"
+        android:strokeWidth="3.62017608" />
+    <path
+        android:fillColor="#00000000"
+        android:pathData="m18.8586,34.3511 l8.2642,14.395 8.2387,-14.3878"
+        android:strokeColor="#ffffff"
+        android:strokeLineCap="butt"
+        android:strokeLineJoin="miter"
+        android:strokeWidth="2.16499996" />
+    <path
+        android:fillColor="#ffffff"
+        android:pathData="m20.3863,51.3913c0,-0.2324 0.0118,-0.4622 0.0348,-0.6885 0.023,-0.2264 0.0572,-0.4495 0.1021,-0.6687 0.0897,-0.4384 0.222,-0.8613 0.3924,-1.2641 0.3408,-0.8057 0.8339,-1.5313 1.4432,-2.1406 1.2187,-1.2187 2.9023,-1.9725 4.7619,-1.9725 1.8597,0 3.5432,0.7538 4.7619,1.9725 0.6093,0.6093 1.1025,1.3349 1.4432,2.1406 0.1704,0.4029 0.3027,0.8257 0.3924,1.2641 0.0448,0.2192 0.079,0.4423 0.102,0.6687 0.023,0.2264 0.0348,0.4561 0.0348,0.6885"
+        android:strokeColor="#ffffff"
+        android:strokeWidth="4.53127003" />
+    <path
+        android:fillColor="#ffffff"
+        android:pathData="M32.5339,34.3505a2.8274,2.8274 0,1 0,5.6548 0a2.8274,2.8274 0,1 0,-5.6548 0z"
+        android:strokeColor="#ffffff"
+        android:strokeWidth="3.3452239" />
+    <path
+        android:fillColor="#ffffff"
+        android:pathData="M16.0199,34.3489a2.8274,2.8274 0,1 0,5.6548 0a2.8274,2.8274 0,1 0,-5.6548 0z"
+        android:strokeColor="#ffffff"
+        android:strokeWidth="3.3452239" />
+    <path
+        android:fillColor="#ffffff"
+        android:pathData="m19.6895,12.6939q0.0317,-2.0638 0.5397,-3.6195 0.5397,-1.5558 1.3017,-2.413 0.7937,-0.889 1.8733,-1.4288 1.0795,-0.5397 2.0003,-0.6985 0.9525,-0.1905 2.0003,-0.1905 3.4925,0 5.6832,2.032 2.2225,2.032 2.2225,5.2705 0,2.0003 -0.7937,3.302 -0.7937,1.3017 -3.0162,2.8575 -1.4288,1.016 -1.778,1.6193 -0.3492,0.6033 -0.3492,2.159h-3.937v-0.4445q0,-1.5875 0.5397,-2.7622 0.5715,-1.2065 1.3652,-1.9368 0.7937,-0.7303 1.5875,-1.3652 0.7937,-0.635 1.3335,-1.4605 0.5715,-0.8255 0.5715,-1.8733 0,-1.5558 -0.9525,-2.6035 -0.9525,-1.0477 -2.3812,-1.0477 -1.4922,0 -2.5082,1.2065 -0.9843,1.2065 -0.9843,3.048v0.2858,0.0635zM29.8813,23.3302v4.6355h-4.7625v-4.6355z" />
+</vector>

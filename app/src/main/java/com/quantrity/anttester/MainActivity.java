@@ -4,16 +4,15 @@ import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
-import android.content.ActivityNotFoundException;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.graphics.Insets;
 import android.graphics.PorterDuff;
 import android.hardware.usb.UsbDevice;
@@ -26,13 +25,9 @@ import android.os.IBinder;
 import android.os.Looper;
 import android.provider.Settings;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
 import android.view.WindowInsets;
 import android.widget.ImageView;
-import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -49,9 +44,6 @@ import com.dsi.ant.channel.AdapterInfo;
 
 public class MainActivity extends Activity {
     private static final String TAG = "MainActivity";
-    private static final int RED = Color.parseColor("#cc0000");
-    private static final int GREEN = Color.parseColor("#009900");
-    private static final int YELLOW = Color.parseColor("#999900");
     private static final String YES_TAG = "Y";
     private static final String NO_TAG = "N";
     private static final int ANT_SERVICE_RETRY_ATTEMPTS = 20;
@@ -60,13 +52,15 @@ public class MainActivity extends Activity {
     private ImageView ant_capable_iv;
     private TextView builtin_ant_detected_tv;
     private TextView usb_host_support_tv;
-    private TextView addon_adapter_support_label_tv;
     private TextView addon_adapter_support_tv;
     private TextView builtin_firmware_tv;
     private TextView ant_hal_service_tv;
     private TextView ant_radio_service_tv;
     private TextView ant_usb_service_tv;
-    private TableRow ant_usb_service_tr;
+    private View addon_adapter_support_row;
+    private View addon_adapter_support_divider;
+    private View ant_usb_service_tr;
+    private View ant_usb_service_divider;
     private TextView ant_plugins_tv;
     private ImageView builtin_ant_detected_iv;
     private ImageView addon_adapter_support_iv;
@@ -78,6 +72,10 @@ public class MainActivity extends Activity {
     private ImageView ant_plugins_iv;
     private TextView usb_devices_tv1;
     private TextView usb_devices_tv2;
+    private int statusErrorColor;
+    private int statusSuccessColor;
+    private int statusWarningColor;
+    private int actionIconColor;
 
     private final myOnClickListener ant_usb_service_ocl = new myOnClickListener("com.dsi.ant.usbservice");
     private final myOnClickListener ant_radio_service_ocl = new myOnClickListener("com.dsi.ant.service.socket");
@@ -85,6 +83,14 @@ public class MainActivity extends Activity {
     private final Handler mAntServiceHandler = new Handler(Looper.getMainLooper());
     private AntService mAntRadioService;
     private int mAntServiceRetryAttempts;
+    private boolean mUsbDetachReceiverRegistered;
+
+    private final BroadcastReceiver mUsbDetachReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            testANTSupport();
+        }
+    };
 
     private final Runnable mAntServiceInfoRetry = new Runnable() {
         @Override
@@ -99,11 +105,11 @@ public class MainActivity extends Activity {
                 if (adapters.hasNext()) {
                     AdapterInfo adapter = adapters.next();
                     builtin_firmware_tv.setText(adapter.getVersionString());
-                    builtin_firmware_tv.setTextColor(GREEN);
-                    builtin_firmware_iv.setVisibility(View.GONE);
-                    builtin_ant_detected_iv.setVisibility(View.GONE);
-                    ant_radio_service_lock_iv.setVisibility(View.GONE);
-                    ant_radio_service_lock2_iv.setVisibility(View.GONE);
+                    builtin_firmware_tv.setTextColor(statusSuccessColor);
+                    builtin_firmware_iv.setVisibility(View.INVISIBLE);
+                    builtin_ant_detected_iv.setVisibility(View.INVISIBLE);
+                    ant_radio_service_lock_iv.setVisibility(View.INVISIBLE);
+                    ant_radio_service_lock2_iv.setVisibility(View.INVISIBLE);
                     return;
                 }
             } catch (Exception e) {
@@ -125,17 +131,31 @@ public class MainActivity extends Activity {
             Api35Insets.apply(findViewById(android.R.id.content));
         }
 
+        statusErrorColor = getResources().getColor(R.color.status_error);
+        statusSuccessColor = getResources().getColor(R.color.status_success);
+        statusWarningColor = getResources().getColor(R.color.status_warning);
+        actionIconColor = getResources().getColor(R.color.action_icon);
 
         ant_capable_iv = findViewById(R.id.ant_capable_iv);
+        ImageView refresh_button = findViewById(R.id.refresh_button);
+        tintActionIcon(refresh_button);
+        refresh_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                testANTSupport();
+            }
+        });
         builtin_ant_detected_tv = findViewById(R.id.builtin_ant_detected_tv);
         usb_host_support_tv = findViewById(R.id.usb_host_support_tv);
-        addon_adapter_support_label_tv = findViewById(R.id.addon_adapter_support_label_tv);
         addon_adapter_support_tv = findViewById(R.id.addon_adapter_support_tv);
         builtin_firmware_tv = findViewById(R.id.builtin_firmware_tv);
         ant_hal_service_tv = findViewById(R.id.ant_hal_service_tv);
         ant_radio_service_tv = findViewById(R.id.ant_radio_service_tv);
         ant_usb_service_tv = findViewById(R.id.ant_usb_service_tv);
+        addon_adapter_support_row = findViewById(R.id.addon_adapter_support_row);
+        addon_adapter_support_divider = findViewById(R.id.addon_adapter_support_divider);
         ant_usb_service_tr = findViewById(R.id.ant_usb_service_tr);
+        ant_usb_service_divider = findViewById(R.id.ant_usb_service_divider);
         ant_plugins_tv = findViewById(R.id.ant_plugins_tv);
 
         builtin_ant_detected_iv = findViewById(R.id.builtin_ant_detected_iv);
@@ -148,6 +168,10 @@ public class MainActivity extends Activity {
         ant_usb_service_iv = findViewById(R.id.ant_usb_service_iv);
         ant_plugins_iv = findViewById(R.id.ant_plugins_iv);
 
+        builtin_ant_detected_iv.setColorFilter(statusErrorColor, PorterDuff.Mode.SRC_IN);
+        ant_radio_service_lock_iv.setColorFilter(statusErrorColor, PorterDuff.Mode.SRC_IN);
+        ant_radio_service_lock2_iv.setColorFilter(statusErrorColor, PorterDuff.Mode.SRC_IN);
+
         addon_adapter_support_iv.setOnClickListener(ant_usb_service_ocl);
         builtin_firmware_iv.setOnClickListener(ant_radio_service_ocl);
         ant_radio_service_iv.setTag(NO_TAG);
@@ -156,6 +180,12 @@ public class MainActivity extends Activity {
         ant_usb_service_iv.setOnClickListener(ant_usb_service_ocl);
         ant_plugins_iv.setTag(NO_TAG);
         ant_plugins_iv.setOnClickListener(ant_plugins_service_ocl);
+
+        tintActionIcon(addon_adapter_support_iv);
+        tintActionIcon(builtin_firmware_iv);
+        tintActionIcon(ant_radio_service_iv);
+        tintActionIcon(ant_usb_service_iv);
+        tintActionIcon(ant_plugins_iv);
 
         usb_devices_tv1 = findViewById(R.id.usb_devices_tv1);
         usb_devices_tv2 = findViewById(R.id.usb_devices_tv2);
@@ -247,14 +277,43 @@ public class MainActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
+        registerUsbDetachReceiver();
         testANTSupport();
+    }
+
+    @Override
+    protected void onPause() {
+        unregisterUsbDetachReceiver();
+        super.onPause();
+    }
+
+    private void registerUsbDetachReceiver() {
+        if (Build.VERSION.SDK_INT >= 12 && !mUsbDetachReceiverRegistered) {
+            Api12UsbDetachReceiver.register(this, mUsbDetachReceiver);
+            mUsbDetachReceiverRegistered = true;
+        }
+    }
+
+    private void unregisterUsbDetachReceiver() {
+        if (mUsbDetachReceiverRegistered) {
+            unregisterReceiver(mUsbDetachReceiver);
+            mUsbDetachReceiverRegistered = false;
+        }
+    }
+
+    @TargetApi(12)
+    private static class Api12UsbDetachReceiver {
+        static void register(Context context, BroadcastReceiver receiver) {
+            IntentFilter filter = new IntentFilter(UsbManager.ACTION_USB_DEVICE_DETACHED);
+            context.registerReceiver(receiver, filter);
+        }
     }
 
     private void testANTSupport() {
         doUnbindAntRadioService();
         boolean has_builtin_library = AntSupportChecker.hasAntFeature(this);
         builtin_ant_detected_tv.setText((has_builtin_library) ? R.string.yes : R.string.no);
-        builtin_ant_detected_tv.setTextColor((has_builtin_library) ? GREEN : RED);
+        builtin_ant_detected_tv.setTextColor((has_builtin_library) ? statusSuccessColor : statusErrorColor);
 
 
         boolean usb_host_support = false;
@@ -286,42 +345,40 @@ public class MainActivity extends Activity {
 
 
         usb_host_support_tv.setText((usb_host_support) ? R.string.yes : R.string.no);
-        usb_host_support_tv.setTextColor((usb_host_support) ? GREEN : RED);
+        usb_host_support_tv.setTextColor((usb_host_support) ? statusSuccessColor : statusErrorColor);
 
         boolean has_ant_addon_support = AntSupportChecker.hasAntAddOn(this);
+        addon_adapter_support_row.setVisibility(usb_host_support ? View.VISIBLE : View.GONE);
+        addon_adapter_support_divider.setVisibility(usb_host_support ? View.VISIBLE : View.GONE);
         if (usb_host_support) {
             addon_adapter_support_tv.setText((has_ant_addon_support) ? R.string.yes : R.string.no);
-            addon_adapter_support_tv.setTextColor((has_ant_addon_support) ? GREEN : RED);
+            addon_adapter_support_tv.setTextColor((has_ant_addon_support) ? statusSuccessColor : statusErrorColor);
             if (has_ant_addon_support) {
-                addon_adapter_support_iv.setImageResource(R.drawable.ic_info_outline_white_24dp);
-                addon_adapter_support_iv.setColorFilter(Color.DKGRAY, PorterDuff.Mode.MULTIPLY);
+                setActionIcon(addon_adapter_support_iv, R.drawable.ic_info_outline_white_24dp);
                 addon_adapter_support_iv.setTag(YES_TAG);
             } else {
-                addon_adapter_support_iv.setImageResource(R.drawable.ic_file_download_black_24dp);
+                setActionIcon(addon_adapter_support_iv, R.drawable.ic_file_download_black_24dp);
                 addon_adapter_support_iv.setTag(NO_TAG);
             }
-        } else {
-            addon_adapter_support_tv.setVisibility(View.GONE);
-            addon_adapter_support_label_tv.setVisibility(View.GONE);
-            addon_adapter_support_iv.setVisibility(View.GONE);
         }
 
-        ant_capable_iv.setImageResource((has_builtin_library || usb_host_support) ? R.drawable.ic_ok_green_36dp : R.drawable.ic_nok_red_36dp);
+        boolean is_ant_capable = has_builtin_library || usb_host_support;
+        ant_capable_iv.setImageResource(is_ant_capable ? R.drawable.ic_ok_green_36dp : R.drawable.ic_nok_red_36dp);
+        ant_capable_iv.setColorFilter(is_ant_capable ? statusSuccessColor : statusErrorColor, PorterDuff.Mode.SRC_IN);
 
         boolean has_ARS = false;
         String version = null;
         try {
             version = getPackageManager().getPackageInfo("com.dsi.ant.service.socket", PackageManager.GET_META_DATA).versionName;
             ant_radio_service_tv.setText(version);
-            ant_radio_service_tv.setTextColor(GREEN);
-            ant_radio_service_iv.setImageResource(R.drawable.ic_info_outline_white_24dp);
-            ant_radio_service_iv.setColorFilter(Color.DKGRAY, PorterDuff.Mode.MULTIPLY);
+            ant_radio_service_tv.setTextColor(statusSuccessColor);
+            setActionIcon(ant_radio_service_iv, R.drawable.ic_info_outline_white_24dp);
             ant_radio_service_iv.setTag(YES_TAG);
 
             has_ARS = true;
 
             builtin_firmware_iv.setTag(YES_TAG);
-            builtin_firmware_iv.setImageResource(R.drawable.ic_settings_black_24dp);
+            setActionIcon(builtin_firmware_iv, R.drawable.ic_settings_black_24dp);
 
             //Check ANT Radio Service permissions
             if (Build.VERSION.SDK_INT >= 16) {
@@ -337,8 +394,8 @@ public class MainActivity extends Activity {
                             break;
                         }
                     }
-                    ant_radio_service_lock_iv.setVisibility(enabled ? View.GONE : View.VISIBLE);
-                    ant_radio_service_lock2_iv.setVisibility(enabled ? View.GONE : View.VISIBLE);
+                    ant_radio_service_lock_iv.setVisibility(enabled ? View.INVISIBLE : View.VISIBLE);
+                    ant_radio_service_lock2_iv.setVisibility(enabled ? View.INVISIBLE : View.VISIBLE);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -346,11 +403,11 @@ public class MainActivity extends Activity {
         } catch (Exception e) {
             if (version == null) {
                 ant_radio_service_tv.setText(R.string.not_available);
-                ant_radio_service_tv.setTextColor(RED);
-                ant_radio_service_iv.setImageResource(R.drawable.ic_file_download_black_24dp);
+                ant_radio_service_tv.setTextColor(statusErrorColor);
+                setActionIcon(ant_radio_service_iv, R.drawable.ic_file_download_black_24dp);
                 ant_radio_service_iv.setTag(NO_TAG);
-                ant_radio_service_lock_iv.setVisibility(View.GONE);
-                ant_radio_service_lock2_iv.setVisibility(View.GONE);
+                ant_radio_service_lock_iv.setVisibility(View.INVISIBLE);
+                ant_radio_service_lock2_iv.setVisibility(View.INVISIBLE);
             }
             e.printStackTrace();
         }
@@ -359,31 +416,33 @@ public class MainActivity extends Activity {
             if (has_ARS)
             {
                 builtin_firmware_tv.setText(R.string.no_service);
-                builtin_firmware_tv.setTextColor(RED);
+                builtin_firmware_tv.setTextColor(statusErrorColor);
                 builtin_ant_detected_iv.setVisibility(View.VISIBLE);
                 builtin_firmware_iv.setTag(YES_TAG);
             }
             else {
                 builtin_firmware_tv.setText(R.string.requires_ars);
-                builtin_firmware_tv.setTextColor(YELLOW);
-                builtin_ant_detected_iv.setVisibility(View.GONE);
+                builtin_firmware_tv.setTextColor(statusWarningColor);
+                builtin_ant_detected_iv.setVisibility(View.INVISIBLE);
                 builtin_firmware_iv.setTag(NO_TAG);
             }
             builtin_firmware_iv.setVisibility(View.VISIBLE);
         } else {
             builtin_firmware_tv.setText(R.string.no);
-            builtin_firmware_tv.setTextColor(RED);
-            builtin_firmware_iv.setVisibility(View.GONE);
-            builtin_ant_detected_iv.setVisibility(View.GONE);
+            builtin_firmware_tv.setTextColor(statusErrorColor);
+            builtin_firmware_iv.setVisibility(View.INVISIBLE);
+            builtin_ant_detected_iv.setVisibility(View.INVISIBLE);
         }
 
         if (!usb_host_support)
         {
             ant_usb_service_tr.setVisibility(View.GONE);
+            ant_usb_service_divider.setVisibility(View.GONE);
         }
         else
         {
             ant_usb_service_tr.setVisibility(View.VISIBLE);
+            ant_usb_service_divider.setVisibility(View.VISIBLE);
             getPackageVersion(ant_usb_service_tv, "com.dsi.ant.usbservice", ant_usb_service_iv);
         }
         getPackageVersion(ant_plugins_tv, "com.dsi.ant.plugins.antplus", ant_plugins_iv);
@@ -391,15 +450,15 @@ public class MainActivity extends Activity {
         try {
             version = getPackageManager().getPackageInfo("com.dsi.ant.server", PackageManager.GET_META_DATA).versionName;
             ant_hal_service_tv.setText(version);
-            ant_hal_service_tv.setTextColor(GREEN);
+            ant_hal_service_tv.setTextColor(statusSuccessColor);
         } catch (Exception e1) {
             try {
                 version = getPackageManager().getPackageInfo("com.sonyericsson.anthal.service", PackageManager.GET_META_DATA).versionName;
                 ant_hal_service_tv.setText(version);
-                ant_hal_service_tv.setTextColor(GREEN);
+                ant_hal_service_tv.setTextColor(statusSuccessColor);
             } catch (Exception e2) {
                 ant_hal_service_tv.setText(R.string.not_found);
-                ant_hal_service_tv.setTextColor(RED);
+                ant_hal_service_tv.setTextColor(statusErrorColor);
             }
         }
 
@@ -445,23 +504,24 @@ public class MainActivity extends Activity {
         try {
             String version = getPackageManager().getPackageInfo(name, PackageManager.GET_META_DATA).versionName;
             tv.setText(version);
-            tv.setTextColor(GREEN);
-            iv.setImageResource(R.drawable.ic_info_outline_white_24dp);
-            iv.setColorFilter(Color.DKGRAY, PorterDuff.Mode.MULTIPLY);
+            tv.setTextColor(statusSuccessColor);
+            setActionIcon(iv, R.drawable.ic_info_outline_white_24dp);
             iv.setTag(YES_TAG);
         } catch (Exception e) {
             tv.setText(R.string.not_available);
-            tv.setTextColor(RED);
-            iv.setImageResource(R.drawable.ic_file_download_black_24dp);
+            tv.setTextColor(statusErrorColor);
+            setActionIcon(iv, R.drawable.ic_file_download_black_24dp);
             iv.setTag(NO_TAG);
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
+    private void setActionIcon(ImageView imageView, int drawableResource) {
+        imageView.setImageResource(drawableResource);
+        tintActionIcon(imageView);
+    }
+
+    private void tintActionIcon(ImageView imageView) {
+        imageView.setColorFilter(actionIconColor, PorterDuff.Mode.SRC_IN);
     }
 
     @Override
@@ -470,43 +530,9 @@ public class MainActivity extends Activity {
         super.onDestroy();
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int itemId = item.getItemId();
-        if (itemId == R.id.action_test) {
-            testANTSupport();
-            return true;
-        } else if (itemId == R.id.action_about) {
-            Dialog settingsDialog = new Dialog(this);
-            if (settingsDialog.getWindow() != null) {
-                settingsDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-            }
-            View v = View.inflate(this, R.layout.about_dialog, null);
-            settingsDialog.setContentView(v);
-            settingsDialog.show();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    public void aboutClick(View view) {
+    public void statusIconClick(View view) {
         int id = view.getId();
-        if (id == R.id.rate_button) {
-            Uri uri = Uri.parse("market://details?id=" + getPackageName());
-            Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
-            try {
-                startActivity(goToMarket);
-            } catch (ActivityNotFoundException e) {
-                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + getPackageName())));
-            }
-        } else if (id == R.id.translate_button) {
-            try {
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://localize.quantrity.com/projects/3"));
-                startActivity(browserIntent);
-            } catch (ActivityNotFoundException e) {
-                e.printStackTrace();
-            }
-        } else if (id == R.id.builtin_ant_detected_iv) {
+        if (id == R.id.builtin_ant_detected_iv) {
             Toast.makeText(getApplicationContext(), R.string.no_service, Toast.LENGTH_SHORT).show();
         } else if (id == R.id.ant_radio_service_lock_iv || id == R.id.ant_radio_service_lock2_iv) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);

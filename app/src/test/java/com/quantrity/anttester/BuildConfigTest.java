@@ -8,7 +8,7 @@ import org.junit.Test;
 public class BuildConfigTest {
     @Test
     public void releaseVersionIsDefined() {
-        assertEquals("1.27", BuildConfig.VERSION_NAME);
+        assertEquals("2.01", BuildConfig.VERSION_NAME);
         assertTrue(BuildConfig.VERSION_CODE > 0);
     }
 }

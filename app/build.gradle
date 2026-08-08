@@ -4,7 +4,7 @@ plugins {
 
 android {
     namespace 'com.quantrity.anttester'
-    compileSdk = 37
+    compileSdk = 36
 
     buildFeatures {
         buildConfig = true
@@ -13,9 +13,9 @@ android {
     defaultConfig {
         applicationId "com.quantrity.anttester"
         minSdk = 7
-        targetSdk = 37
-        versionCode 27
-        versionName "1.27"
+        targetSdk = 36
+        versionCode 201
+        versionName "2.01"
         //testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 

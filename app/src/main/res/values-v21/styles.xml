@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="AppTheme" parent="android:style/Theme.Material.Light.NoActionBar">
+        <item name="android:windowBackground">@color/screen_background</item>
+        <item name="android:colorBackground">@color/screen_background</item>
+        <item name="android:textColorPrimary">@color/text_primary</item>
+        <item name="android:textColorSecondary">@color/text_secondary</item>
+        <item name="android:colorAccent">@color/brand_primary</item>
+        <item name="android:colorControlHighlight">@color/primary_container</item>
+        <item name="android:statusBarColor">@color/brand_primary_dark</item>
+        <item name="android:navigationBarColor">@color/screen_background</item>
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowNoTitle">true</item>
+    </style>
+
+    <style name="Widget.AntTester.Card">
+        <item name="android:background">@drawable/bg_card</item>
+        <item name="android:elevation">1dp</item>
+    </style>
+
+    <style name="Widget.AntTester.HeroCard">
+        <item name="android:background">@drawable/bg_hero</item>
+        <item name="android:elevation">0dp</item>
+        <item name="android:padding">16dp</item>
+    </style>
+
+    <style name="TextAppearance.AntTester.HeroOverline">
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:letterSpacing">0.08</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textColor">@color/brand_primary</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="TextAppearance.AntTester.HeroTitle">
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="android:textSize">26sp</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="TextAppearance.AntTester.SectionHeader">
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:letterSpacing">0.08</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textColor">@color/text_secondary</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="TextAppearance.AntTester.StatusValue">
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:gravity">right</item>
+        <item name="android:paddingLeft">12dp</item>
+        <item name="android:textColor">@color/status_error</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+</resources>

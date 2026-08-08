@@ -3,253 +3,362 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".MainActivity"
-    tools:ignore="RtlHardcoded,RtlSymmetry,UseCompoundDrawables">
-    <HorizontalScrollView
-        android:layout_width="wrap_content" android:layout_height="wrap_content">
+    android:fillViewport="true"
+    tools:context=".MainActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingBottom="@dimen/activity_vertical_margin">
+
         <LinearLayout
+            style="@style/Widget.AntTester.HeroCard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:contentDescription="@string/app_name"
+                android:src="@drawable/ic_launcher" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="12dp"
+                android:layout_marginStart="12dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    style="@style/TextAppearance.AntTester.HeroOverline"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/app_name" />
+
+                <TextView
+                    style="@style/TextAppearance.AntTester.HeroTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="@string/ant_capable" />
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/ant_capable_iv"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:contentDescription="@string/ant_capable"
+                android:padding="4dp"
+                android:src="@drawable/ic_nok_red_36dp" />
+
+            <ImageButton
+                android:id="@+id/refresh_button"
+                style="@style/Widget.AntTester.HeroActionIcon"
+                android:layout_marginLeft="4dp"
+                android:layout_marginStart="4dp"
+                android:contentDescription="@string/menu_test"
+                android:src="@drawable/ic_update_white_24dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            style="@style/Widget.AntTester.Card"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                style="@style/Widget.AntTester.StatusRow"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    style="@style/TextAppearance.AntTester.RowLabel"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/built_in_ant_detected" />
+
+                <TextView
+                    android:id="@+id/builtin_ant_detected_tv"
+                    style="@style/TextAppearance.AntTester.StatusValue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/no" />
+
+                <ImageView
+                    android:id="@+id/builtin_ant_detected_iv"
+                    style="@style/Widget.AntTester.ActionIcon"
+                    android:contentDescription="@string/no_service"
+                    android:onClick="statusIconClick"
+                    android:src="@drawable/ic_error_red_24dp"
+                    android:visibility="invisible" />
+
+                <View style="@style/Widget.AntTester.ActionIcon" />
+            </LinearLayout>
+
+            <View style="@style/Widget.AntTester.Divider" />
+
+            <LinearLayout
+                style="@style/Widget.AntTester.StatusRow"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    style="@style/TextAppearance.AntTester.RowLabel"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/usb_on_the_go_support" />
+
+                <TextView
+                    android:id="@+id/usb_host_support_tv"
+                    style="@style/TextAppearance.AntTester.StatusValue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/no" />
+
+                <View style="@style/Widget.AntTester.ActionArea" />
+            </LinearLayout>
+
+            <View
+                android:id="@+id/addon_adapter_support_divider"
+                style="@style/Widget.AntTester.Divider" />
+
+            <LinearLayout
+                android:id="@+id/addon_adapter_support_row"
+                style="@style/Widget.AntTester.StatusRow"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/addon_adapter_support_label_tv"
+                    style="@style/TextAppearance.AntTester.RowLabel"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/ant_usb_service_installed" />
+
+                <TextView
+                    android:id="@+id/addon_adapter_support_tv"
+                    style="@style/TextAppearance.AntTester.StatusValue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/no" />
+
+                <ImageView
+                    android:id="@+id/addon_adapter_support_iv"
+                    style="@style/Widget.AntTester.ActionIcon"
+                    android:contentDescription="@string/ant_usb_service"
+                    android:src="@drawable/ic_file_download_black_24dp" />
+
+                <View style="@style/Widget.AntTester.ActionIcon" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <TextView
+            style="@style/TextAppearance.AntTester.SectionHeader"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="4dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginRight="4dp"
+            android:layout_marginBottom="8dp"
+            android:text="@string/ant_support_version_info" />
+
+        <LinearLayout
+            style="@style/Widget.AntTester.Card"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
-        <TableLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-            <TableRow>
+
+            <LinearLayout
+                style="@style/Widget.AntTester.StatusRow"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
                 <TextView
+                    style="@style/TextAppearance.AntTester.RowLabel"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/built_in_firmware" />
+
+                <TextView
+                    android:id="@+id/builtin_firmware_tv"
+                    style="@style/TextAppearance.AntTester.StatusValue"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/ant_capable"
-                    android:textAppearance="?android:attr/textAppearanceLarge" />
+                    android:text="@string/no" />
+
                 <ImageView
-                    android:paddingLeft="15dip"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_nok_red_36dp"
-                    android:layout_gravity="left"
-                    android:id="@+id/ant_capable_iv"
-                    android:contentDescription="@null"/>
-            </TableRow>
-            <TableRow android:gravity="center_vertical">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/built_in_ant_detected"
-                    android:textAppearance="?android:attr/textAppearanceMedium" />
-                <TextView
-                    android:paddingLeft="15dip"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/no"
-                    android:textColor="#cc0000"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:id="@+id/builtin_ant_detected_tv"/>
+                    android:id="@+id/builtin_firmware_iv"
+                    style="@style/Widget.AntTester.ActionIcon"
+                    android:contentDescription="@string/ant_radio_service"
+                    android:src="@drawable/ic_file_download_black_24dp" />
+
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_error_red_24dp"
-                    android:id="@+id/builtin_ant_detected_iv"
-                    android:contentDescription="@string/no_service"
-                    android:onClick="aboutClick"/>
-            </TableRow>
-            <TableRow>
+                    android:id="@+id/ant_radio_service_lock_iv"
+                    style="@style/Widget.AntTester.ActionIcon"
+                    android:contentDescription="@string/use_ant_hardware_permission"
+                    android:onClick="statusIconClick"
+                    android:src="@drawable/ic_lock_red_24dp"
+                    android:visibility="invisible" />
+            </LinearLayout>
+
+            <View style="@style/Widget.AntTester.Divider" />
+
+            <LinearLayout
+                style="@style/Widget.AntTester.StatusRow"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
                 <TextView
-                    android:layout_width="wrap_content"
+                    style="@style/TextAppearance.AntTester.RowLabel"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="@string/usb_on_the_go_support"
-                    android:textAppearance="?android:attr/textAppearanceMedium" />
+                    android:layout_weight="1"
+                    android:text="@string/ant_hal_service" />
+
                 <TextView
-                    android:paddingLeft="15dip"
+                    android:id="@+id/ant_hal_service_tv"
+                    style="@style/TextAppearance.AntTester.StatusValue"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/no"
-                    android:textColor="#cc0000"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:id="@+id/usb_host_support_tv" />
-            </TableRow>
-            <TableRow android:gravity="center_vertical">
+                    android:text="@string/not_found" />
+
+                <View style="@style/Widget.AntTester.ActionArea" />
+            </LinearLayout>
+
+            <View style="@style/Widget.AntTester.Divider" />
+
+            <LinearLayout
+                style="@style/Widget.AntTester.StatusRow"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
                 <TextView
-                    android:layout_width="wrap_content"
+                    style="@style/TextAppearance.AntTester.RowLabel"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="@string/ant_usb_service_installed"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:id="@+id/addon_adapter_support_label_tv" />
+                    android:layout_weight="1"
+                    android:text="@string/ant_radio_service" />
+
                 <TextView
-                    android:paddingLeft="15dip"
+                    android:id="@+id/ant_radio_service_tv"
+                    style="@style/TextAppearance.AntTester.StatusValue"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/no"
-                    android:textColor="#cc0000"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:id="@+id/addon_adapter_support_tv" />
+                    android:text="@string/not_found" />
+
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_file_download_black_24dp"
-                    android:id="@+id/addon_adapter_support_iv"
-                    android:contentDescription="@string/ant_usb_service"/>
-            </TableRow>
-        </TableLayout>
-        <TableLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-            <TableRow>
-                <TextView
-                    android:layout_span="2"
-                    android:paddingTop="10dip"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/ant_support_version_info"
-                    android:textAppearance="?android:attr/textAppearanceLarge" />
-            </TableRow>
-            <TableRow android:gravity="center_vertical">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/built_in_firmware"
-                    android:textAppearance="?android:attr/textAppearanceMedium" />
-                <LinearLayout android:gravity="center_vertical">
-                    <TextView
-                        android:paddingLeft="15dip"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/no"
-                        android:textColor="#cc0000"
-                        android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:id="@+id/builtin_firmware_tv" />
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingLeft="10dip"
-                        android:src="@drawable/ic_file_download_black_24dp"
-                        android:id="@+id/builtin_firmware_iv"
-                        android:contentDescription="@string/ant_radio_service"/>
-                    <ImageView
-                        android:visibility="gone"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingLeft="10dip"
-                        android:src="@drawable/ic_lock_red_24dp"
-                        android:id="@+id/ant_radio_service_lock_iv"
-                        android:contentDescription="@string/use_ant_hardware_permission"
-                        android:onClick="aboutClick"/>
-                </LinearLayout>
-            </TableRow>
-            <TableRow>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/ant_hal_service"
-                    android:textAppearance="?android:attr/textAppearanceMedium" />
-                <TextView
-                    android:paddingLeft="15dip"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/not_found"
-                    android:textColor="#cc0000"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:id="@+id/ant_hal_service_tv" />
-            </TableRow>
-            <TableRow android:baselineAligned="false"
-                android:gravity="center_vertical">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/ant_radio_service"
-                    android:textAppearance="?android:attr/textAppearanceMedium" />
-                <LinearLayout android:gravity="center_vertical">
-                    <TextView
-                        android:paddingLeft="15dip"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/not_found"
-                        android:textColor="#cc0000"
-                        android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:id="@+id/ant_radio_service_tv" />
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingLeft="10dip"
-                        android:src="@drawable/ic_file_download_black_24dp"
-                        android:id="@+id/ant_radio_service_iv"
-                        android:contentDescription="@string/ant_radio_service"/>
-                    <ImageView
-                        android:visibility="gone"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingLeft="10dip"
-                        android:src="@drawable/ic_lock_red_24dp"
-                        android:id="@+id/ant_radio_service_lock2_iv"
-                        android:contentDescription="@string/use_ant_hardware_permission"
-                        android:onClick="aboutClick"/>
-                </LinearLayout>
-            </TableRow>
-            <TableRow android:gravity="center_vertical"
-                android:id="@+id/ant_usb_service_tr">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/ant_usb_service"
-                    android:textAppearance="?android:attr/textAppearanceMedium" />
-                <LinearLayout android:gravity="center_vertical">
-                <TextView
-                    android:paddingLeft="15dip"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/not_found"
-                    android:textColor="#cc0000"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:id="@+id/ant_usb_service_tv"/>
+                    android:id="@+id/ant_radio_service_iv"
+                    style="@style/Widget.AntTester.ActionIcon"
+                    android:contentDescription="@string/ant_radio_service"
+                    android:src="@drawable/ic_file_download_black_24dp" />
+
                 <ImageView
+                    android:id="@+id/ant_radio_service_lock2_iv"
+                    style="@style/Widget.AntTester.ActionIcon"
+                    android:contentDescription="@string/use_ant_hardware_permission"
+                    android:onClick="statusIconClick"
+                    android:src="@drawable/ic_lock_red_24dp"
+                    android:visibility="invisible" />
+            </LinearLayout>
+
+            <View
+                android:id="@+id/ant_usb_service_divider"
+                style="@style/Widget.AntTester.Divider" />
+
+            <LinearLayout
+                android:id="@+id/ant_usb_service_tr"
+                style="@style/Widget.AntTester.StatusRow"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    style="@style/TextAppearance.AntTester.RowLabel"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/ant_usb_service" />
+
+                <TextView
+                    android:id="@+id/ant_usb_service_tv"
+                    style="@style/TextAppearance.AntTester.StatusValue"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingLeft="10dip"
-                    android:src="@drawable/ic_file_download_black_24dp"
+                    android:text="@string/not_found" />
+
+                <ImageView
                     android:id="@+id/ant_usb_service_iv"
-                    android:contentDescription="@string/ant_usb_service"/>
-                </LinearLayout>
-            </TableRow>
-            <TableRow android:gravity="center_vertical">
+                    style="@style/Widget.AntTester.ActionIcon"
+                    android:contentDescription="@string/ant_usb_service"
+                    android:src="@drawable/ic_file_download_black_24dp" />
+
+                <View style="@style/Widget.AntTester.ActionIcon" />
+            </LinearLayout>
+
+            <View style="@style/Widget.AntTester.Divider" />
+
+            <LinearLayout
+                style="@style/Widget.AntTester.StatusRow"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
                 <TextView
+                    style="@style/TextAppearance.AntTester.RowLabel"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/ant_plugins" />
+
+                <TextView
+                    android:id="@+id/ant_plugins_tv"
+                    style="@style/TextAppearance.AntTester.StatusValue"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/ant_plugins"
-                    android:textAppearance="?android:attr/textAppearanceMedium" />
-                <LinearLayout android:gravity="center_vertical">
-                <TextView
-                    android:paddingLeft="15dip"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/not_found"
-                    android:textColor="#cc0000"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:id="@+id/ant_plugins_tv" />
+                    android:text="@string/not_found" />
+
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="10dip"
-                    android:src="@drawable/ic_file_download_black_24dp"
                     android:id="@+id/ant_plugins_iv"
-                    android:contentDescription="@string/ant_plugins"/>
-                </LinearLayout>
-            </TableRow>
-        </TableLayout>
-            <TextView
-                android:id="@+id/usb_devices_tv1"
-                android:paddingTop="10dip"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/usb_devices"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:typeface="monospace"
-                android:id="@+id/usb_devices_tv2"/>
+                    style="@style/Widget.AntTester.ActionIcon"
+                    android:contentDescription="@string/ant_plugins"
+                    android:src="@drawable/ic_file_download_black_24dp" />
+
+                <View style="@style/Widget.AntTester.ActionIcon" />
+            </LinearLayout>
         </LinearLayout>
-    </HorizontalScrollView>
+
+        <TextView
+            android:id="@+id/usb_devices_tv1"
+            style="@style/TextAppearance.AntTester.SectionHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginRight="4dp"
+            android:layout_marginBottom="8dp"
+            android:text="@string/usb_devices"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/usb_devices_tv2"
+            style="@style/TextAppearance.AntTester.DeviceDetails"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_device_details"
+            android:padding="16dp"
+            android:typeface="monospace"
+            android:visibility="gone" />
+    </LinearLayout>
 </ScrollView>

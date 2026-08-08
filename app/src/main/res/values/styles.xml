@@ -1,8 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- API 7-compatible base theme. Newer platforms override this theme. -->
-    <style name="AppTheme" parent="android:Theme.Light">
-        <!-- Customize your theme here. -->
+    <!-- API 7-compatible foundation. Newer platforms layer on native Holo/Material polish. -->
+    <style name="AppTheme" parent="android:style/Theme.Light">
+        <item name="android:windowBackground">@color/screen_background</item>
+        <item name="android:colorBackground">@color/screen_background</item>
+        <item name="android:textColorPrimary">@color/text_primary</item>
+        <item name="android:textColorSecondary">@color/text_secondary</item>
+        <item name="android:windowNoTitle">true</item>
+    </style>
+
+    <style name="Widget.AntTester" parent="@android:style/Widget" />
+
+    <style name="TextAppearance.AntTester" parent="@android:style/TextAppearance" />
+
+    <style name="Widget.AntTester.Card">
+        <item name="android:background">@drawable/bg_card</item>
+    </style>
+
+    <style name="Widget.AntTester.HeroCard">
+        <item name="android:background">@drawable/bg_hero</item>
+        <item name="android:padding">16dp</item>
+    </style>
+
+    <style name="Widget.AntTester.StatusRow">
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:minHeight">64dp</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:paddingLeft">16dp</item>
+        <item name="android:paddingRight">8dp</item>
+    </style>
+
+    <style name="Widget.AntTester.Divider">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:layout_marginLeft">16dp</item>
+        <item name="android:layout_marginRight">16dp</item>
+        <item name="android:background">@color/divider</item>
+    </style>
+
+    <style name="Widget.AntTester.ActionIcon">
+        <item name="android:layout_width">48dp</item>
+        <item name="android:layout_height">48dp</item>
+        <item name="android:padding">12dp</item>
+    </style>
+
+    <style name="Widget.AntTester.HeroActionIcon" parent="android:style/Widget.ImageButton">
+        <item name="android:layout_width">48dp</item>
+        <item name="android:layout_height">48dp</item>
+        <item name="android:background">@drawable/bg_hero_action</item>
+        <item name="android:padding">12dp</item>
+    </style>
+
+    <!-- Keeps status values aligned when a row has fewer action icons. -->
+    <style name="Widget.AntTester.ActionArea">
+        <item name="android:layout_width">96dp</item>
+        <item name="android:layout_height">48dp</item>
+    </style>
+
+    <style name="TextAppearance.AntTester.HeroOverline">
+        <item name="android:textColor">@color/brand_primary</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="TextAppearance.AntTester.HeroTitle">
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="android:textSize">26sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="TextAppearance.AntTester.SectionHeader">
+        <item name="android:textColor">@color/text_secondary</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="TextAppearance.AntTester.RowLabel">
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="TextAppearance.AntTester.StatusValue">
+        <item name="android:gravity">right</item>
+        <item name="android:paddingLeft">12dp</item>
+        <item name="android:textColor">@color/status_error</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="TextAppearance.AntTester.DeviceDetails">
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="android:textSize">13sp</item>
     </style>
 
 </resources>
