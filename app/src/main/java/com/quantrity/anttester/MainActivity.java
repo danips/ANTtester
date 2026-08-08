@@ -81,13 +81,14 @@ public class MainActivity extends Activity {
     private int statusWarningColor;
     private int actionIconColor;
 
-    private final myOnClickListener ant_usb_service_ocl = new myOnClickListener("com.dsi.ant.usbservice");
-    private final myOnClickListener ant_radio_service_ocl = new myOnClickListener("com.dsi.ant.service.socket");
-    private final myOnClickListener ant_plugins_service_ocl = new myOnClickListener("com.dsi.ant.plugins.antplus");
+    private final myOnClickListener ant_usb_service_ocl = new myOnClickListener(AntPackages.USB_SERVICE);
+    private final myOnClickListener ant_radio_service_ocl = new myOnClickListener(AntPackages.RADIO_SERVICE);
+    private final myOnClickListener ant_plugins_service_ocl = new myOnClickListener(AntPackages.PLUGINS_SERVICE);
     private final Handler mAntServiceHandler = new Handler(Looper.getMainLooper());
     private AntService mAntRadioService;
     private int mAntServiceRetryAttempts;
     private boolean mUsbDetachReceiverRegistered;
+    private PackageInspector packageInspector;
 
     private final BroadcastReceiver mUsbDetachReceiver = new BroadcastReceiver() {
         @Override
@@ -141,6 +142,16 @@ public class MainActivity extends Activity {
                     return;
                 }
                 if (foundExternal) setReadiness(AntReadiness.READY_EXTERNAL_USB);
+            } catch (com.dsi.ant.channel.UnsupportedFeatureException e) {
+                Log.i(TAG, "ANT adapter provider is unsupported by the installed service");
+                builtin_firmware_tv.setText(R.string.requires_ars);
+                builtin_firmware_tv.setTextColor(statusWarningColor);
+                setReadiness(AntReadiness.SETUP_REQUIRED_SERVICE);
+                return;
+            } catch (SecurityException e) {
+                Log.w(TAG, "ANT adapter query permission denied", e);
+                setReadiness(AntReadiness.BLOCKED_PERMISSION);
+                return;
             } catch (Exception e) {
                 Log.v(TAG, "Unable to read ANT adapter information", e);
             }
@@ -155,6 +166,7 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        packageInspector = new PackageInspector(this);
 
         if (Build.VERSION.SDK_INT >= 35) {
             Api35Insets.apply(findViewById(android.R.id.content));
@@ -275,7 +287,17 @@ public class MainActivity extends Activity {
         //registerReceiver(mChannelProviderStateChangedReceiver, new IntentFilter(AntChannelProvider.ACTION_CHANNEL_PROVIDER_STATE_CHANGED));
 
 //        Log.v(TAG, "doBindAntRadioService");
-        mAntRadioServiceBound = AntService.bindService(this, mAntRadioServiceConnection);
+        try {
+            mAntRadioServiceBound = AntService.bindService(this, mAntRadioServiceConnection);
+        } catch (SecurityException e) {
+            mAntRadioServiceBound = false;
+            Log.w(TAG, "ANT Radio Service bind permission denied", e);
+            setReadiness(AntReadiness.BLOCKED_PERMISSION);
+        } catch (RuntimeException e) {
+            mAntRadioServiceBound = false;
+            Log.w(TAG, "ANT Radio Service bind failed", e);
+            setReadiness(AntReadiness.UNKNOWN_ERROR);
+        }
     }
 
     private void doUnbindAntRadioService()
@@ -397,50 +419,29 @@ public class MainActivity extends Activity {
         setReadiness((has_builtin_library || usb_host_support)
                 ? AntReadiness.SETUP_REQUIRED_ADAPTER : AntReadiness.UNSUPPORTED);
 
-        boolean has_ARS = false;
-        String version = null;
-        try {
-            version = getPackageManager().getPackageInfo("com.dsi.ant.service.socket", PackageManager.GET_META_DATA).versionName;
-            ant_radio_service_tv.setText(version);
-            ant_radio_service_tv.setTextColor(statusSuccessColor);
+        PackageState radioService = packageInspector.inspect(AntPackages.RADIO_SERVICE);
+        boolean has_ARS = radioService.isInstalledEnabled() || radioService.kind == PackageState.Kind.VERSION_TOO_OLD;
+        if (has_ARS) {
+            ant_radio_service_tv.setText(radioService.versionName);
+            ant_radio_service_tv.setTextColor(radioService.kind == PackageState.Kind.VERSION_TOO_OLD
+                    ? statusWarningColor : statusSuccessColor);
             setActionIcon(ant_radio_service_iv, R.drawable.ic_info_outline_white_24dp);
             ant_radio_service_iv.setTag(YES_TAG);
-
-            has_ARS = true;
-
             builtin_firmware_iv.setTag(YES_TAG);
             setActionIcon(builtin_firmware_iv, R.drawable.ic_settings_black_24dp);
-
-            //Check ANT Radio Service permissions
-            if (Build.VERSION.SDK_INT >= 16) {
-                try {
-                    PackageInfo pi = getApplicationContext().getPackageManager().getPackageInfo("com.dsi.ant.service.socket", PackageManager.GET_PERMISSIONS);
-                    final String[] requestedPermissions = pi.requestedPermissions;
-                    boolean enabled = false;
-                    for (int i = 0, len = requestedPermissions.length; i < len; i++) {
-                        if (requestedPermissions[i].startsWith("com.dsi.ant.permission.ANT") &&
-                                ((pi.requestedPermissionsFlags[i] & PackageInfo.REQUESTED_PERMISSION_GRANTED) != 0))
-                        {
-                            enabled = true;
-                            break;
-                        }
-                    }
-                    ant_radio_service_lock_iv.setVisibility(enabled ? View.INVISIBLE : View.VISIBLE);
-                    ant_radio_service_lock2_iv.setVisibility(enabled ? View.INVISIBLE : View.VISIBLE);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        } catch (Exception e) {
-            if (version == null) {
-                ant_radio_service_tv.setText(R.string.not_available);
-                ant_radio_service_tv.setTextColor(statusErrorColor);
-                setActionIcon(ant_radio_service_iv, R.drawable.ic_file_download_black_24dp);
-                ant_radio_service_iv.setTag(NO_TAG);
-                ant_radio_service_lock_iv.setVisibility(View.INVISIBLE);
-                ant_radio_service_lock2_iv.setVisibility(View.INVISIBLE);
-            }
-            e.printStackTrace();
+            PermissionState permission = packageInspector.inspectAntPermission();
+            boolean permissionGranted = permission.isGranted();
+            ant_radio_service_lock_iv.setVisibility(permissionGranted ? View.INVISIBLE : View.VISIBLE);
+            ant_radio_service_lock2_iv.setVisibility(permissionGranted ? View.INVISIBLE : View.VISIBLE);
+        } else {
+            ant_radio_service_tv.setText(radioService.kind == PackageState.Kind.INSTALLED_DISABLED
+                    ? R.string.disabled : R.string.not_available);
+            ant_radio_service_tv.setTextColor(radioService.kind == PackageState.Kind.INSTALLED_DISABLED
+                    ? statusWarningColor : statusErrorColor);
+            setActionIcon(ant_radio_service_iv, R.drawable.ic_file_download_black_24dp);
+            ant_radio_service_iv.setTag(NO_TAG);
+            ant_radio_service_lock_iv.setVisibility(View.INVISIBLE);
+            ant_radio_service_lock2_iv.setVisibility(View.INVISIBLE);
         }
 
         if (!has_ARS && (has_builtin_library || usb_host_support)) {
@@ -478,23 +479,20 @@ public class MainActivity extends Activity {
         {
             ant_usb_service_tr.setVisibility(View.VISIBLE);
             ant_usb_service_divider.setVisibility(View.VISIBLE);
-            getPackageVersion(ant_usb_service_tv, "com.dsi.ant.usbservice", ant_usb_service_iv);
+            getPackageVersion(ant_usb_service_tv, AntPackages.USB_SERVICE, ant_usb_service_iv);
         }
-        getPackageVersion(ant_plugins_tv, "com.dsi.ant.plugins.antplus", ant_plugins_iv);
+        getPackageVersion(ant_plugins_tv, AntPackages.PLUGINS_SERVICE, ant_plugins_iv);
 
-        try {
-            version = getPackageManager().getPackageInfo("com.dsi.ant.server", PackageManager.GET_META_DATA).versionName;
-            ant_hal_service_tv.setText(version);
+        PackageState halService = packageInspector.inspect(AntPackages.HAL_SERVER);
+        if (halService.kind == PackageState.Kind.MISSING) {
+            halService = packageInspector.inspect(AntPackages.LEGACY_HAL_SERVICE);
+        }
+        if (halService.isInstalledEnabled()) {
+            ant_hal_service_tv.setText(halService.versionName);
             ant_hal_service_tv.setTextColor(statusSuccessColor);
-        } catch (Exception e1) {
-            try {
-                version = getPackageManager().getPackageInfo("com.sonyericsson.anthal.service", PackageManager.GET_META_DATA).versionName;
-                ant_hal_service_tv.setText(version);
-                ant_hal_service_tv.setTextColor(statusSuccessColor);
-            } catch (Exception e2) {
-                ant_hal_service_tv.setText(R.string.not_found);
-                ant_hal_service_tv.setTextColor(statusErrorColor);
-            }
+        } else {
+            ant_hal_service_tv.setText(R.string.not_found);
+            ant_hal_service_tv.setTextColor(statusErrorColor);
         }
 
 
@@ -536,15 +534,18 @@ public class MainActivity extends Activity {
     }
 
     private void getPackageVersion(TextView tv, String name, ImageView iv) {
-        try {
-            String version = getPackageManager().getPackageInfo(name, PackageManager.GET_META_DATA).versionName;
+        PackageState state = packageInspector.inspect(name);
+        if (state.isInstalledEnabled() || state.kind == PackageState.Kind.VERSION_TOO_OLD) {
+            String version = state.versionName;
             tv.setText(version);
-            tv.setTextColor(statusSuccessColor);
+            tv.setTextColor(state.kind == PackageState.Kind.VERSION_TOO_OLD
+                    ? statusWarningColor : statusSuccessColor);
             setActionIcon(iv, R.drawable.ic_info_outline_white_24dp);
             iv.setTag(YES_TAG);
-        } catch (Exception e) {
+        } else {
             tv.setText(R.string.not_available);
-            tv.setTextColor(statusErrorColor);
+            tv.setTextColor(state.kind == PackageState.Kind.INSTALLED_DISABLED
+                    ? statusWarningColor : statusErrorColor);
             setActionIcon(iv, R.drawable.ic_file_download_black_24dp);
             iv.setTag(NO_TAG);
         }
