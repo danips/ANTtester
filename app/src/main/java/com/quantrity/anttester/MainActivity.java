@@ -52,6 +52,7 @@ public class MainActivity extends Activity {
     private static final long ANT_SERVICE_RETRY_DELAY_MS = 250L;
 
     private ImageView ant_capable_iv;
+    private TextView readiness_tv;
     private TextView builtin_ant_detected_tv;
     private TextView usb_host_support_tv;
     private TextView addon_adapter_support_tv;
@@ -112,6 +113,7 @@ public class MainActivity extends Activity {
                     }
                 }
                 boolean foundBuiltIn = false;
+                boolean foundExternal = false;
                 StringBuilder externalAdapters = new StringBuilder();
                 for (AntAdapterSnapshot adapter : AntAdapterSorter.sort(adapterSnapshots)) {
                     if (adapter.builtIn) {
@@ -121,6 +123,7 @@ public class MainActivity extends Activity {
                         builtin_firmware_iv.setVisibility(View.INVISIBLE);
                         builtin_ant_detected_iv.setVisibility(View.INVISIBLE);
                     } else {
+                        foundExternal = true;
                         if (externalAdapters.length() > 0) externalAdapters.append('\n');
                         externalAdapters.append(adapter.displayName).append(": ")
                                 .append(adapter.firmwareVersion);
@@ -134,8 +137,10 @@ public class MainActivity extends Activity {
                     external_adapters_tv.setVisibility(View.GONE);
                 }
                 if (foundBuiltIn) {
+                    setReadiness(AntReadiness.READY_BUILT_IN);
                     return;
                 }
+                if (foundExternal) setReadiness(AntReadiness.READY_EXTERNAL_USB);
             } catch (Exception e) {
                 Log.v(TAG, "Unable to read ANT adapter information", e);
             }
@@ -161,6 +166,7 @@ public class MainActivity extends Activity {
         actionIconColor = getResources().getColor(R.color.action_icon);
 
         ant_capable_iv = findViewById(R.id.ant_capable_iv);
+        readiness_tv = findViewById(R.id.readiness_tv);
         ImageView refresh_button = findViewById(R.id.refresh_button);
         tintActionIcon(refresh_button);
         refresh_button.setOnClickListener(new View.OnClickListener() {
@@ -336,6 +342,7 @@ public class MainActivity extends Activity {
 
     private void testANTSupport() {
         doUnbindAntRadioService();
+        setReadiness(AntReadiness.CHECKING);
         boolean has_builtin_library = AntSupportChecker.hasAntFeature(this);
         builtin_ant_detected_tv.setText((has_builtin_library) ? R.string.yes : R.string.no);
         builtin_ant_detected_tv.setTextColor((has_builtin_library) ? statusSuccessColor : statusErrorColor);
@@ -387,9 +394,8 @@ public class MainActivity extends Activity {
             }
         }
 
-        boolean is_ant_capable = has_builtin_library || usb_host_support;
-        ant_capable_iv.setImageResource(is_ant_capable ? R.drawable.ic_ok_green_36dp : R.drawable.ic_nok_red_36dp);
-        ant_capable_iv.setColorFilter(is_ant_capable ? statusSuccessColor : statusErrorColor, PorterDuff.Mode.SRC_IN);
+        setReadiness((has_builtin_library || usb_host_support)
+                ? AntReadiness.SETUP_REQUIRED_ADAPTER : AntReadiness.UNSUPPORTED);
 
         boolean has_ARS = false;
         String version = null;
@@ -435,6 +441,10 @@ public class MainActivity extends Activity {
                 ant_radio_service_lock2_iv.setVisibility(View.INVISIBLE);
             }
             e.printStackTrace();
+        }
+
+        if (!has_ARS && (has_builtin_library || usb_host_support)) {
+            setReadiness(AntReadiness.SETUP_REQUIRED_SERVICE);
         }
 
         if (has_builtin_library) {
@@ -547,6 +557,30 @@ public class MainActivity extends Activity {
 
     private void tintActionIcon(ImageView imageView) {
         imageView.setColorFilter(actionIconColor, PorterDuff.Mode.SRC_IN);
+    }
+
+    private void setReadiness(AntReadiness readiness) {
+        int text;
+        switch (readiness) {
+            case READY_BUILT_IN: text = R.string.ready_built_in; break;
+            case READY_EXTERNAL_USB: text = R.string.ready_external_usb; break;
+            case SETUP_REQUIRED_SERVICE: text = R.string.setup_required_service; break;
+            case SETUP_REQUIRED_ADAPTER: text = R.string.setup_required_adapter; break;
+            case BLOCKED_PERMISSION: text = R.string.blocked_permission; break;
+            case UNSUPPORTED: text = R.string.unsupported; break;
+            case UNKNOWN_ERROR: text = R.string.unknown_error; break;
+            default: text = R.string.checking; break;
+        }
+        readiness_tv.setText(text);
+        boolean ready = readiness == AntReadiness.READY_BUILT_IN
+                || readiness == AntReadiness.READY_EXTERNAL_USB;
+        int color = ready ? statusSuccessColor
+                : readiness == AntReadiness.CHECKING
+                || readiness == AntReadiness.SETUP_REQUIRED_SERVICE
+                || readiness == AntReadiness.SETUP_REQUIRED_ADAPTER ? statusWarningColor : statusErrorColor;
+        readiness_tv.setTextColor(color);
+        ant_capable_iv.setImageResource(ready ? R.drawable.ic_ok_green_36dp : R.drawable.ic_nok_red_36dp);
+        ant_capable_iv.setColorFilter(color, PorterDuff.Mode.SRC_IN);
     }
 
     @Override

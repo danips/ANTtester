@@ -50,6 +50,14 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
                     android:text="@string/ant_capable" />
+
+                <TextView
+                    android:id="@+id/readiness_tv"
+                    style="@style/TextAppearance.AntTester.HeroOverline"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="@string/checking" />
             </LinearLayout>
 
             <ImageView

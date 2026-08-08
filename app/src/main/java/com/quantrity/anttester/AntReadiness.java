@@ -1,0 +1,12 @@
+package com.quantrity.anttester;
+
+enum AntReadiness {
+    CHECKING,
+    READY_BUILT_IN,
+    READY_EXTERNAL_USB,
+    SETUP_REQUIRED_SERVICE,
+    SETUP_REQUIRED_ADAPTER,
+    BLOCKED_PERMISSION,
+    UNSUPPORTED,
+    UNKNOWN_ERROR
+}
