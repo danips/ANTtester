@@ -6,7 +6,5 @@
 /build
 /captures
 /.project
-/gradle
-/gradlew
-/gradlew.bat
+/gradle/gradle-daemon-jvm.properties
 .externalNativeBuild

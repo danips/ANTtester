@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-	<string name="about_dialog_contact">Kontakt</string>
 	<string name="about_dialog_rate">Ohodnotit</string>
 	<string name="about_dialog_text">Můžete aplikaci projevit podporu ohodnocením v Google Play nebo přeložením do Vašeho rodného jazyka.</string>
 	<string name="about_dialog_translate">Pomozte přeložit</string>
@@ -16,8 +15,6 @@
 	<string name="built_in_ant_detected">Detekováno zabudované ANT:</string>
 	<string name="built_in_firmware">Zabudovaný firmware:</string>
 	<string name="error_title">Chyba</string>
-	<string name="googleplay_listing_full_description">Touto aplikací můžete zjistit, které služby ANT+™ vaše zařízení podporuje.\nAplikace také poskytuje odkazy na stažení nebo odinstalaci různých služeb ANT+™.</string>
-	<string name="googleplay_listing_short_description">Otestujte své zařízení na podporu ANT+™</string>
 	<string name="menu_about">O aplikaci</string>
 	<string name="menu_test">Otestovat podporu ANT</string>
 	<string name="no">Ne</string>

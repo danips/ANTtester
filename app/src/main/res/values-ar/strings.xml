@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-	<string name="about_dialog_contact">اتصل</string>
 	<string name="about_dialog_rate">قيم</string>
 	<string name="about_dialog_text">يمكنك إظهار دعمك من خلال تقييم التطبيق في Google Play أو المساعدة في ترجمته إلى لغتك الخاصة.</string>
 	<string name="about_dialog_translate">ساعد في الترجمة</string>
@@ -16,8 +15,6 @@
 	<string name="built_in_ant_detected">مكتشف ANT مدمج</string>
 	<string name="built_in_firmware">مدمج مع البرامج الثابته</string>
 	<string name="error_title">خطأ</string>
-	<string name="googleplay_listing_full_description">مع هذا التطبيق يمكنك التحقق من قدرات ANT+™ المختلفة التي يدعمها جهازك.\nكما يقدم روابط لتنزيل / إلغاء تثبيت حزم ANT+™ المختلفة.</string>
-	<string name="googleplay_listing_short_description">اختبر جهازك لقابلية ANT+™</string>
 	<string name="menu_about">حول</string>
 	<string name="menu_test">اختبار دعم ANT</string>
 	<string name="no">لا</string>

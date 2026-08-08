@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-	<string name="about_dialog_contact">Kontaki</string>
 	<string name="about_dialog_rate">Likme</string>
 	<string name="about_dialog_text">Varat rādīt savu atbalstu, novērtējot lietotni pakalpojumā Google Play vai palīdzot to tulkot savā valodā.</string>
 	<string name="about_dialog_translate">Palīdziet tulkot</string>
@@ -16,8 +15,6 @@
 	<string name="built_in_ant_detected">Atrastais Built-in ANT:</string>
 	<string name="built_in_firmware">Iebūvēta programmaparatūra:</string>
 	<string name="error_title">Kļūda</string>
-	<string name="googleplay_listing_full_description">Ar šo programmu jūs varat pārbaudīt dažādās ANT+™ iespējas, ko atbalsta jūsu ierīce.\nTas piedāvā arī saites, lai lejupielādētu / atinstalētu dažādus ANT+™ pakotnes.</string>
-	<string name="googleplay_listing_short_description">Parbaudi iekartu uz ANT+™ saderību</string>
 	<string name="menu_about">Par mums</string>
 	<string name="menu_test">ANT atbalsta Tests</string>
 	<string name="no">Nav</string>

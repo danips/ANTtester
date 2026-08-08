@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-	<string name="about_dialog_contact">Contatto</string>
 	<string name="about_dialog_rate">Valutazione</string>
 	<string name="about_dialog_text">Potete mostrare il vostro sostegno valutando l\'app in Google Play o aiutare a tradurla nella vostra lingua.</string>
 	<string name="about_dialog_translate">Aiuta a tradurre</string>
@@ -16,8 +15,6 @@
 	<string name="built_in_ant_detected">Rilevato ANT incorporato:</string>
 	<string name="built_in_firmware">Firmware incorporato:</string>
 	<string name="error_title">Errore</string>
-	<string name="googleplay_listing_full_description">Con questa applicazione è possibile verificare le diverse funzionalità ANT+™ supportate dal dispositivo.\nOffre anche link per scaricare/disinstallare i diversi pacchetti ANT+™.</string>
-	<string name="googleplay_listing_short_description">Testa il tuo dispositivo per verificare le funzioni ANT+™</string>
 	<string name="menu_about">Info</string>
 	<string name="menu_test">Test supporto ANT:</string>
 	<string name="no">No</string>

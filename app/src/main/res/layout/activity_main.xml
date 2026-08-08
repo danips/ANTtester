@@ -7,7 +7,8 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    tools:ignore="RtlHardcoded,RtlSymmetry,UseCompoundDrawables">
     <HorizontalScrollView
         android:layout_width="wrap_content" android:layout_height="wrap_content">
         <LinearLayout
@@ -29,7 +30,8 @@
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_nok_red_36dp"
                     android:layout_gravity="left"
-                    android:id="@+id/ant_capable_iv"/>
+                    android:id="@+id/ant_capable_iv"
+                    android:contentDescription="@null"/>
             </TableRow>
             <TableRow android:gravity="center_vertical">
                 <TextView
@@ -50,6 +52,7 @@
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_error_red_24dp"
                     android:id="@+id/builtin_ant_detected_iv"
+                    android:contentDescription="@string/no_service"
                     android:onClick="aboutClick"/>
             </TableRow>
             <TableRow>
@@ -86,7 +89,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_file_download_black_24dp"
-                    android:id="@+id/addon_adapter_support_iv"/>
+                    android:id="@+id/addon_adapter_support_iv"
+                    android:contentDescription="@string/ant_usb_service"/>
             </TableRow>
         </TableLayout>
         <TableLayout
@@ -121,7 +125,8 @@
                         android:layout_height="wrap_content"
                         android:paddingLeft="10dip"
                         android:src="@drawable/ic_file_download_black_24dp"
-                        android:id="@+id/builtin_firmware_iv"/>
+                        android:id="@+id/builtin_firmware_iv"
+                        android:contentDescription="@string/ant_radio_service"/>
                     <ImageView
                         android:visibility="gone"
                         android:layout_width="wrap_content"
@@ -129,6 +134,7 @@
                         android:paddingLeft="10dip"
                         android:src="@drawable/ic_lock_red_24dp"
                         android:id="@+id/ant_radio_service_lock_iv"
+                        android:contentDescription="@string/use_ant_hardware_permission"
                         android:onClick="aboutClick"/>
                 </LinearLayout>
             </TableRow>
@@ -168,7 +174,8 @@
                         android:layout_height="wrap_content"
                         android:paddingLeft="10dip"
                         android:src="@drawable/ic_file_download_black_24dp"
-                        android:id="@+id/ant_radio_service_iv"/>
+                        android:id="@+id/ant_radio_service_iv"
+                        android:contentDescription="@string/ant_radio_service"/>
                     <ImageView
                         android:visibility="gone"
                         android:layout_width="wrap_content"
@@ -176,6 +183,7 @@
                         android:paddingLeft="10dip"
                         android:src="@drawable/ic_lock_red_24dp"
                         android:id="@+id/ant_radio_service_lock2_iv"
+                        android:contentDescription="@string/use_ant_hardware_permission"
                         android:onClick="aboutClick"/>
                 </LinearLayout>
             </TableRow>
@@ -200,7 +208,8 @@
                     android:layout_height="wrap_content"
                     android:paddingLeft="10dip"
                     android:src="@drawable/ic_file_download_black_24dp"
-                    android:id="@+id/ant_usb_service_iv"/>
+                    android:id="@+id/ant_usb_service_iv"
+                    android:contentDescription="@string/ant_usb_service"/>
                 </LinearLayout>
             </TableRow>
             <TableRow android:gravity="center_vertical">
@@ -223,7 +232,8 @@
                     android:layout_height="wrap_content"
                     android:paddingLeft="10dip"
                     android:src="@drawable/ic_file_download_black_24dp"
-                    android:id="@+id/ant_plugins_iv"/>
+                    android:id="@+id/ant_plugins_iv"
+                    android:contentDescription="@string/ant_plugins"/>
                 </LinearLayout>
             </TableRow>
         </TableLayout>

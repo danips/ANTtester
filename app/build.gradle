@@ -4,12 +4,16 @@ plugins {
 
 android {
     namespace 'com.quantrity.anttester'
-    compileSdk 34
+    compileSdk = 37
+
+    buildFeatures {
+        buildConfig = true
+    }
 
     defaultConfig {
         applicationId "com.quantrity.anttester"
-        minSdk 7
-        targetSdk 34
+        minSdk = 7
+        targetSdk = 37
         versionCode 27
         versionName "1.27"
         //testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -17,16 +21,16 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled true
-            shrinkResources true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            minifyEnabled = true
+            shrinkResources = true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.aar'])
-    //testImplementation 'junit:junit:4.13.2'
+    testImplementation 'junit:junit:4.13.2'
     //androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     //androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 }

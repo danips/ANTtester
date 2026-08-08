@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-	<string name="about_dialog_contact">تماس با ما</string>
 	<string name="about_dialog_rate">امتیاز</string>
 	<string name="about_dialog_text">شما میتوانید با امتیاز دادن به ما در پلی استور و یا با کمک به ترجمه این برنامه به زبان خود از ما حمایت کنید.</string>
 	<string name="about_dialog_translate">کمک ترجمه</string>
@@ -16,8 +15,6 @@
 	<string name="built_in_ant_detected">آنتن واخلی پیدا شد:</string>
 	<string name="built_in_firmware">در سیستم عامل ساخته شده است:</string>
 	<string name="error_title">مشکل</string>
-	<string name="googleplay_listing_full_description">با این نرم افزار شما میتوانید دستگاه خود را از نظر حمایت از قابلیت های مختلف ANT+™ تست کنید.\nهمچنین به شما لینکهایی برای دانلود و یا حذف بسته های مختلف ANT+™ پیشنهاد میکند.</string>
-	<string name="googleplay_listing_short_description">دستگاه خود را از نظر داشتن قابلیت ANT+™ تست کنید</string>
 	<string name="menu_about">درباره</string>
 	<string name="menu_test">امتحان راهنمای صفحه ها</string>
 	<string name="no">نه</string>

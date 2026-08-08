@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-	<string name="about_dialog_contact">Contacta</string>
 	<string name="about_dialog_rate">Valora\'ns</string>
 	<string name="about_dialog_text">Pots ajudar puntuant l\'app a Google Play o ajudant a traduir-la a la vostra llengua.</string>
 	<string name="about_dialog_translate">Ajuda a la traducció</string>
@@ -16,8 +15,6 @@
 	<string name="built_in_ant_detected">ANT integrat detectat:</string>
 	<string name="built_in_firmware">Firmware integrat:</string>
 	<string name="error_title">Error</string>
-	<string name="googleplay_listing_full_description">Amb aquesta app pots comprovar les diferents funcionalitats que suporta el teu dispositiu.\nTambé ofereix els enllaços per a descarregar/desinstal·lar els diferents paquets ANT+.</string>
-	<string name="googleplay_listing_short_description">Comproveu si el dispositiu té funcionabilitats ANT+™</string>
 	<string name="menu_about">Quan a</string>
 	<string name="menu_test">Comprovar Suport  ANT</string>
 	<string name="no">No</string>

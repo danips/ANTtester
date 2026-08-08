@@ -1,7 +1,7 @@
 <resources>
 
-    <!-- Base application theme. -->
-    <style name="AppTheme" parent="android:Theme.Holo.Light.DarkActionBar">
+    <!-- API 7-compatible base theme. Newer platforms override this theme. -->
+    <style name="AppTheme" parent="android:Theme.Light">
         <!-- Customize your theme here. -->
     </style>
 

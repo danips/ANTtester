@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-	<string name="about_dialog_contact">聯繫</string>
 	<string name="about_dialog_rate">給于評價</string>
 	<string name="about_dialog_text">您可以通過在Google Play中對應用進行評分或幫助將其翻譯成您自己的語言來顯示您的支持。</string>
 	<string name="about_dialog_translate">幫助翻譯</string>
@@ -16,8 +15,6 @@
 	<string name="built_in_ant_detected">偵測到內置ANT：</string>
 	<string name="built_in_firmware">內置固件硬體：</string>
 	<string name="error_title">錯誤</string>
-	<string name="googleplay_listing_full_description">有了這個應用程序，你可以檢查你的設備支持不同的ANT+™功能。\n它還提供了下載/卸載不同ANT+™軟件包的鏈接。</string>
-	<string name="googleplay_listing_short_description">測試您的設備的ANT+™功能</string>
 	<string name="menu_about">關於</string>
 	<string name="menu_test">支援測試ANT</string>
 	<string name="no">否</string>

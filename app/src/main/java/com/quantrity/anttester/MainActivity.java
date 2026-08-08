@@ -1,5 +1,7 @@
 package com.quantrity.anttester;
 
+import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -12,6 +14,7 @@ import android.content.ServiceConnection;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.graphics.Insets;
 import android.graphics.PorterDuff;
 import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbManager;
@@ -20,12 +23,14 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
+import android.view.WindowInsets;
 import android.widget.ImageView;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -49,6 +54,8 @@ public class MainActivity extends Activity {
     private static final int YELLOW = Color.parseColor("#999900");
     private static final String YES_TAG = "Y";
     private static final String NO_TAG = "N";
+    private static final int ANT_SERVICE_RETRY_ATTEMPTS = 20;
+    private static final long ANT_SERVICE_RETRY_DELAY_MS = 250L;
 
     private ImageView ant_capable_iv;
     private TextView builtin_ant_detected_tv;
@@ -75,11 +82,48 @@ public class MainActivity extends Activity {
     private final myOnClickListener ant_usb_service_ocl = new myOnClickListener("com.dsi.ant.usbservice");
     private final myOnClickListener ant_radio_service_ocl = new myOnClickListener("com.dsi.ant.service.socket");
     private final myOnClickListener ant_plugins_service_ocl = new myOnClickListener("com.dsi.ant.plugins.antplus");
+    private final Handler mAntServiceHandler = new Handler(Looper.getMainLooper());
+    private AntService mAntRadioService;
+    private int mAntServiceRetryAttempts;
+
+    private final Runnable mAntServiceInfoRetry = new Runnable() {
+        @Override
+        public void run() {
+            if (!mAntRadioServiceBound || mAntRadioService == null) {
+                return;
+            }
+
+            try {
+                Iterator<AdapterInfo> adapters = mAntRadioService.getAdapterProvider()
+                        .getAdaptersInfo(MainActivity.this).iterator();
+                if (adapters.hasNext()) {
+                    AdapterInfo adapter = adapters.next();
+                    builtin_firmware_tv.setText(adapter.getVersionString());
+                    builtin_firmware_tv.setTextColor(GREEN);
+                    builtin_firmware_iv.setVisibility(View.GONE);
+                    builtin_ant_detected_iv.setVisibility(View.GONE);
+                    ant_radio_service_lock_iv.setVisibility(View.GONE);
+                    ant_radio_service_lock2_iv.setVisibility(View.GONE);
+                    return;
+                }
+            } catch (Exception e) {
+                Log.v(TAG, "Unable to read ANT adapter information", e);
+            }
+
+            if (--mAntServiceRetryAttempts > 0 && mAntRadioServiceBound) {
+                mAntServiceHandler.postDelayed(this, ANT_SERVICE_RETRY_DELAY_MS);
+            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        if (Build.VERSION.SDK_INT >= 35) {
+            Api35Insets.apply(findViewById(android.R.id.content));
+        }
 
 
         ant_capable_iv = findViewById(R.id.ant_capable_iv);
@@ -119,40 +163,29 @@ public class MainActivity extends Activity {
         testANTSupport();
     }
 
-    private class MyRunnable implements Runnable
-    {
-        int countdown;
-        final AntService as;
-        MyRunnable(int countdown, AntService as)
-        {
-            this.countdown = countdown;
-            this.as = as;
-        }
+    /** Keeps content clear of mandatory edge-to-edge system bars on Android 15+. */
+    @SuppressLint("UseRequiresApi")
+    @TargetApi(35)
+    private static class Api35Insets {
+        static void apply(final View content) {
+            final int initialLeft = content.getPaddingLeft();
+            final int initialTop = content.getPaddingTop();
+            final int initialRight = content.getPaddingRight();
+            final int initialBottom = content.getPaddingBottom();
 
-        @Override
-        public void run() {
-            if (countdown == 0) return;
-
-            countdown--;
-            try
-            {
-                Iterator<AdapterInfo> i = as.getAdapterProvider().getAdaptersInfo(MainActivity.this).iterator();
-                if (i.hasNext()) {
-                    AdapterInfo ai = i.next();
-                    builtin_firmware_tv.setText(ai.getVersionString());
-                    builtin_firmware_tv.setTextColor(GREEN);
-                    builtin_firmware_iv.setVisibility(View.GONE);
-                    builtin_ant_detected_iv.setVisibility(View.GONE);
-                    ant_radio_service_lock_iv.setVisibility(View.GONE);
-                    ant_radio_service_lock2_iv.setVisibility(View.GONE);
+            content.setOnApplyWindowInsetsListener(new View.OnApplyWindowInsetsListener() {
+                @Override
+                public WindowInsets onApplyWindowInsets(View view, WindowInsets windowInsets) {
+                    Insets systemBars = windowInsets.getInsets(WindowInsets.Type.systemBars());
+                    view.setPadding(
+                            initialLeft + systemBars.left,
+                            initialTop + systemBars.top,
+                            initialRight + systemBars.right,
+                            initialBottom + systemBars.bottom);
+                    return windowInsets;
                 }
-            }
-            catch (Exception e)
-            {
-                Log.v(TAG, "MyRunnable run " + countdown);
-                final Handler handler = new Handler();
-                handler.postDelayed(new MyRunnable(countdown, as), 250);
-            }
+            });
+            content.requestApplyInsets();
         }
     }
 
@@ -161,14 +194,17 @@ public class MainActivity extends Activity {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service)
         {
-            final AntService as = new AntService(service);
-            final Handler handler = new Handler();
-            int countdown = 20;
-            handler.postDelayed(new MyRunnable(countdown, as), 250);
+            mAntRadioService = new AntService(service);
+            mAntServiceRetryAttempts = ANT_SERVICE_RETRY_ATTEMPTS;
+            mAntServiceHandler.removeCallbacks(mAntServiceInfoRetry);
+            mAntServiceHandler.postDelayed(mAntServiceInfoRetry, ANT_SERVICE_RETRY_DELAY_MS);
         }
 
         @Override
-        public void onServiceDisconnected(ComponentName name) {}
+        public void onServiceDisconnected(ComponentName name) {
+            mAntServiceHandler.removeCallbacks(mAntServiceInfoRetry);
+            mAntRadioService = null;
+        }
     };
 
     private boolean mAntRadioServiceBound;
@@ -189,6 +225,9 @@ public class MainActivity extends Activity {
         //} catch (IllegalArgumentException exception) {
         //    if(BuildConfig.DEBUG) Log.d(TAG, "Attempting to unregister a never registered Channel Provider State Changed receiver.");
         //}
+
+        mAntServiceHandler.removeCallbacks(mAntServiceInfoRetry);
+        mAntRadioService = null;
 
         if(mAntRadioServiceBound)
         {
@@ -309,7 +348,7 @@ public class MainActivity extends Activity {
                 ant_radio_service_tv.setText(R.string.not_available);
                 ant_radio_service_tv.setTextColor(RED);
                 ant_radio_service_iv.setImageResource(R.drawable.ic_file_download_black_24dp);
-                ant_radio_service_tv.setTag(NO_TAG);
+                ant_radio_service_iv.setTag(NO_TAG);
                 ant_radio_service_lock_iv.setVisibility(View.GONE);
                 ant_radio_service_lock2_iv.setVisibility(View.GONE);
             }
@@ -458,11 +497,11 @@ public class MainActivity extends Activity {
             try {
                 startActivity(goToMarket);
             } catch (ActivityNotFoundException e) {
-                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/details?id=" + getPackageName())));
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + getPackageName())));
             }
         } else if (id == R.id.translate_button) {
             try {
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://localize.quantrity.com/projects/3"));
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://localize.quantrity.com/projects/3"));
                 startActivity(browserIntent);
             } catch (ActivityNotFoundException e) {
                 e.printStackTrace();
@@ -503,7 +542,7 @@ public class MainActivity extends Activity {
                 try {
                     startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + pkg)));
                 } catch (android.content.ActivityNotFoundException e) {
-                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/details?id=" + pkg)));
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + pkg)));
                 }
             }
         }

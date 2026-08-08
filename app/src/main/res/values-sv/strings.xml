@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-	<string name="about_dialog_contact">Kontakt</string>
 	<string name="about_dialog_rate">Betyg</string>
 	<string name="about_dialog_text">Du kan visa ditt stöd genom att betygsätta appen i Google Play eller hjälpa till att översätta den till ditt eget språk.</string>
 	<string name="about_dialog_translate">Hjälp med att översätta</string>
@@ -16,8 +15,6 @@
 	<string name="built_in_ant_detected">Inbyggd ANT upptäckt:</string>
 	<string name="built_in_firmware">Inbyggd Firmware</string>
 	<string name="error_title">Fel</string>
-	<string name="googleplay_listing_full_description">Med den här applikationen kan du kontrollera de olika ANT+™ -funktionerna som din enhet stöder.\nDet erbjuder också länkar för att ladda ner / avinstallera de olika ANT+™ -paketen.</string>
-	<string name="googleplay_listing_short_description">Testa din enhet för ANT+™ stöd</string>
 	<string name="menu_about">Om</string>
 	<string name="menu_test">Testa ANT Stöd</string>
 	<string name="no">Nej</string>
