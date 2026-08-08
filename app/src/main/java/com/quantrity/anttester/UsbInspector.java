@@ -71,6 +71,12 @@ final class UsbInspector {
             result.add(new UsbDeviceSnapshot(-1, -1, -1, null, null, null, null,
                     "USB enumeration failed"));
         }
+        return sortDevices(result);
+    }
+
+    static List<UsbDeviceSnapshot> sortDevices(List<UsbDeviceSnapshot> input) {
+        ArrayList<UsbDeviceSnapshot> result = new ArrayList<UsbDeviceSnapshot>(input == null
+                ? Collections.<UsbDeviceSnapshot>emptyList() : input);
         Collections.sort(result, new Comparator<UsbDeviceSnapshot>() {
             @Override public int compare(UsbDeviceSnapshot left, UsbDeviceSnapshot right) {
                 int value = compareInt(left.vendorId, right.vendorId);
