@@ -15,8 +15,22 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 final class UsbInspector {
+    static final class Scan {
+        final List<UsbDeviceSnapshot> devices;
+        final Map<String, UsbDevice> antAdapters;
+        final UsbManager manager;
+
+        Scan(List<UsbDeviceSnapshot> devices, Map<String, UsbDevice> antAdapters, UsbManager manager) {
+            this.devices = devices;
+            this.antAdapters = antAdapters;
+            this.manager = manager;
+        }
+    }
+
     private final Context context;
 
     UsbInspector(Context context) {
@@ -48,17 +62,23 @@ final class UsbInspector {
         return false;
     }
 
-    List<UsbDeviceSnapshot> inspectDevices() {
+    Scan inspectDevices() {
         ArrayList<UsbDeviceSnapshot> result = new ArrayList<UsbDeviceSnapshot>();
-        if (Build.VERSION.SDK_INT < 12) return result;
+        Map<String, UsbDevice> antAdapters = new TreeMap<String, UsbDevice>();
+        UsbManager manager = null;
+        if (Build.VERSION.SDK_INT < 12) return new Scan(result, antAdapters, null);
         try {
-            UsbManager manager = (UsbManager) context.getSystemService(Context.USB_SERVICE);
-            if (manager == null) return result;
+            manager = (UsbManager) context.getSystemService(Context.USB_SERVICE);
+            if (manager == null) return new Scan(result, antAdapters, null);
             HashMap<String, UsbDevice> devices = manager.getDeviceList();
-            if (devices == null) return result;
-            for (UsbDevice device : devices.values()) {
+            if (devices == null) return new Scan(result, antAdapters, manager);
+            for (Map.Entry<String, UsbDevice> entry : devices.entrySet()) {
                 try {
-                    result.add(UsbDeviceSnapshot.from(device));
+                    UsbDeviceSnapshot snapshot = UsbDeviceSnapshot.from(entry.getValue());
+                    result.add(snapshot);
+                    if (AntUsbFirmwareReader.isSupported(snapshot.vendorId, snapshot.productId)) {
+                        antAdapters.put(entry.getKey(), entry.getValue());
+                    }
                 } catch (RuntimeException e) {
                     result.add(new UsbDeviceSnapshot(-1, -1, -1, null, null, null, null,
                             "device inspection failed"));
@@ -71,7 +91,7 @@ final class UsbInspector {
             result.add(new UsbDeviceSnapshot(-1, -1, -1, null, null, null, null,
                     "USB enumeration failed"));
         }
-        return sortDevices(result);
+        return new Scan(sortDevices(result), antAdapters, manager);
     }
 
     static List<UsbDeviceSnapshot> sortDevices(List<UsbDeviceSnapshot> input) {

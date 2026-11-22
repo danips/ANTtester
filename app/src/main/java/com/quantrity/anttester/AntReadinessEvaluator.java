@@ -8,6 +8,35 @@ final class AntReadinessEvaluator {
         if (snapshot == null || snapshot.probeStatus == AntSupportSnapshot.ProbeStatus.CHECKING) {
             return new AntReadinessResult(AntReadiness.CHECKING, "Checking ANT support");
         }
+        if (snapshot.serviceState == AntSupportSnapshot.ServiceState.AVAILABLE) {
+            if (hasBuiltIn(snapshot)) {
+                return new AntReadinessResult(AntReadiness.READY_BUILT_IN, "Built-in ANT adapter ready");
+            }
+            if (snapshot.usbHostSupported && hasExternal(snapshot)
+                    && (installed(snapshot.usbService) || snapshot.antAddOnSupported)) {
+                return new AntReadinessResult(AntReadiness.READY_EXTERNAL_USB, "External ANT adapter ready");
+            }
+        }
+        if (snapshot.firmware.builtInVersion != null) {
+            return new AntReadinessResult(AntReadiness.VERIFIED_BUILT_IN, "Built-in ANT verified directly");
+        }
+        if (snapshot.firmware.hasVerifiedUsb()) {
+            return new AntReadinessResult(AntReadiness.VERIFIED_EXTERNAL_USB, "External ANT verified via USB");
+        }
+        if (snapshot.firmware.builtInState == AntFirmwareFacts.BuiltInState.CHECKING
+                || snapshot.firmware.usbChecking
+                || snapshot.serviceState == AntSupportSnapshot.ServiceState.QUERYING) {
+            return new AntReadinessResult(AntReadiness.CHECKING, "Checking ANT support");
+        }
+        if (snapshot.firmware.builtInState == AntFirmwareFacts.BuiltInState.PERMISSION_REQUIRED) {
+            return new AntReadinessResult(AntReadiness.BLOCKED_PERMISSION, "Allow ANT hardware permission");
+        }
+        if (!snapshot.firmware.usbVersions.isEmpty()) {
+            return new AntReadinessResult(AntReadiness.DETECTED_EXTERNAL_USB, "Detected via USB");
+        }
+        if (snapshot.firmware.builtInState == AntFirmwareFacts.BuiltInState.FAILED) {
+            return new AntReadinessResult(AntReadiness.UNKNOWN_ERROR, "Could not verify ANT support");
+        }
         if (snapshot.probeStatus == AntSupportSnapshot.ProbeStatus.UNKNOWN_ERROR
                 || hasQueryError(snapshot)) {
             return new AntReadinessResult(AntReadiness.UNKNOWN_ERROR, "Could not verify ANT support");
@@ -18,9 +47,8 @@ final class AntReadinessEvaluator {
             return new AntReadinessResult(AntReadiness.SETUP_REQUIRED_SERVICE,
                     "Install a newer ANT Radio Service");
         }
-        if ((snapshot.antPermission.kind == PermissionState.Kind.DENIED
-                || snapshot.antPermission.kind == PermissionState.Kind.NOT_DECLARED)
-                && snapshot.radioService != null && snapshot.radioService.isInstalledEnabled()) {
+        if (snapshot.builtInFeatureDeclared && snapshot.antPermission.kind == PermissionState.Kind.DENIED
+                && installed(snapshot.radioService)) {
             return new AntReadinessResult(AntReadiness.BLOCKED_PERMISSION,
                     "Allow ANT hardware permission");
         }
@@ -45,15 +73,8 @@ final class AntReadinessEvaluator {
             return new AntReadinessResult(AntReadiness.SETUP_REQUIRED_SERVICE,
                     "Install or enable ANT Radio Service");
         }
-        if (snapshot.builtInFeatureDeclared && hasBuiltIn(snapshot)) {
-            return new AntReadinessResult(AntReadiness.READY_BUILT_IN, "Built-in ANT adapter ready");
-        }
         if (snapshot.usbHostSupported && hasExternal(snapshot)) {
-            if (snapshot.usbService == null || !snapshot.usbService.isInstalledEnabled()) {
-                return new AntReadinessResult(AntReadiness.SETUP_REQUIRED_SERVICE,
-                        "Install ANT USB Service");
-            }
-            return new AntReadinessResult(AntReadiness.READY_EXTERNAL_USB, "External ANT adapter ready");
+            return new AntReadinessResult(AntReadiness.SETUP_REQUIRED_SERVICE, "Install ANT USB Service");
         }
         if (snapshot.serviceState == AntSupportSnapshot.ServiceState.NO_ADAPTER
                 || snapshot.serviceState == AntSupportSnapshot.ServiceState.NOT_QUERIED
@@ -75,12 +96,14 @@ final class AntReadinessEvaluator {
     }
 
     private static boolean hasQueryError(AntSupportSnapshot snapshot) {
-        return packageError(snapshot.radioService) || packageError(snapshot.usbService)
-                || packageError(snapshot.pluginsService) || packageError(snapshot.halService)
-                || snapshot.antPermission.kind == PermissionState.Kind.QUERY_ERROR;
+        return packageError(snapshot.radioService) || snapshot.usbHostSupported && packageError(snapshot.usbService);
     }
 
     private static boolean packageError(PackageState state) {
         return state != null && state.kind == PackageState.Kind.QUERY_ERROR;
+    }
+
+    private static boolean installed(PackageState state) {
+        return state != null && state.isInstalledEnabled();
     }
 }

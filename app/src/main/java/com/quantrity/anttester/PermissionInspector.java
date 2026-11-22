@@ -11,20 +11,27 @@ final class PermissionInspector {
 
     @TargetApi(16)
     static PermissionState inspect(PackageInfo packageInfo) {
-        if (packageInfo == null || packageInfo.requestedPermissions == null
-                || packageInfo.requestedPermissionsFlags == null) {
+        return packageInfo == null ? inspect(null, null)
+                : inspect(packageInfo.requestedPermissions, packageInfo.requestedPermissionsFlags);
+    }
+
+    static PermissionState inspect(String[] requested, int[] flags) {
+        if (requested == null || flags == null) {
             return new PermissionState(PermissionState.Kind.NOT_DECLARED, ANT_HARDWARE_PERMISSION);
         }
-        String[] requested = packageInfo.requestedPermissions;
-        int[] flags = packageInfo.requestedPermissionsFlags;
+        PermissionState fallback = new PermissionState(PermissionState.Kind.NOT_DECLARED, ANT_HARDWARE_PERMISSION);
         for (int i = 0; i < requested.length; i++) {
-            if (ANT_HARDWARE_PERMISSION.equals(requested[i])) {
-                return new PermissionState(i < flags.length
-                        && (flags[i] & PackageInfo.REQUESTED_PERMISSION_GRANTED) != 0
-                        ? PermissionState.Kind.GRANTED : PermissionState.Kind.DENIED,
-                        ANT_HARDWARE_PERMISSION);
+            String permission = requested[i];
+            if (AntHalFirmwareProbe.PERMISSION.equals(permission) || ANT_HARDWARE_PERMISSION.equals(permission)) {
+                PermissionState.Kind kind = i >= flags.length ? PermissionState.Kind.NOT_DECLARED
+                        : (flags[i] & PackageInfo.REQUESTED_PERMISSION_GRANTED) != 0
+                        ? PermissionState.Kind.GRANTED : PermissionState.Kind.DENIED;
+                PermissionState result = new PermissionState(kind, permission);
+                // The radio service uses ANTRADIO to bind the built-in HAL when it declares both.
+                if (AntHalFirmwareProbe.PERMISSION.equals(permission)) return result;
+                fallback = result;
             }
         }
-        return new PermissionState(PermissionState.Kind.NOT_DECLARED, ANT_HARDWARE_PERMISSION);
+        return fallback;
     }
 }

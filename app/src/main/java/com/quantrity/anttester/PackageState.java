@@ -17,4 +17,8 @@ final class PackageState {
     }
 
     boolean isInstalledEnabled() { return kind == Kind.INSTALLED_ENABLED; }
+
+    boolean isInstalled() {
+        return isInstalledEnabled() || kind == Kind.INSTALLED_DISABLED || kind == Kind.VERSION_TOO_OLD;
+    }
 }

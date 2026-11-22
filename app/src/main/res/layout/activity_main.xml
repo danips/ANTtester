@@ -49,7 +49,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
-                    android:text="@string/ant_capable" />
+                    android:text="@string/ant_status" />
 
                 <TextView
                     android:id="@+id/readiness_tv"
@@ -64,7 +64,7 @@
                 android:id="@+id/ant_capable_iv"
                 android:layout_width="44dp"
                 android:layout_height="44dp"
-                android:contentDescription="@string/ant_capable"
+                android:contentDescription="@null"
                 android:padding="4dp"
                 android:src="@drawable/ic_nok_red_36dp" />
 
@@ -116,27 +116,27 @@
 
             <View style="@style/Widget.AntTester.Divider" />
 
-            <LinearLayout
+            <com.quantrity.anttester.ExternalAdapterRow
                 style="@style/Widget.AntTester.StatusRow"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
                 <TextView
                     style="@style/TextAppearance.AntTester.RowLabel"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:text="@string/external_ant_adapters" />
 
                 <TextView
                     android:id="@+id/external_adapters_tv"
                     style="@style/TextAppearance.AntTester.StatusValue"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:visibility="gone" />
-
-                <View style="@style/Widget.AntTester.ActionIcon" />
-            </LinearLayout>
+                    android:layout_weight="1"
+                    android:paddingLeft="4dp"
+                    android:paddingRight="@dimen/status_action_area_width"
+                    android:text="@string/not_available" />
+            </com.quantrity.anttester.ExternalAdapterRow>
 
             <LinearLayout
                 style="@style/Widget.AntTester.StatusRow"
@@ -212,6 +212,7 @@
             android:orientation="vertical">
 
             <LinearLayout
+                android:id="@+id/builtin_firmware_row"
                 style="@style/Widget.AntTester.StatusRow"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -245,9 +246,12 @@
                     android:visibility="invisible" />
             </LinearLayout>
 
-            <View style="@style/Widget.AntTester.Divider" />
+            <View
+                android:id="@+id/builtin_firmware_divider"
+                style="@style/Widget.AntTester.Divider" />
 
             <LinearLayout
+                android:id="@+id/ant_hal_service_row"
                 style="@style/Widget.AntTester.StatusRow"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -269,7 +273,9 @@
                 <View style="@style/Widget.AntTester.ActionArea" />
             </LinearLayout>
 
-            <View style="@style/Widget.AntTester.Divider" />
+            <View
+                android:id="@+id/ant_hal_service_divider"
+                style="@style/Widget.AntTester.Divider" />
 
             <LinearLayout
                 style="@style/Widget.AntTester.StatusRow"

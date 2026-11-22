@@ -54,7 +54,7 @@
 
     <!-- Keeps status values aligned when a row has fewer action icons. -->
     <style name="Widget.AntTester.ActionArea">
-        <item name="android:layout_width">96dp</item>
+        <item name="android:layout_width">@dimen/status_action_area_width</item>
         <item name="android:layout_height">48dp</item>
     </style>
 

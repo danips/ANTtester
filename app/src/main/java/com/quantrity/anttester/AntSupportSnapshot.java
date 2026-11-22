@@ -7,7 +7,7 @@ import java.util.List;
 /** Complete immutable facts used to derive the top-level ANT result. */
 final class AntSupportSnapshot {
     enum ProbeStatus { CHECKING, COMPLETE, UNKNOWN_ERROR }
-    enum ServiceState { NOT_QUERIED, AVAILABLE, NO_ADAPTER, SERVICE_MISSING, SERVICE_DISABLED,
+    enum ServiceState { NOT_QUERIED, QUERYING, AVAILABLE, NO_ADAPTER, SERVICE_MISSING, SERVICE_DISABLED,
         SERVICE_TOO_OLD, PERMISSION_BLOCKED, BIND_FAILED, TIMED_OUT, QUERY_ERROR }
 
     final ProbeStatus probeStatus;
@@ -23,12 +23,23 @@ final class AntSupportSnapshot {
     final List<AntAdapterSnapshot> adapters;
     final List<UsbDeviceSnapshot> usbDevices;
     final List<String> issues;
+    final AntFirmwareFacts firmware;
 
     AntSupportSnapshot(ProbeStatus probeStatus, boolean builtInFeatureDeclared, boolean usbHostSupported,
                        boolean antAddOnSupported, PackageState radioService, PackageState usbService,
                        PackageState pluginsService, PackageState halService, PermissionState antPermission,
                        ServiceState serviceState, List<AntAdapterSnapshot> adapters,
                        List<UsbDeviceSnapshot> usbDevices, List<String> issues) {
+        this(probeStatus, builtInFeatureDeclared, usbHostSupported, antAddOnSupported, radioService,
+                usbService, pluginsService, halService, antPermission, serviceState, adapters,
+                usbDevices, issues, AntFirmwareFacts.empty());
+    }
+
+    private AntSupportSnapshot(ProbeStatus probeStatus, boolean builtInFeatureDeclared, boolean usbHostSupported,
+                               boolean antAddOnSupported, PackageState radioService, PackageState usbService,
+                               PackageState pluginsService, PackageState halService, PermissionState antPermission,
+                               ServiceState serviceState, List<AntAdapterSnapshot> adapters,
+                               List<UsbDeviceSnapshot> usbDevices, List<String> issues, AntFirmwareFacts firmware) {
         this.probeStatus = probeStatus;
         this.builtInFeatureDeclared = builtInFeatureDeclared;
         this.usbHostSupported = usbHostSupported;
@@ -42,6 +53,7 @@ final class AntSupportSnapshot {
         this.adapters = immutable(adapters);
         this.usbDevices = immutable(usbDevices);
         this.issues = immutable(issues);
+        this.firmware = firmware;
     }
 
     static AntSupportSnapshot checking() {
@@ -56,7 +68,13 @@ final class AntSupportSnapshot {
         if (issue != null) nextIssues.add(issue);
         return new AntSupportSnapshot(probeStatus, builtInFeatureDeclared, usbHostSupported, antAddOnSupported,
                 radioService, usbService, pluginsService, halService, antPermission, state, adapterResults,
-                usbDevices, nextIssues);
+                usbDevices, nextIssues, firmware);
+    }
+
+    AntSupportSnapshot withFirmware(AntFirmwareFacts readings) {
+        return new AntSupportSnapshot(probeStatus, builtInFeatureDeclared, usbHostSupported, antAddOnSupported,
+                radioService, usbService, pluginsService, halService, antPermission, serviceState, adapters,
+                usbDevices, issues, readings);
     }
 
     private static <T> List<T> immutable(List<T> values) {

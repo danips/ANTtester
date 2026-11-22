@@ -15,9 +15,7 @@ final class PackageInspector {
 
     PackageState inspect(String packageName) {
         try {
-            int flags = Build.VERSION.SDK_INT >= 16 && AntPackages.RADIO_SERVICE.equals(packageName)
-                    ? PackageManager.GET_PERMISSIONS : 0;
-            PackageInfo info = context.getPackageManager().getPackageInfo(packageName, flags);
+            PackageInfo info = context.getPackageManager().getPackageInfo(packageName, 0);
             ApplicationInfo app = info.applicationInfo;
             PackageState.Kind kind = app != null && !app.enabled
                     ? PackageState.Kind.INSTALLED_DISABLED : PackageState.Kind.INSTALLED_ENABLED;

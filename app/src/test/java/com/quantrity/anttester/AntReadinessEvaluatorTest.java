@@ -42,6 +42,34 @@ public class AntReadinessEvaluatorTest {
         assertEquals(AntReadiness.SETUP_REQUIRED_SERVICE, AntReadinessEvaluator.evaluate(snapshot).readiness);
     }
 
+    @Test public void firmwareReadThroughTheHalDoesNotRequireAntRadioService() {
+        AntSupportSnapshot snapshot = snapshot(true, false, missing(), missing(),
+                PermissionState.Kind.NOT_DECLARED, AntSupportSnapshot.ServiceState.SERVICE_MISSING,
+                Collections.<AntAdapterSnapshot>emptyList());
+        snapshot = snapshot.withFirmware(snapshot.firmware.withBuiltIn(
+                AntFirmwareFacts.BuiltInState.VERIFIED, "AUM1.04B22"));
+        assertEquals(AntReadiness.VERIFIED_BUILT_IN, AntReadinessEvaluator.evaluate(snapshot).readiness);
+    }
+
+    @Test public void usbDetectionAndAFirmwareReplyAreDifferentStates() {
+        AntSupportSnapshot snapshot = snapshot(false, true, missing(), missing(),
+                PermissionState.Kind.NOT_DECLARED, AntSupportSnapshot.ServiceState.SERVICE_MISSING,
+                Collections.<AntAdapterSnapshot>emptyList());
+        AntSupportSnapshot detected = snapshot.withFirmware(snapshot.firmware.withUsb(
+                Collections.<String, String>singletonMap("stick", null), false));
+        assertEquals(AntReadiness.DETECTED_EXTERNAL_USB, AntReadinessEvaluator.evaluate(detected).readiness);
+        AntSupportSnapshot verified = snapshot.withFirmware(snapshot.firmware.withUsb(
+                Collections.singletonMap("stick", "AJK2.05RAF"), false));
+        assertEquals(AntReadiness.VERIFIED_EXTERNAL_USB, AntReadinessEvaluator.evaluate(verified).readiness);
+    }
+
+    @Test public void missingPermissionMetadataDoesNotInvalidateAnAdapterReply() {
+        AntSupportSnapshot snapshot = snapshot(false, true, installed(), installed(),
+                PermissionState.Kind.NOT_DECLARED, AntSupportSnapshot.ServiceState.AVAILABLE,
+                Collections.singletonList(new AntAdapterSnapshot("External", "1", false, "a")));
+        assertEquals(AntReadiness.READY_EXTERNAL_USB, AntReadinessEvaluator.evaluate(snapshot).readiness);
+    }
+
     @Test public void permissionIsBlockedSeparately() {
         AntSupportSnapshot snapshot = snapshot(true, false, installed(), installed(),
                 PermissionState.Kind.DENIED, AntSupportSnapshot.ServiceState.NOT_QUERIED,

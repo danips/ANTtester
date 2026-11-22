@@ -4,6 +4,7 @@ import com.dsi.ant.channel.AdapterInfo;
 
 /** Vendor-neutral representation of one ANT adapter. */
 final class AntAdapterSnapshot {
+    private static final String UNKNOWN = "Unknown";
     final String displayName;
     final String firmwareVersion;
     final boolean builtIn;
@@ -30,6 +31,10 @@ final class AntAdapterSnapshot {
     }
 
     private static String valueOrUnknown(String value) {
-        return value == null || value.trim().length() == 0 ? "Unknown" : value.trim();
+        return value == null || value.trim().length() == 0 ? UNKNOWN : value.trim();
+    }
+
+    String knownFirmwareVersion() {
+        return UNKNOWN.equalsIgnoreCase(firmwareVersion) ? null : firmwareVersion;
     }
 }

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.PendingIntent;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -12,8 +13,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.graphics.Insets;
 import android.graphics.PorterDuff;
 import android.hardware.usb.UsbDevice;
@@ -36,24 +35,26 @@ import com.dsi.ant.AntService;
 import com.dsi.ant.AntSupportChecker;
 import com.dsi.ant.channel.AdapterInfo;
 import com.dsi.ant.channel.ChannelNotAvailableException;
+import com.dsi.ant.channel.ChannelNotAvailableReason;
 import com.dsi.ant.channel.UnsupportedFeatureException;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 /** Lifecycle and view boundary for the ANT diagnostic screen. */
 public class MainActivity extends Activity {
     private static final String TAG = "ANTtester";
     private static final String YES_TAG = "Y";
     private static final String NO_TAG = "N";
-    private static final int MIN_ADAPTER_PROVIDER_SERVICE_VERSION = 40702;
+    private static final int ANT_HAL_PERMISSION_REQUEST = 1;
     private static final int MAX_TRANSIENT_SERVICE_RETRIES = 4;
     private static final long SERVICE_RETRY_DELAY_MS = 250L;
     private static final long SERVICE_QUERY_TIMEOUT_MS = 3000L;
@@ -70,6 +71,10 @@ public class MainActivity extends Activity {
     private TextView antUsbServiceTv;
     private View addonAdapterSupportRow;
     private View addonAdapterSupportDivider;
+    private View builtinFirmwareRow;
+    private View builtinFirmwareDivider;
+    private View antHalServiceRow;
+    private View antHalServiceDivider;
     private View antUsbServiceRow;
     private View antUsbServiceDivider;
     private TextView antPluginsTv;
@@ -90,19 +95,25 @@ public class MainActivity extends Activity {
 
     private final Handler mainHandler = new Handler(Looper.getMainLooper());
     private final ExecutorService probeExecutor = Executors.newSingleThreadExecutor();
+    private final ExecutorService serviceExecutor = Executors.newSingleThreadExecutor();
+    private final ExecutorService usbFirmwareExecutor = Executors.newSingleThreadExecutor();
     private PackageInspector packageInspector;
     private UsbInspector usbInspector;
-    private AntService antRadioService;
-    private boolean antRadioServiceBindRequested;
-    private boolean antRadioServiceConnected;
+    private AntHalFirmwareProbe halFirmwareProbe;
+    private RadioConnection radioConnection;
+    private String usbPermissionAction;
+    private PendingIntent usbPermissionRequest;
     private boolean usbReceiverRegistered;
     private boolean lifecycleActive;
     private boolean refreshActive;
     private boolean refreshAgain;
+    private boolean usbAccessQueued;
     private long nextGeneration;
     private long activeGeneration;
     private int serviceRetryAttempts;
-    private java.util.concurrent.Future<?> probeFuture;
+    private Future<?> probeFuture;
+    private Future<?> serviceFuture;
+    private Future<?> usbFirmwareFuture;
     private Runnable serviceRetryRunnable;
     private Runnable serviceTimeoutRunnable;
     private AntSupportSnapshot activeSnapshot;
@@ -113,59 +124,65 @@ public class MainActivity extends Activity {
         }
     };
 
-    private final ServiceConnection antRadioServiceConnection = new ServiceConnection() {
+    private final BroadcastReceiver usbPermissionReceiver = new BroadcastReceiver() {
+        @Override public void onReceive(Context context, Intent intent) {
+            usbPermissionRequest = null;
+            requestRefresh("USB permission");
+        }
+    };
+
+    private final class RadioConnection implements ServiceConnection {
+        final long generation;
+        AntService service;
+
+        RadioConnection(long generation) { this.generation = generation; }
+
+        private boolean isActive() {
+            return radioConnection == this && isCurrent(generation);
+        }
+
         @Override public void onServiceConnected(ComponentName name, IBinder service) {
-            if (!isCurrent(activeGeneration)) return;
+            if (!isActive()) return;
             try {
-                antRadioService = new AntService(service);
-                antRadioServiceConnected = true;
-                queryAdapters(activeGeneration);
+                this.service = new AntService(service);
+                queryAdapters(this);
             } catch (RuntimeException e) {
-                Log.w(TAG, "ANT service returned an invalid binder, generation=" + activeGeneration, e);
-                applyServiceResult(activeGeneration, AntSupportSnapshot.ServiceState.QUERY_ERROR,
+                Log.w(TAG, "ANT service returned an invalid binder, generation=" + generation, e);
+                applyServiceResult(generation, AntSupportSnapshot.ServiceState.QUERY_ERROR,
                         Collections.<AntAdapterSnapshot>emptyList(), "Invalid ANT service binder");
             }
         }
 
         @Override public void onServiceDisconnected(ComponentName name) {
-            antRadioServiceConnected = false;
-            antRadioService = null;
-            removeServiceWork();
-            if (isCurrent(activeGeneration) && refreshActive) {
-                applyServiceResult(activeGeneration, AntSupportSnapshot.ServiceState.QUERY_ERROR,
+            if (isActive()) {
+                applyServiceResult(generation, AntSupportSnapshot.ServiceState.QUERY_ERROR,
                         Collections.<AntAdapterSnapshot>emptyList(), "ANT Radio Service disconnected");
             }
         }
 
         @TargetApi(26)
         @Override public void onBindingDied(ComponentName name) {
-            antRadioServiceBindRequested = false;
-            antRadioServiceConnected = false;
-            antRadioService = null;
-            removeServiceWork();
-            if (isCurrent(activeGeneration) && refreshActive) {
-                applyServiceResult(activeGeneration, AntSupportSnapshot.ServiceState.BIND_FAILED,
+            if (isActive()) {
+                applyServiceResult(generation, AntSupportSnapshot.ServiceState.BIND_FAILED,
                         Collections.<AntAdapterSnapshot>emptyList(), "ANT Radio Service binding died");
             }
         }
 
         @TargetApi(26)
         @Override public void onNullBinding(ComponentName name) {
-            antRadioServiceBindRequested = false;
-            antRadioServiceConnected = false;
-            removeServiceWork();
-            if (isCurrent(activeGeneration) && refreshActive) {
-                applyServiceResult(activeGeneration, AntSupportSnapshot.ServiceState.BIND_FAILED,
+            if (isActive()) {
+                applyServiceResult(generation, AntSupportSnapshot.ServiceState.BIND_FAILED,
                         Collections.<AntAdapterSnapshot>emptyList(), "ANT Radio Service returned no binding");
             }
         }
-    };
+    }
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         packageInspector = new PackageInspector(this);
         usbInspector = new UsbInspector(this);
+        halFirmwareProbe = new AntHalFirmwareProbe(this);
         if (Build.VERSION.SDK_INT >= 35) Api35Insets.apply(findViewById(android.R.id.content));
 
         statusErrorColor = getResources().getColor(R.color.status_error);
@@ -184,6 +201,10 @@ public class MainActivity extends Activity {
         antUsbServiceTv = findViewById(R.id.ant_usb_service_tv);
         addonAdapterSupportRow = findViewById(R.id.addon_adapter_support_row);
         addonAdapterSupportDivider = findViewById(R.id.addon_adapter_support_divider);
+        builtinFirmwareRow = findViewById(R.id.builtin_firmware_row);
+        builtinFirmwareDivider = findViewById(R.id.builtin_firmware_divider);
+        antHalServiceRow = findViewById(R.id.ant_hal_service_row);
+        antHalServiceDivider = findViewById(R.id.ant_hal_service_divider);
         antUsbServiceRow = findViewById(R.id.ant_usb_service_tr);
         antUsbServiceDivider = findViewById(R.id.ant_usb_service_divider);
         antPluginsTv = findViewById(R.id.ant_plugins_tv);
@@ -203,10 +224,19 @@ public class MainActivity extends Activity {
         antRadioServiceLock2Iv.setColorFilter(statusErrorColor, PorterDuff.Mode.SRC_IN);
         ImageView refreshButton = findViewById(R.id.refresh_button);
         refreshButton.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) { requestRefresh("manual"); }
+            @Override public void onClick(View view) { requestRefresh("manual", true); }
         });
         addonAdapterSupportIv.setOnClickListener(new PackageActionListener(AntPackages.USB_SERVICE));
-        builtinFirmwareIv.setOnClickListener(new PackageActionListener(AntPackages.RADIO_SERVICE));
+        builtinFirmwareIv.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View view) {
+                if (Build.VERSION.SDK_INT >= 23 && activeSnapshot != null
+                        && activeSnapshot.firmware.builtInState == AntFirmwareFacts.BuiltInState.PERMISSION_REQUIRED) {
+                    requestPermissions(new String[] {AntHalFirmwareProbe.PERMISSION}, ANT_HAL_PERMISSION_REQUEST);
+                } else {
+                    openPackageAction(view, AntPackages.RADIO_SERVICE);
+                }
+            }
+        });
         antRadioServiceIv.setOnClickListener(new PackageActionListener(AntPackages.RADIO_SERVICE));
         antUsbServiceIv.setOnClickListener(new PackageActionListener(AntPackages.USB_SERVICE));
         antPluginsIv.setOnClickListener(new PackageActionListener(AntPackages.PLUGINS_SERVICE));
@@ -219,27 +249,37 @@ public class MainActivity extends Activity {
         render(AntSupportSnapshot.checking());
     }
 
-    @Override protected void onStart() {
-        super.onStart();
+    @Override protected void onResume() {
+        super.onResume();
         lifecycleActive = true;
         registerUsbReceiver();
         requestRefresh("initial/resume");
     }
 
-    @Override protected void onStop() {
+    @Override protected void onPause() {
         lifecycleActive = false;
         nextGeneration++;
         cancelProbeWork();
-        removeServiceRetry();
         doUnbindAntRadioService();
         unregisterUsbReceiver();
-        super.onStop();
+        super.onPause();
+    }
+
+    @TargetApi(23)
+    @Override public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grants) {
+        super.onRequestPermissionsResult(requestCode, permissions, grants);
+        if (requestCode == ANT_HAL_PERMISSION_REQUEST) requestRefresh("HAL permission");
     }
 
     private void requestRefresh(String reason) {
+        requestRefresh(reason, false);
+    }
+
+    private void requestRefresh(String reason, final boolean requestUsbAccess) {
         if (!lifecycleActive) return;
         if (refreshActive) {
             refreshAgain = true;
+            usbAccessQueued |= requestUsbAccess;
             return;
         }
         refreshActive = true;
@@ -249,12 +289,12 @@ public class MainActivity extends Activity {
         render(activeSnapshot);
         final long generation = activeGeneration;
         probeFuture = probeExecutor.submit(new Runnable() {
-            @Override public void run() { collectLocalFacts(generation); }
+            @Override public void run() { collectLocalFacts(generation, requestUsbAccess); }
         });
         Log.d(TAG, "refresh started, generation=" + generation + ", reason=" + reason);
     }
 
-    private void collectLocalFacts(final long generation) {
+    private void collectLocalFacts(final long generation, final boolean requestUsbAccess) {
         boolean builtin = false;
         boolean addon = false;
         boolean usbHost = false;
@@ -269,18 +309,14 @@ public class MainActivity extends Activity {
         PackageState plugins = packageInspector.inspect(AntPackages.PLUGINS_SERVICE);
         PackageState hal = inspectHalService();
         PermissionState permission = packageInspector.inspectAntPermission();
-        List<UsbDeviceSnapshot> devices = usbInspector.inspectDevices();
+        final UsbInspector.Scan usbScan = usbInspector.inspectDevices();
         AntSupportSnapshot.ServiceState serviceState = serviceStateForPackage(radio);
-        if (radio != null && radio.isInstalledEnabled() && radio.versionCode > 0
-                && radio.versionCode < MIN_ADAPTER_PROVIDER_SERVICE_VERSION) {
-            serviceState = AntSupportSnapshot.ServiceState.SERVICE_TOO_OLD;
-        }
         final AntSupportSnapshot snapshot = new AntSupportSnapshot(
                 issues.isEmpty() ? AntSupportSnapshot.ProbeStatus.COMPLETE : AntSupportSnapshot.ProbeStatus.UNKNOWN_ERROR,
                 builtin, usbHost, addon, radio, usb, plugins, hal, permission, serviceState,
-                Collections.<AntAdapterSnapshot>emptyList(), devices, issues);
+                Collections.<AntAdapterSnapshot>emptyList(), usbScan.devices, issues);
         mainHandler.post(new Runnable() {
-            @Override public void run() { onLocalFacts(generation, snapshot); }
+            @Override public void run() { onLocalFacts(generation, snapshot, usbScan, requestUsbAccess); }
         });
     }
 
@@ -298,35 +334,138 @@ public class MainActivity extends Activity {
         if (state.kind == PackageState.Kind.INSTALLED_DISABLED) {
             return AntSupportSnapshot.ServiceState.SERVICE_DISABLED;
         }
+        if (state.kind == PackageState.Kind.VERSION_TOO_OLD) {
+            return AntSupportSnapshot.ServiceState.SERVICE_TOO_OLD;
+        }
         if (state.kind == PackageState.Kind.QUERY_ERROR) {
             return AntSupportSnapshot.ServiceState.QUERY_ERROR;
         }
         return AntSupportSnapshot.ServiceState.NOT_QUERIED;
     }
 
-    private void onLocalFacts(long generation, AntSupportSnapshot snapshot) {
+    private void onLocalFacts(long generation, AntSupportSnapshot snapshot, UsbInspector.Scan usbScan,
+                              boolean requestUsbAccess) {
         if (!isCurrent(generation)) return;
-        activeSnapshot = snapshot;
-        render(snapshot);
         boolean canQuery = snapshot.radioService != null && snapshot.radioService.isInstalledEnabled()
                 && snapshot.serviceState == AntSupportSnapshot.ServiceState.NOT_QUERIED
-                && snapshot.antPermission.isGranted()
                 && (snapshot.builtInFeatureDeclared || snapshot.usbHostSupported);
+        activeSnapshot = canQuery ? snapshot.withService(AntSupportSnapshot.ServiceState.QUERYING,
+                snapshot.adapters, null) : snapshot;
+        startHalFirmwareProbe(generation);
+        if (Build.VERSION.SDK_INT >= 12 && usbScan.manager != null) {
+            startUsbFirmwareProbe(generation, usbScan, requestUsbAccess);
+        }
+        render(activeSnapshot);
         if (canQuery) beginServiceBinding(generation);
-        else finishRefresh(generation);
+        finishRefresh(generation);
     }
 
-    private void beginServiceBinding(long generation) {
-        serviceRetryAttempts = 0;
+    private void startHalFirmwareProbe(final long generation) {
+        if (!activeSnapshot.builtInFeatureDeclared || activeSnapshot.radioService == null
+                || activeSnapshot.radioService.kind != PackageState.Kind.MISSING) return;
+        ComponentName service = AntHalFirmwareProbe.findService(this);
+        if (service == null) return;
+        if (!AntHalFirmwareProbe.hasPermission(this)) {
+            if (Build.VERSION.SDK_INT >= 23) {
+                activeSnapshot = activeSnapshot.withFirmware(activeSnapshot.firmware.withBuiltIn(
+                        AntFirmwareFacts.BuiltInState.PERMISSION_REQUIRED, null));
+            }
+            return;
+        }
+        activeSnapshot = activeSnapshot.withFirmware(activeSnapshot.firmware.withBuiltIn(
+                AntFirmwareFacts.BuiltInState.CHECKING, null));
+        halFirmwareProbe.start(service, new AntHalFirmwareProbe.Listener() {
+            @Override public void onResult(String version) {
+                if (!isCurrent(generation)) return;
+                activeSnapshot = activeSnapshot.withFirmware(activeSnapshot.firmware.withBuiltIn(
+                        version == null ? AntFirmwareFacts.BuiltInState.FAILED
+                                : AntFirmwareFacts.BuiltInState.VERIFIED, version));
+                render(activeSnapshot);
+                finishRefresh(generation);
+            }
+        });
+    }
+
+    @TargetApi(12)
+    private void startUsbFirmwareProbe(final long generation, final UsbInspector.Scan scan,
+                                       boolean requestUsbAccess) {
+        final Map<String, String> versions = new TreeMap<String, String>();
+        final Map<String, UsbDevice> readable = new TreeMap<String, UsbDevice>();
+        boolean allowDirect = activeSnapshot.radioService == null
+                || !activeSnapshot.radioService.isInstalledEnabled() || !activeSnapshot.antAddOnSupported;
+        for (Map.Entry<String, UsbDevice> device : scan.antAdapters.entrySet()) {
+            versions.put(device.getKey(), null);
+            if (!allowDirect) continue;
+            try {
+                if (scan.manager.hasPermission(device.getValue())) {
+                    readable.put(device.getKey(), device.getValue());
+                } else if (requestUsbAccess && usbPermissionRequest == null) {
+                    requestUsbFirmwarePermission(scan.manager, device.getValue());
+                    requestUsbAccess = false;
+                }
+            } catch (RuntimeException e) {
+                Log.d(TAG, "USB adapter is no longer accessible", e);
+            }
+        }
+        activeSnapshot = activeSnapshot.withFirmware(activeSnapshot.firmware.withUsb(versions, !readable.isEmpty()));
+        if (readable.isEmpty()) return;
+
+        usbFirmwareFuture = usbFirmwareExecutor.submit(new Runnable() {
+            @Override public void run() {
+                for (Map.Entry<String, UsbDevice> device : readable.entrySet()) {
+                    if (Thread.currentThread().isInterrupted()) return;
+                    versions.put(device.getKey(), AntUsbFirmwareReader.readVersion(scan.manager, device.getValue()));
+                }
+                mainHandler.post(new Runnable() {
+                    @Override public void run() {
+                        if (!isCurrent(generation)) return;
+                        usbFirmwareFuture = null;
+                        activeSnapshot = activeSnapshot.withFirmware(activeSnapshot.firmware.withUsb(versions, false));
+                        render(activeSnapshot);
+                        finishRefresh(generation);
+                    }
+                });
+            }
+        });
+    }
+
+    @TargetApi(12)
+    private void requestUsbFirmwarePermission(UsbManager manager, UsbDevice device) {
         try {
-            antRadioServiceBindRequested = AntService.bindService(this, antRadioServiceConnection);
-            if (!antRadioServiceBindRequested) {
+            if (usbPermissionAction == null) {
+                String action = getPackageName() + ".USB_PERMISSION." + UUID.randomUUID();
+                IntentFilter filter = new IntentFilter(action);
+                if (Build.VERSION.SDK_INT >= 33) {
+                    registerReceiver(usbPermissionReceiver, filter, Context.RECEIVER_NOT_EXPORTED);
+                } else {
+                    registerReceiver(usbPermissionReceiver, filter);
+                }
+                usbPermissionAction = action;
+            }
+            Intent intent = new Intent(usbPermissionAction).setPackage(getPackageName());
+            int flags = PendingIntent.FLAG_ONE_SHOT;
+            if (Build.VERSION.SDK_INT >= 23) flags |= PendingIntent.FLAG_IMMUTABLE;
+            usbPermissionRequest = PendingIntent.getBroadcast(this, 0, intent, flags);
+            manager.requestPermission(device, usbPermissionRequest);
+        } catch (SecurityException | IllegalArgumentException e) {
+            Log.d(TAG, "Unable to request access to the ANT USB adapter", e);
+            if (usbPermissionRequest != null) usbPermissionRequest.cancel();
+            usbPermissionRequest = null;
+        }
+    }
+
+    private void beginServiceBinding(final long generation) {
+        serviceRetryAttempts = 0;
+        final RadioConnection connection = new RadioConnection(generation);
+        radioConnection = connection;
+        try {
+            if (!AntService.bindService(this, connection)) {
                 applyServiceResult(generation, AntSupportSnapshot.ServiceState.BIND_FAILED,
                         Collections.<AntAdapterSnapshot>emptyList(), "ANT Radio Service rejected binding");
             } else {
                 serviceTimeoutRunnable = new Runnable() {
                     @Override public void run() {
-                        if (isCurrent(generation)) {
+                        if (connection.isActive()) {
                             applyServiceResult(generation, AntSupportSnapshot.ServiceState.TIMED_OUT,
                                     Collections.<AntAdapterSnapshot>emptyList(), "ANT Radio Service query timed out");
                         }
@@ -336,7 +475,7 @@ public class MainActivity extends Activity {
             }
         } catch (SecurityException e) {
             Log.w(TAG, "ANT service bind denied, generation=" + generation, e);
-            applyServiceResult(generation, AntSupportSnapshot.ServiceState.BIND_FAILED,
+            applyServiceResult(generation, AntSupportSnapshot.ServiceState.PERMISSION_BLOCKED,
                     Collections.<AntAdapterSnapshot>emptyList(), "ANT Radio Service permission denied");
         } catch (RuntimeException e) {
             Log.w(TAG, "ANT service bind failed, generation=" + generation, e);
@@ -345,15 +484,18 @@ public class MainActivity extends Activity {
         }
     }
 
-    private void queryAdapters(final long generation) {
-        if (!isCurrent(generation) || antRadioService == null) return;
-        final AntService service = antRadioService;
-        probeExecutor.submit(new Runnable() {
+    private void queryAdapters(final RadioConnection connection) {
+        if (!connection.isActive() || connection.service == null) return;
+        final long generation = connection.generation;
+        final AntService service = connection.service;
+        serviceFuture = serviceExecutor.submit(new Runnable() {
             @Override public void run() {
                 try {
                     Collection<AdapterInfo> infos = service.getAdapterProvider().getAdaptersInfo(getApplicationContext());
                     ArrayList<AntAdapterSnapshot> adapters = new ArrayList<AntAdapterSnapshot>();
-                    if (infos != null) for (AdapterInfo info : infos) adapters.add(AntAdapterSnapshot.from(info));
+                    if (infos != null) {
+                        for (AdapterInfo info : infos) if (info != null) adapters.add(AntAdapterSnapshot.from(info));
+                    }
                     adapters = new ArrayList<AntAdapterSnapshot>(AntAdapterSorter.sort(adapters));
                     postServiceResult(generation, adapters.isEmpty()
                                     ? AntSupportSnapshot.ServiceState.NO_ADAPTER : AntSupportSnapshot.ServiceState.AVAILABLE,
@@ -368,8 +510,16 @@ public class MainActivity extends Activity {
                     postServiceResult(generation, AntSupportSnapshot.ServiceState.QUERY_ERROR,
                             Collections.<AntAdapterSnapshot>emptyList(), "ANT service remote query failed");
                 } catch (ChannelNotAvailableException e) {
-                    postServiceResult(generation, AntSupportSnapshot.ServiceState.QUERY_ERROR,
-                            Collections.<AntAdapterSnapshot>emptyList(), "ANT adapter is not available");
+                    if (e.reasonCode == ChannelNotAvailableReason.SERVICE_INITIALIZING) {
+                        postServiceResult(generation, AntSupportSnapshot.ServiceState.TIMED_OUT,
+                                Collections.<AntAdapterSnapshot>emptyList(), "ANT Radio Service is still initializing", true);
+                    } else if (e.reasonCode == ChannelNotAvailableReason.NO_ADAPTERS_EXIST) {
+                        postServiceResult(generation, AntSupportSnapshot.ServiceState.NO_ADAPTER,
+                                Collections.<AntAdapterSnapshot>emptyList(), null);
+                    } else {
+                        postServiceResult(generation, AntSupportSnapshot.ServiceState.QUERY_ERROR,
+                                Collections.<AntAdapterSnapshot>emptyList(), "ANT adapter is not available");
+                    }
                 } catch (RuntimeException e) {
                     Log.w(TAG, "ANT adapter query failed, generation=" + generation, e);
                     postServiceResult(generation, AntSupportSnapshot.ServiceState.QUERY_ERROR,
@@ -381,15 +531,23 @@ public class MainActivity extends Activity {
 
     private void postServiceResult(final long generation, final AntSupportSnapshot.ServiceState state,
                                    final List<AntAdapterSnapshot> adapters, final String issue) {
+        postServiceResult(generation, state, adapters, issue, state == AntSupportSnapshot.ServiceState.NO_ADAPTER);
+    }
+
+    private void postServiceResult(final long generation, final AntSupportSnapshot.ServiceState state,
+                                   final List<AntAdapterSnapshot> adapters, final String issue,
+                                   final boolean retryable) {
         mainHandler.post(new Runnable() {
             @Override public void run() {
-                if (!isCurrent(generation)) return;
-                if (state == AntSupportSnapshot.ServiceState.NO_ADAPTER
-                        && serviceRetryAttempts++ < MAX_TRANSIENT_SERVICE_RETRIES - 1
-                        && antRadioServiceBindRequested && antRadioServiceConnected) {
+                if (!isCurrent(generation) || radioConnection == null
+                        || radioConnection.generation != generation) return;
+                serviceFuture = null;
+                if (retryable && serviceRetryAttempts++ < MAX_TRANSIENT_SERVICE_RETRIES - 1
+                        && radioConnection.service != null) {
                     removeServiceRetry();
+                    final RadioConnection connection = radioConnection;
                     serviceRetryRunnable = new Runnable() {
-                        @Override public void run() { queryAdapters(generation); }
+                        @Override public void run() { queryAdapters(connection); }
                     };
                     mainHandler.postDelayed(serviceRetryRunnable, SERVICE_RETRY_DELAY_MS);
                     return;
@@ -401,19 +559,24 @@ public class MainActivity extends Activity {
 
     private void applyServiceResult(long generation, AntSupportSnapshot.ServiceState state,
                                     List<AntAdapterSnapshot> adapters, String issue) {
-        if (!isCurrent(generation) || activeSnapshot == null) return;
+        if (!isCurrent(generation) || activeSnapshot == null
+                || activeSnapshot.serviceState != AntSupportSnapshot.ServiceState.QUERYING) return;
         activeSnapshot = activeSnapshot.withService(state, adapters, issue);
+        doUnbindAntRadioService();
         render(activeSnapshot);
         finishRefresh(generation);
     }
 
     private void finishRefresh(long generation) {
-        if (!isCurrent(generation)) return;
-        doUnbindAntRadioService();
+        if (!isCurrent(generation) || activeSnapshot.serviceState == AntSupportSnapshot.ServiceState.QUERYING
+                || activeSnapshot.firmware.builtInState == AntFirmwareFacts.BuiltInState.CHECKING
+                || activeSnapshot.firmware.usbChecking) return;
         refreshActive = false;
         if (refreshAgain && lifecycleActive) {
+            boolean requestUsbAccess = usbAccessQueued;
             refreshAgain = false;
-            requestRefresh("coalesced");
+            usbAccessQueued = false;
+            requestRefresh("coalesced", requestUsbAccess);
         }
     }
 
@@ -424,8 +587,12 @@ public class MainActivity extends Activity {
     private void cancelProbeWork() {
         if (probeFuture != null) probeFuture.cancel(true);
         probeFuture = null;
+        if (usbFirmwareFuture != null) usbFirmwareFuture.cancel(true);
+        usbFirmwareFuture = null;
+        halFirmwareProbe.cancel();
         refreshActive = false;
         refreshAgain = false;
+        usbAccessQueued = false;
     }
 
     private void removeServiceRetry() {
@@ -441,15 +608,15 @@ public class MainActivity extends Activity {
 
     private void doUnbindAntRadioService() {
         removeServiceWork();
-        antRadioService = null;
-        antRadioServiceConnected = false;
-        if (antRadioServiceBindRequested) {
+        if (serviceFuture != null) serviceFuture.cancel(true);
+        serviceFuture = null;
+        RadioConnection connection = radioConnection;
+        radioConnection = null;
+        if (connection != null) {
             try {
-                unbindService(antRadioServiceConnection);
+                unbindService(connection);
             } catch (IllegalArgumentException e) {
                 Log.w(TAG, "ANT service unbind state mismatch");
-            } finally {
-                antRadioServiceBindRequested = false;
             }
         }
     }
@@ -474,84 +641,108 @@ public class MainActivity extends Activity {
     private void render(AntSupportSnapshot snapshot) {
         AntReadinessResult result = AntReadinessEvaluator.evaluate(snapshot);
         readinessTv.setText(readinessText(result.readiness));
-        int color = result.readiness == AntReadiness.READY_BUILT_IN
-                || result.readiness == AntReadiness.READY_EXTERNAL_USB ? statusSuccessColor
+        boolean verified = result.readiness == AntReadiness.READY_BUILT_IN
+                || result.readiness == AntReadiness.READY_EXTERNAL_USB
+                || result.readiness == AntReadiness.VERIFIED_BUILT_IN
+                || result.readiness == AntReadiness.VERIFIED_EXTERNAL_USB;
+        int color = verified ? statusSuccessColor
                 : result.readiness == AntReadiness.CHECKING
                 || result.readiness == AntReadiness.SETUP_REQUIRED_SERVICE
-                || result.readiness == AntReadiness.SETUP_REQUIRED_ADAPTER ? statusWarningColor : statusErrorColor;
+                || result.readiness == AntReadiness.SETUP_REQUIRED_ADAPTER
+                || result.readiness == AntReadiness.DETECTED_EXTERNAL_USB ? statusWarningColor : statusErrorColor;
         readinessTv.setTextColor(color);
-        antCapableIv.setImageResource(result.readiness == AntReadiness.READY_BUILT_IN
-                || result.readiness == AntReadiness.READY_EXTERNAL_USB
-                ? R.drawable.ic_ok_green_36dp : R.drawable.ic_nok_red_36dp);
+        antCapableIv.setImageResource(verified ? R.drawable.ic_ok_green_36dp : R.drawable.ic_nok_red_36dp);
         antCapableIv.setColorFilter(color, PorterDuff.Mode.SRC_IN);
 
-        setBooleanStatus(builtinAntDetectedTv, snapshot.probeStatus == AntSupportSnapshot.ProbeStatus.CHECKING
-                ? null : snapshot.builtInFeatureDeclared);
-        setBooleanStatus(usbHostSupportTv, snapshot.probeStatus == AntSupportSnapshot.ProbeStatus.CHECKING
-                ? null : snapshot.usbHostSupported);
+        boolean checking = snapshot.probeStatus == AntSupportSnapshot.ProbeStatus.CHECKING;
+        boolean builtIn = snapshot.builtInFeatureDeclared || snapshot.firmware.builtInVersion != null;
+        for (AntAdapterSnapshot adapter : snapshot.adapters) builtIn |= adapter.builtIn;
+        setBooleanStatus(builtinAntDetectedTv, checking ? null : builtIn);
+        setBooleanStatus(usbHostSupportTv, checking ? null : snapshot.usbHostSupported);
+        setRowVisibility(builtinFirmwareRow, builtinFirmwareDivider, builtIn);
+        setRowVisibility(antHalServiceRow, antHalServiceDivider, builtIn
+                || snapshot.halService != null && snapshot.halService.isInstalled());
         addonAdapterSupportRow.setVisibility(snapshot.usbHostSupported ? View.VISIBLE : View.GONE);
         addonAdapterSupportDivider.setVisibility(snapshot.usbHostSupported ? View.VISIBLE : View.GONE);
-        setBooleanStatus(addonAdapterSupportTv, snapshot.probeStatus == AntSupportSnapshot.ProbeStatus.CHECKING
-                ? null : snapshot.antAddOnSupported);
+        setBooleanStatus(addonAdapterSupportTv, checking ? null
+                : snapshot.usbService != null && snapshot.usbService.isInstalled());
+        setPackageAction(addonAdapterSupportIv, snapshot.usbService);
         setPackageStatus(antRadioServiceTv, antRadioServiceIv, snapshot.radioService);
         setPackageStatus(antUsbServiceTv, antUsbServiceIv, snapshot.usbService);
         setPackageStatus(antPluginsTv, antPluginsIv, snapshot.pluginsService);
-        if (snapshot.halService != null && snapshot.halService.isInstalledEnabled()) {
-            antHalServiceTv.setText(snapshot.halService.versionName);
-            antHalServiceTv.setTextColor(statusSuccessColor);
-        } else {
-            antHalServiceTv.setText(snapshot.probeStatus == AntSupportSnapshot.ProbeStatus.CHECKING
-                    ? R.string.checking : R.string.not_found);
-            antHalServiceTv.setTextColor(statusErrorColor);
-        }
-        antUsbServiceRow.setVisibility(snapshot.usbHostSupported ? View.VISIBLE : View.GONE);
-        antUsbServiceDivider.setVisibility(snapshot.usbHostSupported ? View.VISIBLE : View.GONE);
+        setPackageStatus(antHalServiceTv, null, snapshot.halService);
+        setRowVisibility(antUsbServiceRow, antUsbServiceDivider, snapshot.usbHostSupported);
         renderAdapters(snapshot);
         renderUsbDevices(snapshot.usbDevices);
-        boolean permissionOkay = snapshot.antPermission.isGranted();
-        boolean permissionRelevant = snapshot.probeStatus != AntSupportSnapshot.ProbeStatus.CHECKING
-                && snapshot.radioService != null && snapshot.radioService.isInstalledEnabled();
-        int permissionVisibility = permissionRelevant && !permissionOkay ? View.VISIBLE : View.INVISIBLE;
+        boolean permissionBlocked = snapshot.serviceState == AntSupportSnapshot.ServiceState.PERMISSION_BLOCKED
+                || builtIn && snapshot.radioService != null && snapshot.radioService.isInstalledEnabled()
+                && snapshot.antPermission.kind == PermissionState.Kind.DENIED;
+        int permissionVisibility = permissionBlocked ? View.VISIBLE : View.INVISIBLE;
         antRadioServiceLockIv.setVisibility(permissionVisibility);
         antRadioServiceLock2Iv.setVisibility(permissionVisibility);
     }
 
+    private void setRowVisibility(View row, View divider, boolean visible) {
+        int visibility = visible ? View.VISIBLE : View.GONE;
+        row.setVisibility(visibility);
+        divider.setVisibility(visibility);
+    }
+
     private void renderAdapters(AntSupportSnapshot snapshot) {
-        if (snapshot.probeStatus == AntSupportSnapshot.ProbeStatus.CHECKING) {
-            builtinFirmwareTv.setText(R.string.checking);
-            externalAdaptersTv.setVisibility(View.GONE);
-            builtinAntDetectedIv.setVisibility(View.INVISIBLE);
-            return;
-        }
         ArrayList<AntAdapterSnapshot> builtin = new ArrayList<AntAdapterSnapshot>();
-        ArrayList<AntAdapterSnapshot> external = new ArrayList<AntAdapterSnapshot>();
+        ArrayList<String> external = new ArrayList<String>();
         for (AntAdapterSnapshot adapter : snapshot.adapters) {
-            (adapter.builtIn ? builtin : external).add(adapter);
+            if (adapter.builtIn) builtin.add(adapter);
+            else external.add(adapter.knownFirmwareVersion());
         }
+        builtinAntDetectedIv.setVisibility(View.INVISIBLE);
+        builtinFirmwareIv.setVisibility(View.INVISIBLE);
+        builtinFirmwareIv.setContentDescription(getString(R.string.ant_radio_service));
+        builtinFirmwareTv.setTextColor(statusWarningColor);
         if (!builtin.isEmpty()) {
             builtinFirmwareTv.setText(joinFirmware(builtin));
             builtinFirmwareTv.setTextColor(statusSuccessColor);
-            builtinAntDetectedIv.setVisibility(View.INVISIBLE);
+        } else if (snapshot.firmware.builtInVersion != null) {
+            builtinFirmwareTv.setText(snapshot.firmware.builtInVersion);
+            builtinFirmwareTv.setTextColor(statusSuccessColor);
+        } else if (snapshot.firmware.builtInState == AntFirmwareFacts.BuiltInState.PERMISSION_REQUIRED) {
+            builtinFirmwareTv.setText(R.string.allow_ant_access);
+            builtinFirmwareIv.setContentDescription(getString(R.string.allow_ant_access));
+            setActionIcon(builtinFirmwareIv, R.drawable.ic_info_outline_white_24dp);
+            builtinFirmwareIv.setVisibility(View.VISIBLE);
+        } else if (snapshot.firmware.builtInState == AntFirmwareFacts.BuiltInState.CHECKING
+                || snapshot.serviceState == AntSupportSnapshot.ServiceState.QUERYING) {
+            builtinFirmwareTv.setText(R.string.checking);
+        } else if (snapshot.firmware.builtInState == AntFirmwareFacts.BuiltInState.FAILED) {
+            builtinFirmwareTv.setText(R.string.firmware_unreadable);
         } else if (snapshot.builtInFeatureDeclared) {
-            builtinFirmwareTv.setText(serviceMessage(snapshot.serviceState, R.string.requires_ars));
-            builtinFirmwareTv.setTextColor(statusWarningColor);
-            builtinAntDetectedIv.setVisibility(View.VISIBLE);
+            if (snapshot.radioService == null || !snapshot.radioService.isInstalledEnabled()) {
+                builtinFirmwareTv.setText(R.string.requires_ars);
+            } else {
+                builtinFirmwareTv.setText(R.string.firmware_unreadable);
+                builtinAntDetectedIv.setVisibility(View.VISIBLE);
+            }
+            setPackageAction(builtinFirmwareIv, snapshot.radioService);
         } else {
             builtinFirmwareTv.setText(R.string.not_available);
             builtinFirmwareTv.setTextColor(statusErrorColor);
-            builtinAntDetectedIv.setVisibility(View.INVISIBLE);
         }
-        if (external.isEmpty()) {
-            externalAdaptersTv.setVisibility(View.GONE);
-        } else {
-            StringBuilder value = new StringBuilder();
-            for (AntAdapterSnapshot adapter : external) {
-                if (value.length() > 0) value.append('\n');
-                value.append(adapter.displayName).append(": ").append(adapter.firmwareVersion);
-            }
-            externalAdaptersTv.setText(value.toString());
+
+        String externalText = ExternalAdapterReadings.format(external, snapshot.firmware.usbVersions.values(),
+                getString(R.string.ant_radio_service), getString(R.string.usb_devices),
+                getString(R.string.firmware_unknown), getString(R.string.detected_via_usb));
+        if (externalText.length() > 0) {
+            externalAdaptersTv.setText(externalText);
             externalAdaptersTv.setTextColor(statusSuccessColor);
-            externalAdaptersTv.setVisibility(View.VISIBLE);
+        } else if (snapshot.probeStatus == AntSupportSnapshot.ProbeStatus.CHECKING
+                || snapshot.serviceState == AntSupportSnapshot.ServiceState.QUERYING) {
+            externalAdaptersTv.setText(R.string.checking);
+            externalAdaptersTv.setTextColor(statusWarningColor);
+        } else {
+            externalAdaptersTv.setText(snapshot.serviceState == AntSupportSnapshot.ServiceState.AVAILABLE
+                    || snapshot.serviceState == AntSupportSnapshot.ServiceState.NO_ADAPTER
+                    ? R.string.no : R.string.not_available);
+            externalAdaptersTv.setTextColor(statusErrorColor);
         }
     }
 
@@ -559,15 +750,10 @@ public class MainActivity extends Activity {
         StringBuilder value = new StringBuilder();
         for (AntAdapterSnapshot adapter : adapters) {
             if (value.length() > 0) value.append(", ");
-            value.append(adapter.firmwareVersion);
+            String version = adapter.knownFirmwareVersion();
+            value.append(version != null ? version : getString(R.string.firmware_unknown));
         }
         return value.toString();
-    }
-
-    private int serviceMessage(AntSupportSnapshot.ServiceState state, int fallback) {
-        return state == AntSupportSnapshot.ServiceState.SERVICE_MISSING
-                || state == AntSupportSnapshot.ServiceState.SERVICE_DISABLED
-                || state == AntSupportSnapshot.ServiceState.SERVICE_TOO_OLD ? R.string.requires_ars : fallback;
     }
 
     private void renderUsbDevices(List<UsbDeviceSnapshot> devices) {
@@ -597,28 +783,36 @@ public class MainActivity extends Activity {
     }
 
     private void setPackageStatus(TextView text, ImageView icon, PackageState state) {
+        if (icon != null) setPackageAction(icon, state);
         if (state == null) {
             text.setText(R.string.checking);
             text.setTextColor(statusWarningColor);
             return;
         }
-        if (state.isInstalledEnabled()) {
+        if (state.isInstalledEnabled() || state.kind == PackageState.Kind.VERSION_TOO_OLD) {
             text.setText(state.versionName);
-            text.setTextColor(statusSuccessColor);
-            setActionIcon(icon, R.drawable.ic_info_outline_white_24dp);
-            icon.setTag(YES_TAG);
+            text.setTextColor(state.isInstalledEnabled() ? statusSuccessColor : statusWarningColor);
         } else {
             text.setText(state.kind == PackageState.Kind.INSTALLED_DISABLED ? R.string.disabled : R.string.not_available);
             text.setTextColor(state.kind == PackageState.Kind.INSTALLED_DISABLED ? statusWarningColor : statusErrorColor);
-            setActionIcon(icon, R.drawable.ic_file_download_black_24dp);
-            icon.setTag(NO_TAG);
         }
+    }
+
+    private void setPackageAction(ImageView icon, PackageState state) {
+        icon.setVisibility(state == null ? View.INVISIBLE : View.VISIBLE);
+        boolean installed = state != null && state.isInstalled();
+        setActionIcon(icon, installed ? R.drawable.ic_info_outline_white_24dp
+                : R.drawable.ic_file_download_black_24dp);
+        icon.setTag(installed ? YES_TAG : NO_TAG);
     }
 
     private int readinessText(AntReadiness readiness) {
         switch (readiness) {
             case READY_BUILT_IN: return R.string.ready_built_in;
             case READY_EXTERNAL_USB: return R.string.ready_external_usb;
+            case VERIFIED_BUILT_IN: return R.string.verified_built_in;
+            case VERIFIED_EXTERNAL_USB: return R.string.verified_external_usb;
+            case DETECTED_EXTERNAL_USB: return R.string.detected_via_usb;
             case SETUP_REQUIRED_SERVICE: return R.string.setup_required_service;
             case SETUP_REQUIRED_ADAPTER: return R.string.setup_required_adapter;
             case BLOCKED_PERMISSION: return R.string.blocked_permission;
@@ -638,13 +832,19 @@ public class MainActivity extends Activity {
     }
 
     @Override protected void onDestroy() {
+        cancelProbeWork();
+        doUnbindAntRadioService();
         probeExecutor.shutdownNow();
+        serviceExecutor.shutdownNow();
+        usbFirmwareExecutor.shutdownNow();
+        if (usbPermissionRequest != null) usbPermissionRequest.cancel();
+        if (usbPermissionAction != null) unregisterReceiver(usbPermissionReceiver);
         super.onDestroy();
     }
 
     public void statusIconClick(View view) {
         if (view.getId() == R.id.builtin_ant_detected_iv) {
-            Toast.makeText(this, R.string.requires_ars, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, builtinFirmwareTv.getText(), Toast.LENGTH_SHORT).show();
         } else if (view.getId() == R.id.ant_radio_service_lock_iv
                 || view.getId() == R.id.ant_radio_service_lock2_iv) {
             new AlertDialog.Builder(this).setIcon(R.drawable.ic_lock_red_24dp)
@@ -662,18 +862,27 @@ public class MainActivity extends Activity {
         PackageActionListener(String packageName) { this.packageName = packageName; }
 
         @Override public void onClick(View view) {
-            Object tag = view.getTag();
-            if (YES_TAG.equals(tag)) showInstalledAppDetails(MainActivity.this, packageName);
-            else openPackageListing(packageName);
+            openPackageAction(view, packageName);
         }
+    }
+
+    private void openPackageAction(View view, String packageName) {
+        if (YES_TAG.equals(view.getTag())) showInstalledAppDetails(this, packageName);
+        else openPackageListing(packageName);
     }
 
     private void openPackageListing(String packageName) {
         Intent market = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + packageName));
         try {
-            if (getPackageManager().resolveActivity(market, 0) != null) { startActivity(market); return; }
-            Intent web = new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + packageName));
-            if (getPackageManager().resolveActivity(web, 0) != null) { startActivity(web); return; }
+            startActivity(market);
+            return;
+        } catch (ActivityNotFoundException | SecurityException e) {
+            // A browser may still be available.
+        }
+        try {
+            startActivity(new Intent(Intent.ACTION_VIEW,
+                    Uri.parse("https://play.google.com/store/apps/details?id=" + packageName)));
+            return;
         } catch (ActivityNotFoundException e) {
             // Fall through to a visible explanation.
         } catch (SecurityException e) {
@@ -693,8 +902,7 @@ public class MainActivity extends Activity {
             intent.putExtra(Build.VERSION.SDK_INT == 8 ? "pkg" : "com.android.settings.ApplicationPkgName", packageName);
         }
         try {
-            if (context.getPackageManager().resolveActivity(intent, 0) != null) context.startActivity(intent);
-            else Toast.makeText(context, R.string.no_app_for_action, Toast.LENGTH_SHORT).show();
+            context.startActivity(intent);
         } catch (ActivityNotFoundException e) {
             Toast.makeText(context, R.string.no_app_for_action, Toast.LENGTH_SHORT).show();
         } catch (SecurityException e) {
