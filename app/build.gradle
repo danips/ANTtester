@@ -3,8 +3,12 @@ plugins {
 }
 
 android {
-    namespace = 'com.quantrity.anttester'
-    compileSdk = 36
+    namespace 'com.quantrity.anttester'
+    compileSdk {
+        version = release(37) {
+            minorApiLevel = 2
+        }
+    }
 
     buildFeatures {
         aidl = true
@@ -14,9 +18,9 @@ android {
     defaultConfig {
         applicationId "com.quantrity.anttester"
         minSdk = 7
-        targetSdk = 36
-        versionCode 201
-        versionName "2.01"
+        targetSdk = 37
+        versionCode 202
+        versionName "2.02"
         //testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -30,9 +34,11 @@ android {
 }
 
 def antLibFile = file('libs/android_antlib_4-16-0.aar')
-tasks.register('verifyAntLibChecksum') {
+def antLibChecksums = file('libs/SHA256SUMS')
+def verifyAntLibChecksum = tasks.register('verifyAntLibChecksum') {
+    inputs.files(antLibFile, antLibChecksums)
     doLast {
-        def expected = '944fab1871b18f2b191228af720aaa2eb7057312ffa18d7150f96d1859562d17'
+        def expected = antLibChecksums.text.trim().split(/\s+/)[0]
         def digest = java.security.MessageDigest.getInstance('SHA-256')
         antLibFile.withInputStream { input ->
             byte[] buffer = new byte[8192]
@@ -46,12 +52,12 @@ tasks.register('verifyAntLibChecksum') {
     }
 }
 
-tasks.whenTaskAdded { task ->
-    if (task.name == 'assembleRelease') task.dependsOn('verifyAntLibChecksum')
+tasks.matching { it.name == 'preReleaseBuild' }.configureEach {
+    dependsOn verifyAntLibChecksum
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.aar'])
+    implementation files(antLibFile)
     testImplementation 'junit:junit:4.13.2'
     //androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     //androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'

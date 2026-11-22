@@ -9,16 +9,14 @@ installable app components.
 
 ## Installation and releases
 
-The old Google Play listing is no longer advertised because it is not currently
-available. Until a signed public release is restored, build from source. The
-chosen future distribution route is a signed GitHub Release; each release must
-identify the exact source tag, Android/API support, ANT service versions tested,
-changelog, and SHA-256 checksum. Do not install the unsigned CI build; it is for
-build verification only.
+The [GitHub releases](https://github.com/danips/ANTtester/releases) include the
+tagged source and changelog. To install a version without a signed APK asset,
+build and sign the app locally. The unsigned release build is for verification.
 
 Release checklist:
 
-1. Create a version tag matching `versionName` and increment `versionCode`.
+1. Update `versionName`, `versionCode`, and the changelog, then tag the tested
+   release commit.
 2. Verify the bundled AAR against `app/libs/SHA256SUMS` and retain the license
    notices from the ANT Android SDK.
 3. Run the release build, lint, unit tests, and device smoke tests with both a
@@ -26,25 +24,22 @@ Release checklist:
 4. Sign through CI/release secrets, publish the APK and SHA-256 checksum with
    release notes, and retain the R8 mapping file privately.
 
-The supported source compatibility floor remains Android API 7. The current
-release is built with JDK 17+, Android SDK 36, and ANTLib 4.16.0. The app's ANT
+The app's minimum SDK is Android API 7. The app's ANT
 Radio Service adapter inspection requires a service version that supports the
 ANTLib adapter-provider API.
 
 ## Build
 
-The project requires JDK 17 or newer and Android SDK Platform 36. Use the
-committed Gradle Wrapper:
+The project requires JDK 17 or newer and Android SDK Platforms 37.0 and 37.2.
+Use the committed Gradle Wrapper:
 
 ```bash
-./gradlew assembleRelease
+./gradlew verifyAntLibChecksum assembleRelease
 ./gradlew lintDebug
 ./gradlew testDebugUnitTest
 ```
 
-The release build is minified with R8. Test it with an ANT-capable device and
-with an ANT USB adapter before publishing. Increment `versionCode` and
-`versionName` for every Play release.
+The release build is minified with R8.
 
 The bundled `android_antlib_4-16-0.aar` is ANTLib 4.16.0 from the ANT Android
 SDK. It communicates with the separately installed ANT Radio Service and ANT

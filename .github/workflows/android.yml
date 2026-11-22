@@ -16,5 +16,7 @@ jobs:
           distribution: temurin
           java-version: '21'
       - uses: android-actions/setup-android@v3
-      - run: sdkmanager "platforms;android-36"
-      - run: ./gradlew verifyAntLibChecksum assembleDebug assembleRelease lintDebug lintRelease testDebugUnitTest --warning-mode all
+        with:
+          cmdline-tools-version: '16111833'
+          packages: 'platform-tools platforms;android-37.0 platforms;android-37.2'
+      - run: ./gradlew verifyAntLibChecksum assembleDebug assembleRelease lintDebug lintRelease testDebugUnitTest
