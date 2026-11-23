@@ -7,7 +7,15 @@ final class ExternalAdapterReadings {
 
     static String format(Collection<String> serviceVersions, Collection<String> usbVersions,
                          String serviceHeading, String usbHeading, String unknown, String detectedViaUsb) {
-        // ANTLib UUIDs and Android USB device names cannot be matched across these sources.
+        // With one reading per source, show a single value if the readings agree or one lacks a version.
+        if (serviceVersions.size() == 1 && usbVersions.size() == 1) {
+            String serviceVersion = serviceVersions.iterator().next();
+            String usbVersion = usbVersions.iterator().next();
+            if (usbVersion == null) return serviceVersion == null ? detectedViaUsb : serviceVersion;
+            if (serviceVersion == null || usbVersion.equals(serviceVersion)) return usbVersion;
+        }
+
+        // ANTLib UUIDs and Android USB device names do not provide a common adapter ID.
         boolean showSource = !serviceVersions.isEmpty() && !usbVersions.isEmpty();
         StringBuilder text = new StringBuilder();
         appendGroup(text, usbVersions, showSource ? usbHeading : null, detectedViaUsb);
