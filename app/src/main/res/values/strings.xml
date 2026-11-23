@@ -20,6 +20,7 @@
 	<string name="checking" tools:ignore="MissingTranslation">Checking…</string>
 	<string name="detected_via_usb" tools:ignore="MissingTranslation">Detected via USB</string>
 	<string name="disabled" tools:ignore="MissingTranslation">Disabled</string>
+	<string name="enable_ars" tools:ignore="MissingTranslation">Enable ARS</string>
 	<string name="error_title">Error</string>
 	<string name="external_ant_adapters" tools:ignore="MissingTranslation">External ANT adapters:</string>
 	<string name="firmware_unknown" tools:ignore="MissingTranslation">Unknown</string>
@@ -31,14 +32,17 @@
 	<string name="no_app_for_action" tools:ignore="MissingTranslation">No app is available for this action.</string>
 	<string name="not_available">N/A</string>
 	<string name="not_found">Not found</string>
+	<string name="open_ant_radio_service_settings" tools:ignore="MissingTranslation">Open ANT Radio Service settings</string>
 	<string name="requires_ars">Requires ARS</string>
 	<string name="ready_built_in" tools:ignore="MissingTranslation">Ready — built-in ANT adapter</string>
 	<string name="ready_external_usb" tools:ignore="MissingTranslation">Ready — external ANT adapter</string>
-	<string name="verified_built_in" tools:ignore="MissingTranslation">Built-in ANT verified directly</string>
+	<string name="verified_built_in" tools:ignore="MissingTranslation">Built-in ANT firmware verified</string>
 	<string name="verified_external_usb" tools:ignore="MissingTranslation">External ANT verified via USB</string>
 	<string name="setup_required_adapter" tools:ignore="MissingTranslation">Setup required — connect a compatible ANT adapter</string>
 	<string name="setup_required_service" tools:ignore="MissingTranslation">Setup required — install or enable ANT service</string>
 	<string name="unsupported" tools:ignore="MissingTranslation">Unsupported — no ANT hardware route detected</string>
+	<string name="update_ars" tools:ignore="MissingTranslation">Update ARS</string>
+	<string name="update_ant_radio_service" tools:ignore="MissingTranslation">Update ANT Radio Service</string>
 	<string name="unknown_error" tools:ignore="MissingTranslation">Could not verify ANT support</string>
 	<string name="usb_devices">Attached USB devices</string>
 	<string name="usb_on_the_go_support">USB On-The-Go support:</string>

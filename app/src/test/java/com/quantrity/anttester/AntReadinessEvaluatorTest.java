@@ -1,6 +1,8 @@
 package com.quantrity.anttester;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
@@ -46,9 +48,55 @@ public class AntReadinessEvaluatorTest {
         AntSupportSnapshot snapshot = snapshot(true, false, missing(), missing(),
                 PermissionState.Kind.NOT_DECLARED, AntSupportSnapshot.ServiceState.SERVICE_MISSING,
                 Collections.<AntAdapterSnapshot>emptyList());
+        assertTrue(snapshot.allowsDirectBuiltInProbe());
         snapshot = snapshot.withFirmware(snapshot.firmware.withBuiltIn(
                 AntFirmwareFacts.BuiltInState.VERIFIED, "AUM1.04B22"));
         assertEquals(AntReadiness.VERIFIED_BUILT_IN, AntReadinessEvaluator.evaluate(snapshot).readiness);
+    }
+
+    @Test public void disabledRadioServiceLeavesTheBuiltInHalRouteAvailable() {
+        PackageState disabled = new PackageState("radio", PackageState.Kind.INSTALLED_DISABLED, "3.0.0", 30000, null);
+        AntSupportSnapshot snapshot = snapshot(true, false, disabled, missing(),
+                PermissionState.Kind.NOT_DECLARED, AntSupportSnapshot.ServiceState.SERVICE_DISABLED,
+                Collections.<AntAdapterSnapshot>emptyList());
+        assertTrue(snapshot.allowsDirectBuiltInProbe());
+        AntSupportSnapshot verified = snapshot.withFirmware(snapshot.firmware.withBuiltIn(
+                AntFirmwareFacts.BuiltInState.VERIFIED, "AUM1.04B22"));
+        assertEquals(AntReadiness.VERIFIED_BUILT_IN, AntReadinessEvaluator.evaluate(verified).readiness);
+    }
+
+    @Test public void installedOrUnverifiedRadioServiceDoesNotStartTheDirectHalProbe() {
+        for (PackageState.Kind kind : new PackageState.Kind[] {PackageState.Kind.INSTALLED_ENABLED,
+                PackageState.Kind.VERSION_TOO_OLD, PackageState.Kind.NOT_VISIBLE, PackageState.Kind.QUERY_ERROR}) {
+            PackageState radio = new PackageState("radio", kind, null, 0, null);
+            AntSupportSnapshot snapshot = snapshot(true, false, radio, missing(),
+                    PermissionState.Kind.NOT_DECLARED, AntSupportSnapshot.ServiceState.NOT_QUERIED,
+                    Collections.<AntAdapterSnapshot>emptyList());
+            assertFalse(kind.name(), snapshot.allowsDirectBuiltInProbe());
+        }
+        assertFalse(snapshot(false, true, missing(), missing(), PermissionState.Kind.NOT_DECLARED,
+                AntSupportSnapshot.ServiceState.SERVICE_MISSING,
+                Collections.<AntAdapterSnapshot>emptyList()).allowsDirectBuiltInProbe());
+    }
+
+    @Test public void usesTheLegacyRouteOnlyWhenTheBuiltInRadioIsUnambiguous() {
+        PackageState old = new PackageState("radio", PackageState.Kind.VERSION_TOO_OLD, "3.0.0", 30000, null);
+        AntSupportSnapshot snapshot = legacySnapshot(old, true, false);
+        assertTrue(snapshot.allowsLegacyBuiltInProbe(16, false));
+        assertFalse(snapshot.allowsLegacyBuiltInProbe(23, false));
+        assertFalse(snapshot.allowsLegacyBuiltInProbe(16, true));
+        assertFalse(legacySnapshot(old, true, true).allowsLegacyBuiltInProbe(16, false));
+        assertFalse(legacySnapshot(old, false, false).allowsLegacyBuiltInProbe(16, false));
+        assertFalse(legacySnapshot(installed(), true, false).allowsLegacyBuiltInProbe(16, false));
+    }
+
+    private static AntSupportSnapshot legacySnapshot(PackageState radio, boolean builtIn, boolean addOn) {
+        return new AntSupportSnapshot(AntSupportSnapshot.ProbeStatus.COMPLETE, builtIn, false, addOn,
+                radio, missing(), installed(), installed(),
+                new PermissionState(PermissionState.Kind.GRANTED, PERMISSION),
+                AntSupportSnapshot.ServiceState.SERVICE_TOO_OLD,
+                Collections.<AntAdapterSnapshot>emptyList(), Collections.<UsbDeviceSnapshot>emptyList(),
+                Collections.<String>emptyList());
     }
 
     @Test public void usbDetectionAndAFirmwareReplyAreDifferentStates() {

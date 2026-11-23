@@ -25,9 +25,9 @@ public class PermissionInspectorTest {
 
     @Test public void usesTheHalPermissionWhenTheRadioServiceDeclaresBoth() {
         PermissionState result = PermissionInspector.inspect(
-                new String[]{PERMISSION, AntHalFirmwareProbe.PERMISSION},
+                new String[]{PERMISSION, BuiltInAntFirmwareProbe.HAL_PERMISSION},
                 new int[]{PackageInfo.REQUESTED_PERMISSION_GRANTED, 0});
-        assertEquals(AntHalFirmwareProbe.PERMISSION, result.permission);
+        assertEquals(BuiltInAntFirmwareProbe.HAL_PERMISSION, result.permission);
         assertEquals(PermissionState.Kind.DENIED, result.kind);
     }
 }

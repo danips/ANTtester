@@ -15,13 +15,13 @@ final class AntVersionMessage {
         return frame;
     }
 
-    static byte[] halRequest() {
-        // The native HAL forwards a single size/ID/payload packet, as used by ant_app's version test.
+    static byte[] requestPacket() {
+        // The binder interfaces accept a single size/ID/payload packet.
         return new byte[] {2, REQUEST_MESSAGE, 0, ANT_VERSION};
     }
 
-    static String readHalVersion(byte[] packet) {
-        // The HAL callback omits the sync and checksum bytes.
+    static String readVersionPacket(byte[] packet) {
+        // Binder replies omit the USB sync and checksum bytes.
         if (packet == null || packet.length < 2 || packet[1] != ANT_VERSION
                 || (packet[0] & 0xff) != packet.length - 2) {
             return null;

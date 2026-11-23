@@ -77,6 +77,18 @@ final class AntSupportSnapshot {
                 usbDevices, issues, readings);
     }
 
+    boolean allowsDirectBuiltInProbe() {
+        return builtInFeatureDeclared && radioService != null
+                && (radioService.kind == PackageState.Kind.MISSING
+                || radioService.kind == PackageState.Kind.INSTALLED_DISABLED);
+    }
+
+    boolean allowsLegacyBuiltInProbe(int sdkVersion, boolean usbDevicesPresent) {
+        // The legacy interface does not identify which adapter answered the version query.
+        return sdkVersion < 23 && builtInFeatureDeclared && !usbDevicesPresent && !antAddOnSupported
+                && radioService != null && radioService.kind == PackageState.Kind.VERSION_TOO_OLD;
+    }
+
     private static <T> List<T> immutable(List<T> values) {
         return Collections.unmodifiableList(new ArrayList<T>(values == null
                 ? Collections.<T>emptyList() : values));

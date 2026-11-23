@@ -18,7 +18,7 @@ final class AntReadinessEvaluator {
             }
         }
         if (snapshot.firmware.builtInVersion != null) {
-            return new AntReadinessResult(AntReadiness.VERIFIED_BUILT_IN, "Built-in ANT verified directly");
+            return new AntReadinessResult(AntReadiness.VERIFIED_BUILT_IN, "Built-in ANT firmware verified");
         }
         if (snapshot.firmware.hasVerifiedUsb()) {
             return new AntReadinessResult(AntReadiness.VERIFIED_EXTERNAL_USB, "External ANT verified via USB");

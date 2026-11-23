@@ -22,13 +22,13 @@ final class PermissionInspector {
         PermissionState fallback = new PermissionState(PermissionState.Kind.NOT_DECLARED, ANT_HARDWARE_PERMISSION);
         for (int i = 0; i < requested.length; i++) {
             String permission = requested[i];
-            if (AntHalFirmwareProbe.PERMISSION.equals(permission) || ANT_HARDWARE_PERMISSION.equals(permission)) {
+            if (BuiltInAntFirmwareProbe.HAL_PERMISSION.equals(permission) || ANT_HARDWARE_PERMISSION.equals(permission)) {
                 PermissionState.Kind kind = i >= flags.length ? PermissionState.Kind.NOT_DECLARED
                         : (flags[i] & PackageInfo.REQUESTED_PERMISSION_GRANTED) != 0
                         ? PermissionState.Kind.GRANTED : PermissionState.Kind.DENIED;
                 PermissionState result = new PermissionState(kind, permission);
                 // The radio service uses ANTRADIO to bind the built-in HAL when it declares both.
-                if (AntHalFirmwareProbe.PERMISSION.equals(permission)) return result;
+                if (BuiltInAntFirmwareProbe.HAL_PERMISSION.equals(permission)) return result;
                 fallback = result;
             }
         }

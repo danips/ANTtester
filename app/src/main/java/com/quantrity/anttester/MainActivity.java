@@ -99,7 +99,7 @@ public class MainActivity extends Activity {
     private final ExecutorService usbFirmwareExecutor = Executors.newSingleThreadExecutor();
     private PackageInspector packageInspector;
     private UsbInspector usbInspector;
-    private AntHalFirmwareProbe halFirmwareProbe;
+    private BuiltInAntFirmwareProbe builtInFirmwareProbe;
     private RadioConnection radioConnection;
     private String usbPermissionAction;
     private PendingIntent usbPermissionRequest;
@@ -182,7 +182,7 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
         packageInspector = new PackageInspector(this);
         usbInspector = new UsbInspector(this);
-        halFirmwareProbe = new AntHalFirmwareProbe(this);
+        builtInFirmwareProbe = new BuiltInAntFirmwareProbe(this);
         if (Build.VERSION.SDK_INT >= 35) Api35Insets.apply(findViewById(android.R.id.content));
 
         statusErrorColor = getResources().getColor(R.color.status_error);
@@ -231,7 +231,7 @@ public class MainActivity extends Activity {
             @Override public void onClick(View view) {
                 if (Build.VERSION.SDK_INT >= 23 && activeSnapshot != null
                         && activeSnapshot.firmware.builtInState == AntFirmwareFacts.BuiltInState.PERMISSION_REQUIRED) {
-                    requestPermissions(new String[] {AntHalFirmwareProbe.PERMISSION}, ANT_HAL_PERMISSION_REQUEST);
+                    requestPermissions(new String[] {BuiltInAntFirmwareProbe.HAL_PERMISSION}, ANT_HAL_PERMISSION_REQUEST);
                 } else {
                     openPackageAction(view, AntPackages.RADIO_SERVICE);
                 }
@@ -351,7 +351,7 @@ public class MainActivity extends Activity {
                 && (snapshot.builtInFeatureDeclared || snapshot.usbHostSupported);
         activeSnapshot = canQuery ? snapshot.withService(AntSupportSnapshot.ServiceState.QUERYING,
                 snapshot.adapters, null) : snapshot;
-        startHalFirmwareProbe(generation);
+        startBuiltInFirmwareProbe(generation, !usbScan.devices.isEmpty());
         if (Build.VERSION.SDK_INT >= 12 && usbScan.manager != null) {
             startUsbFirmwareProbe(generation, usbScan, requestUsbAccess);
         }
@@ -360,12 +360,13 @@ public class MainActivity extends Activity {
         finishRefresh(generation);
     }
 
-    private void startHalFirmwareProbe(final long generation) {
-        if (!activeSnapshot.builtInFeatureDeclared || activeSnapshot.radioService == null
-                || activeSnapshot.radioService.kind != PackageState.Kind.MISSING) return;
-        ComponentName service = AntHalFirmwareProbe.findService(this);
+    private void startBuiltInFirmwareProbe(final long generation, boolean usbDevicesPresent) {
+        boolean legacy = activeSnapshot.allowsLegacyBuiltInProbe(Build.VERSION.SDK_INT, usbDevicesPresent);
+        if (!legacy && !activeSnapshot.allowsDirectBuiltInProbe()) return;
+        ComponentName service = legacy ? LegacyAntFirmwareQuery.findService(this)
+                : BuiltInAntFirmwareProbe.findHalService(this);
         if (service == null) return;
-        if (!AntHalFirmwareProbe.hasPermission(this)) {
+        if (!legacy && !BuiltInAntFirmwareProbe.hasHalPermission(this)) {
             if (Build.VERSION.SDK_INT >= 23) {
                 activeSnapshot = activeSnapshot.withFirmware(activeSnapshot.firmware.withBuiltIn(
                         AntFirmwareFacts.BuiltInState.PERMISSION_REQUIRED, null));
@@ -374,7 +375,7 @@ public class MainActivity extends Activity {
         }
         activeSnapshot = activeSnapshot.withFirmware(activeSnapshot.firmware.withBuiltIn(
                 AntFirmwareFacts.BuiltInState.CHECKING, null));
-        halFirmwareProbe.start(service, new AntHalFirmwareProbe.Listener() {
+        BuiltInAntFirmwareProbe.Listener listener = new BuiltInAntFirmwareProbe.Listener() {
             @Override public void onResult(String version) {
                 if (!isCurrent(generation)) return;
                 activeSnapshot = activeSnapshot.withFirmware(activeSnapshot.firmware.withBuiltIn(
@@ -383,7 +384,9 @@ public class MainActivity extends Activity {
                 render(activeSnapshot);
                 finishRefresh(generation);
             }
-        });
+        };
+        if (legacy) builtInFirmwareProbe.startLegacy(service, listener);
+        else builtInFirmwareProbe.startHal(service, listener);
     }
 
     @TargetApi(12)
@@ -589,7 +592,7 @@ public class MainActivity extends Activity {
         probeFuture = null;
         if (usbFirmwareFuture != null) usbFirmwareFuture.cancel(true);
         usbFirmwareFuture = null;
-        halFirmwareProbe.cancel();
+        builtInFirmwareProbe.cancel();
         refreshActive = false;
         refreshAgain = false;
         usbAccessQueued = false;
@@ -715,8 +718,18 @@ public class MainActivity extends Activity {
             builtinFirmwareTv.setText(R.string.checking);
         } else if (snapshot.firmware.builtInState == AntFirmwareFacts.BuiltInState.FAILED) {
             builtinFirmwareTv.setText(R.string.firmware_unreadable);
+        } else if (snapshot.builtInFeatureDeclared
+                && snapshot.serviceState == AntSupportSnapshot.ServiceState.SERVICE_TOO_OLD) {
+            builtinFirmwareTv.setText(R.string.update_ars);
+            builtinFirmwareIv.setContentDescription(getString(R.string.update_ant_radio_service));
+            setActionIcon(builtinFirmwareIv, R.drawable.ic_file_download_black_24dp);
+            builtinFirmwareIv.setTag(NO_TAG);
+            builtinFirmwareIv.setVisibility(View.VISIBLE);
         } else if (snapshot.builtInFeatureDeclared) {
-            if (snapshot.radioService == null || !snapshot.radioService.isInstalledEnabled()) {
+            if (snapshot.radioService != null && snapshot.radioService.kind == PackageState.Kind.INSTALLED_DISABLED) {
+                builtinFirmwareTv.setText(R.string.enable_ars);
+                builtinFirmwareIv.setContentDescription(getString(R.string.open_ant_radio_service_settings));
+            } else if (snapshot.radioService == null || !snapshot.radioService.isInstalledEnabled()) {
                 builtinFirmwareTv.setText(R.string.requires_ars);
             } else {
                 builtinFirmwareTv.setText(R.string.firmware_unreadable);

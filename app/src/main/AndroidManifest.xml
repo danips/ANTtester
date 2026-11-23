@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="com.dsi.ant.permission.ANTRADIO" />
+    <uses-permission android:name="com.dsi.ant.permission.ANT" android:maxSdkVersion="22" />
+    <uses-permission android:name="com.dsi.ant.permission.ANT_ADMIN" android:maxSdkVersion="22" />
 
     <queries>
         <package android:name="com.dsi.ant.server"/>

@@ -23,6 +23,7 @@ import android.os.SystemClock;
 import android.provider.Settings;
 import android.util.Log;
 
+import com.dsi.ant.IAnt_6;
 import com.dsi.ant.server.IAntHal;
 import com.dsi.ant.server.IAntHalCallback;
 
@@ -33,9 +34,9 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 
-final class AntHalFirmwareProbe {
-    static final String PERMISSION = "com.dsi.ant.permission.ANTRADIO";
-    private static final String TAG = "AntHalFirmwareProbe";
+final class BuiltInAntFirmwareProbe {
+    static final String HAL_PERMISSION = "com.dsi.ant.permission.ANTRADIO";
+    private static final String TAG = "BuiltInAntFirmwareProbe";
     private static final String SERVICE_ACTION = "com.dsi.ant.server.IAntHal";
     private static final String HAL_PACKAGE = "com.dsi.ant.server";
     private static final int CONNECT_TIMEOUT_MS = 2500;
@@ -43,7 +44,7 @@ final class AntHalFirmwareProbe {
     private static final int VERSION_TIMEOUT_MS = 1500;
     private static final int RESTORE_TIMEOUT_MS = 3000;
     private static final int RESTORE_POLL_MS = 50;
-    // The platform HAL shares one callback and radio across activity instances.
+    // Both built-in routes share the same radio across activity instances.
     private static final ExecutorService WORKER = Executors.newSingleThreadExecutor();
 
     interface Listener {
@@ -55,31 +56,39 @@ final class AntHalFirmwareProbe {
     private Future<?> task;
     private int generation;
 
-    AntHalFirmwareProbe(Context context) {
+    BuiltInAntFirmwareProbe(Context context) {
         this.context = context.getApplicationContext();
     }
 
-    static ComponentName findService(Context context) {
+    static ComponentName findHalService(Context context) {
         Intent intent = new Intent(SERVICE_ACTION).setPackage(HAL_PACKAGE);
         ResolveInfo match = context.getPackageManager().resolveService(intent, 0);
         ServiceInfo service = match == null ? null : match.serviceInfo;
-        if (service == null || !service.exported || !PERMISSION.equals(service.permission)
+        if (service == null || !service.exported || !HAL_PERMISSION.equals(service.permission)
                 || (service.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) == 0) {
             return null;
         }
         return new ComponentName(service.packageName, service.name);
     }
 
-    static boolean hasPermission(Context context) {
-        return context.checkCallingOrSelfPermission(PERMISSION) == PackageManager.PERMISSION_GRANTED;
+    static boolean hasHalPermission(Context context) {
+        return context.checkCallingOrSelfPermission(HAL_PERMISSION) == PackageManager.PERMISSION_GRANTED;
     }
 
-    void start(final ComponentName component, final Listener listener) {
+    void startHal(ComponentName component, Listener listener) {
+        start(component, SERVICE_ACTION, listener);
+    }
+
+    void startLegacy(ComponentName component, Listener listener) {
+        start(component, LegacyAntFirmwareQuery.ACTION, listener);
+    }
+
+    private void start(final ComponentName component, final String action, final Listener listener) {
         if (task != null) return;
         final int requestedGeneration = generation;
         task = WORKER.submit(new Runnable() {
             @Override public void run() {
-                final String version = readBoundService(component);
+                final String version = readBoundService(component, action);
                 main.post(new Runnable() {
                     @Override public void run() {
                         if (requestedGeneration != generation) return;
@@ -99,7 +108,7 @@ final class AntHalFirmwareProbe {
         }
     }
 
-    private String readBoundService(ComponentName component) {
+    private String readBoundService(ComponentName component, String action) {
         final CountDownLatch connected = new CountDownLatch(1);
         final AtomicReference<IBinder> binder = new AtomicReference<IBinder>();
         ServiceConnection connection = new ServiceConnection() {
@@ -124,16 +133,21 @@ final class AntHalFirmwareProbe {
 
         boolean bindRequested = false;
         try {
-            if (Thread.currentThread().isInterrupted() || !hasPermission(context)) return null;
+            boolean legacy = LegacyAntFirmwareQuery.ACTION.equals(action);
+            boolean permitted = legacy ? LegacyAntFirmwareQuery.hasPermissions(context) : hasHalPermission(context);
+            if (Thread.currentThread().isInterrupted() || !permitted) return null;
             bindRequested = true;
-            Intent intent = new Intent(SERVICE_ACTION).setComponent(component);
+            Intent intent = new Intent(action).setComponent(component);
             if (!context.bindService(intent, connection, Context.BIND_AUTO_CREATE)
                     || !connected.await(CONNECT_TIMEOUT_MS, TimeUnit.MILLISECONDS)) {
-                Log.d(TAG, "ANT HAL service did not connect");
+                Log.d(TAG, "Built-in ANT firmware service did not connect");
                 return null;
             }
             IBinder service = binder.get();
-            if (service == null || !SERVICE_ACTION.equals(service.getInterfaceDescriptor())) return null;
+            if (service == null || !action.equals(service.getInterfaceDescriptor())) return null;
+            if (legacy) {
+                return LegacyAntFirmwareQuery.read(context, IAnt_6.Stub.asInterface(service), !airplaneModeOn());
+            }
             return query(IAntHal.Stub.asInterface(service));
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
@@ -161,7 +175,7 @@ final class AntHalFirmwareProbe {
             }
 
             @Override public void antHalRxMessage(byte[] packet) {
-                String received = AntVersionMessage.readHalVersion(packet);
+                String received = AntVersionMessage.readVersionPacket(packet);
                 if (received != null && version.compareAndSet(null, received)) replied.countDown();
             }
         };
@@ -191,7 +205,7 @@ final class AntHalFirmwareProbe {
             }
             radioBecameReady = true;
             if (Thread.currentThread().isInterrupted()) return null;
-            if (hal.ANTTxMessage(AntVersionMessage.halRequest()) != SUCCESS
+            if (hal.ANTTxMessage(AntVersionMessage.requestPacket()) != SUCCESS
                     || !replied.await(VERSION_TIMEOUT_MS, TimeUnit.MILLISECONDS)) {
                 Log.d(TAG, "No ANT version reply from the built-in radio");
                 return null;

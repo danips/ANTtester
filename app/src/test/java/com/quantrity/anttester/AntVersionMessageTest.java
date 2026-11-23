@@ -40,13 +40,18 @@ public class AntVersionMessageTest {
     @Test public void readsTheBuiltInRadioVersionFromAHalCallback() {
         byte[] packet = {0x0c, 0x3e, 'A', 'O', 'V', '1', '.', '0', '8', 'B', '0', '0', 0, 0};
 
-        assertEquals("AOV1.08B00", AntVersionMessage.readHalVersion(packet));
+        assertEquals("AOV1.08B00", AntVersionMessage.readVersionPacket(packet));
         assertArrayEquals(new byte[] {0x02, 0x4d, 0x00, 0x3e},
-                AntVersionMessage.halRequest());
+                AntVersionMessage.requestPacket());
     }
 
     @Test public void ignoresATruncatedHalPacketOrAnUnrelatedMessage() {
-        assertNull(AntVersionMessage.readHalVersion(new byte[] {3, 0x3e, 'A', 'B'}));
-        assertNull(AntVersionMessage.readHalVersion(new byte[] {1, 0x6f, 0}));
+        assertNull(AntVersionMessage.readVersionPacket(new byte[] {3, 0x3e, 'A', 'B'}));
+        assertNull(AntVersionMessage.readVersionPacket(new byte[] {1, 0x6f, 0}));
+    }
+
+    @Test public void readsTheXperiaLegacyServiceVersionReply() {
+        byte[] packet = {0x0b, 0x3e, 'A', 'U', 'M', '1', '.', '0', '3', 'B', '0', '0', 0};
+        assertEquals("AUM1.03B00", AntVersionMessage.readVersionPacket(packet));
     }
 }
