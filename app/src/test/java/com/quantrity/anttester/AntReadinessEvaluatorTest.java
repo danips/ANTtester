@@ -6,6 +6,7 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
+import java.util.Arrays;
 import java.util.Collections;
 
 public class AntReadinessEvaluatorTest {
@@ -19,15 +20,42 @@ public class AntReadinessEvaluatorTest {
     @Test public void builtInRouteIsReadyOnlyWithAdapter() {
         AntSupportSnapshot snapshot = snapshot(true, false, installed(), installed(),
                 PermissionState.Kind.GRANTED, AntSupportSnapshot.ServiceState.AVAILABLE,
-                Collections.singletonList(new AntAdapterSnapshot("Built-in", "1", true, "a")));
+                Collections.singletonList(new AntAdapterSnapshot(AntAdapterSnapshot.Kind.BUILT_IN, "1", "a")));
         assertEquals(AntReadiness.READY_BUILT_IN, AntReadinessEvaluator.evaluate(snapshot).readiness);
     }
 
     @Test public void usbRouteIsReadyOnlyWithExternalAdapterAndUsbService() {
         AntSupportSnapshot snapshot = snapshot(false, true, installed(), installed(),
                 PermissionState.Kind.GRANTED, AntSupportSnapshot.ServiceState.AVAILABLE,
-                Collections.singletonList(new AntAdapterSnapshot("External", "1", false, "a")));
+                Collections.singletonList(new AntAdapterSnapshot(AntAdapterSnapshot.Kind.EXTERNAL, "1", "a")));
         assertEquals(AntReadiness.READY_EXTERNAL_USB, AntReadinessEvaluator.evaluate(snapshot).readiness);
+    }
+
+    @Test public void unclassifiedAdapterCannotEstablishEitherReadinessRoute() {
+        AntAdapterSnapshot adapter = new AntAdapterSnapshot(AntAdapterSnapshot.Kind.UNKNOWN, "1", "a");
+        AntSupportSnapshot snapshot = snapshot(false, true, installed(), installed(),
+                PermissionState.Kind.GRANTED, AntSupportSnapshot.ServiceState.AVAILABLE,
+                Collections.singletonList(adapter));
+        assertFalse(snapshot.hasBuiltInAnt());
+        assertEquals(AntReadiness.UNKNOWN_ERROR, AntReadinessEvaluator.evaluate(snapshot).readiness);
+
+        AntSupportSnapshot withBuiltInFeature = snapshot(true, true, installed(), installed(),
+                PermissionState.Kind.GRANTED, AntSupportSnapshot.ServiceState.AVAILABLE,
+                Collections.singletonList(adapter));
+        assertTrue(withBuiltInFeature.hasBuiltInAnt());
+        assertEquals(AntReadiness.UNKNOWN_ERROR, AntReadinessEvaluator.evaluate(withBuiltInFeature).readiness);
+    }
+
+    @Test public void adapterDiscoveryPreservesThePackagePermissionWarning() {
+        AntSupportSnapshot beforeDiscovery = snapshot(true, true, installed(), installed(),
+                PermissionState.Kind.DENIED, AntSupportSnapshot.ServiceState.QUERYING,
+                Collections.<AntAdapterSnapshot>emptyList());
+        AntSupportSnapshot discovered = beforeDiscovery.withService(AntSupportSnapshot.ServiceState.AVAILABLE,
+                Arrays.asList(new AntAdapterSnapshot(AntAdapterSnapshot.Kind.UNKNOWN, null, "a"),
+                        new AntAdapterSnapshot(AntAdapterSnapshot.Kind.EXTERNAL, "AJK2.05RAF", "b")), null);
+        assertTrue(beforeDiscovery.hasAntPermissionWarning());
+        assertTrue(discovered.hasAntPermissionWarning());
+        assertEquals(AntReadiness.READY_EXTERNAL_USB, AntReadinessEvaluator.evaluate(discovered).readiness);
     }
 
     @Test public void usbHostAloneRequiresAdapter() {
@@ -114,8 +142,9 @@ public class AntReadinessEvaluatorTest {
     @Test public void missingPermissionMetadataDoesNotInvalidateAnAdapterReply() {
         AntSupportSnapshot snapshot = snapshot(false, true, installed(), installed(),
                 PermissionState.Kind.NOT_DECLARED, AntSupportSnapshot.ServiceState.AVAILABLE,
-                Collections.singletonList(new AntAdapterSnapshot("External", "1", false, "a")));
+                Collections.singletonList(new AntAdapterSnapshot(AntAdapterSnapshot.Kind.EXTERNAL, "1", "a")));
         assertEquals(AntReadiness.READY_EXTERNAL_USB, AntReadinessEvaluator.evaluate(snapshot).readiness);
+        assertFalse(snapshot.hasAntPermissionWarning());
     }
 
     @Test public void permissionIsBlockedSeparately() {

@@ -66,6 +66,8 @@ public class MainActivity extends Activity {
     private TextView addonAdapterSupportTv;
     private TextView builtinFirmwareTv;
     private TextView externalAdaptersTv;
+    private TextView unknownAdaptersTv;
+    private View unknownAdaptersRow;
     private TextView antHalServiceTv;
     private TextView antRadioServiceTv;
     private TextView antUsbServiceTv;
@@ -196,6 +198,8 @@ public class MainActivity extends Activity {
         addonAdapterSupportTv = findViewById(R.id.addon_adapter_support_tv);
         builtinFirmwareTv = findViewById(R.id.builtin_firmware_tv);
         externalAdaptersTv = findViewById(R.id.external_adapters_tv);
+        unknownAdaptersTv = findViewById(R.id.unknown_adapters_tv);
+        unknownAdaptersRow = findViewById(R.id.unknown_adapters_row);
         antHalServiceTv = findViewById(R.id.ant_hal_service_tv);
         antRadioServiceTv = findViewById(R.id.ant_radio_service_tv);
         antUsbServiceTv = findViewById(R.id.ant_usb_service_tv);
@@ -658,8 +662,7 @@ public class MainActivity extends Activity {
         antCapableIv.setColorFilter(color, PorterDuff.Mode.SRC_IN);
 
         boolean checking = snapshot.probeStatus == AntSupportSnapshot.ProbeStatus.CHECKING;
-        boolean builtIn = snapshot.builtInFeatureDeclared || snapshot.firmware.builtInVersion != null;
-        for (AntAdapterSnapshot adapter : snapshot.adapters) builtIn |= adapter.builtIn;
+        boolean builtIn = snapshot.hasBuiltInAnt();
         setBooleanStatus(builtinAntDetectedTv, checking ? null : builtIn);
         setBooleanStatus(usbHostSupportTv, checking ? null : snapshot.usbHostSupported);
         setRowVisibility(builtinFirmwareRow, builtinFirmwareDivider, builtIn);
@@ -677,10 +680,7 @@ public class MainActivity extends Activity {
         setRowVisibility(antUsbServiceRow, antUsbServiceDivider, snapshot.usbHostSupported);
         renderAdapters(snapshot);
         renderUsbDevices(snapshot.usbDevices);
-        boolean permissionBlocked = snapshot.serviceState == AntSupportSnapshot.ServiceState.PERMISSION_BLOCKED
-                || builtIn && snapshot.radioService != null && snapshot.radioService.isInstalledEnabled()
-                && snapshot.antPermission.kind == PermissionState.Kind.DENIED;
-        int permissionVisibility = permissionBlocked ? View.VISIBLE : View.INVISIBLE;
+        int permissionVisibility = snapshot.hasAntPermissionWarning() ? View.VISIBLE : View.INVISIBLE;
         antRadioServiceLockIv.setVisibility(permissionVisibility);
         antRadioServiceLock2Iv.setVisibility(permissionVisibility);
     }
@@ -694,10 +694,22 @@ public class MainActivity extends Activity {
     private void renderAdapters(AntSupportSnapshot snapshot) {
         ArrayList<AntAdapterSnapshot> builtin = new ArrayList<AntAdapterSnapshot>();
         ArrayList<String> external = new ArrayList<String>();
+        ArrayList<AntAdapterSnapshot> unknown = new ArrayList<AntAdapterSnapshot>();
         for (AntAdapterSnapshot adapter : snapshot.adapters) {
-            if (adapter.builtIn) builtin.add(adapter);
-            else external.add(adapter.knownFirmwareVersion());
+            switch (adapter.kind) {
+                case BUILT_IN:
+                    builtin.add(adapter);
+                    break;
+                case EXTERNAL:
+                    external.add(adapter.knownFirmwareVersion());
+                    break;
+                case UNKNOWN:
+                    unknown.add(adapter);
+                    break;
+            }
         }
+        unknownAdaptersRow.setVisibility(unknown.isEmpty() ? View.GONE : View.VISIBLE);
+        unknownAdaptersTv.setText(joinFirmware(unknown));
         builtinAntDetectedIv.setVisibility(View.INVISIBLE);
         builtinFirmwareIv.setVisibility(View.INVISIBLE);
         builtinFirmwareIv.setContentDescription(getString(R.string.ant_radio_service));

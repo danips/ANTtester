@@ -77,6 +77,24 @@ final class AntSupportSnapshot {
                 usbDevices, issues, readings);
     }
 
+    boolean hasAdapter(AntAdapterSnapshot.Kind kind) {
+        for (AntAdapterSnapshot adapter : adapters) {
+            if (adapter.kind == kind) return true;
+        }
+        return false;
+    }
+
+    boolean hasBuiltInAnt() {
+        return builtInFeatureDeclared || firmware.builtInVersion != null
+                || hasAdapter(AntAdapterSnapshot.Kind.BUILT_IN);
+    }
+
+    boolean hasAntPermissionWarning() {
+        return serviceState == ServiceState.PERMISSION_BLOCKED
+                || (hasBuiltInAnt() && radioService != null && radioService.isInstalledEnabled()
+                && antPermission.kind == PermissionState.Kind.DENIED);
+    }
+
     boolean allowsDirectBuiltInProbe() {
         return builtInFeatureDeclared && radioService != null
                 && (radioService.kind == PackageState.Kind.MISSING

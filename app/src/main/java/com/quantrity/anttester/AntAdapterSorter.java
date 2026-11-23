@@ -14,9 +14,11 @@ final class AntAdapterSorter {
                 ? Collections.<AntAdapterSnapshot>emptyList() : input);
         Collections.sort(result, new Comparator<AntAdapterSnapshot>() {
             @Override public int compare(AntAdapterSnapshot left, AntAdapterSnapshot right) {
-                if (left.builtIn != right.builtIn) return left.builtIn ? -1 : 1;
-                int value = left.displayName.compareToIgnoreCase(right.displayName);
-                return value != 0 ? value : left.adapterKey.compareToIgnoreCase(right.adapterKey);
+                int kind = left.kind.compareTo(right.kind);
+                if (kind != 0) return kind;
+                int key = left.adapterKey.compareToIgnoreCase(right.adapterKey);
+                if (key != 0) return key;
+                return left.firmwareVersion.compareTo(right.firmwareVersion);
             }
         });
         return result;

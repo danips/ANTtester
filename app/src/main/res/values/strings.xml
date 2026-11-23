@@ -43,6 +43,7 @@
 	<string name="unsupported" tools:ignore="MissingTranslation">Unsupported — no ANT hardware route detected</string>
 	<string name="update_ars" tools:ignore="MissingTranslation">Update ARS</string>
 	<string name="update_ant_radio_service" tools:ignore="MissingTranslation">Update ANT Radio Service</string>
+	<string name="unknown_ant_adapters" tools:ignore="MissingTranslation">ANT adapters of unknown type:</string>
 	<string name="unknown_error" tools:ignore="MissingTranslation">Could not verify ANT support</string>
 	<string name="usb_devices">Attached USB devices</string>
 	<string name="usb_on_the_go_support">USB On-The-Go support:</string>

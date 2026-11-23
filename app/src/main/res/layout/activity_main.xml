@@ -116,7 +116,7 @@
 
             <View style="@style/Widget.AntTester.Divider" />
 
-            <com.quantrity.anttester.ExternalAdapterRow
+            <com.quantrity.anttester.AdapterStatusRow
                 style="@style/Widget.AntTester.StatusRow"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -136,7 +136,31 @@
                     android:paddingLeft="4dp"
                     android:paddingRight="@dimen/status_action_area_width"
                     android:text="@string/not_available" />
-            </com.quantrity.anttester.ExternalAdapterRow>
+            </com.quantrity.anttester.AdapterStatusRow>
+
+            <com.quantrity.anttester.AdapterStatusRow
+                android:id="@+id/unknown_adapters_row"
+                style="@style/Widget.AntTester.StatusRow"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone">
+
+                <TextView
+                    style="@style/TextAppearance.AntTester.RowLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/unknown_ant_adapters" />
+
+                <TextView
+                    android:id="@+id/unknown_adapters_tv"
+                    style="@style/TextAppearance.AntTester.StatusValue"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:paddingLeft="4dp"
+                    android:paddingRight="@dimen/status_action_area_width"
+                    android:textColor="@color/status_warning" />
+            </com.quantrity.anttester.AdapterStatusRow>
 
             <LinearLayout
                 style="@style/Widget.AntTester.StatusRow"

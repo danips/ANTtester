@@ -7,20 +7,20 @@ import android.view.Gravity;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-public final class ExternalAdapterRow extends LinearLayout {
+public final class AdapterStatusRow extends LinearLayout {
     private TextView label;
     private TextView value;
     private int valueLeftPadding;
     private int valueRightPadding;
 
-    public ExternalAdapterRow(Context context, AttributeSet attrs) {
+    public AdapterStatusRow(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
     @Override protected void onFinishInflate() {
         super.onFinishInflate();
         label = (TextView) getChildAt(0);
-        value = (TextView) findViewById(R.id.external_adapters_tv);
+        value = (TextView) getChildAt(1);
         valueLeftPadding = value.getPaddingLeft();
         valueRightPadding = value.getPaddingRight();
     }

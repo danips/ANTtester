@@ -9,10 +9,10 @@ final class AntReadinessEvaluator {
             return new AntReadinessResult(AntReadiness.CHECKING, "Checking ANT support");
         }
         if (snapshot.serviceState == AntSupportSnapshot.ServiceState.AVAILABLE) {
-            if (hasBuiltIn(snapshot)) {
+            if (snapshot.hasAdapter(AntAdapterSnapshot.Kind.BUILT_IN)) {
                 return new AntReadinessResult(AntReadiness.READY_BUILT_IN, "Built-in ANT adapter ready");
             }
-            if (snapshot.usbHostSupported && hasExternal(snapshot)
+            if (snapshot.usbHostSupported && snapshot.hasAdapter(AntAdapterSnapshot.Kind.EXTERNAL)
                     && (installed(snapshot.usbService) || snapshot.antAddOnSupported)) {
                 return new AntReadinessResult(AntReadiness.READY_EXTERNAL_USB, "External ANT adapter ready");
             }
@@ -62,7 +62,7 @@ final class AntReadinessEvaluator {
             return new AntReadinessResult(AntReadiness.UNKNOWN_ERROR,
                     "ANT Radio Service could not be queried");
         }
-        if (!snapshot.builtInFeatureDeclared && !snapshot.usbHostSupported) {
+        if (!snapshot.builtInFeatureDeclared && !snapshot.usbHostSupported && snapshot.adapters.isEmpty()) {
             return new AntReadinessResult(AntReadiness.UNSUPPORTED, "No ANT hardware route detected");
         }
         if (snapshot.radioService == null || snapshot.radioService.kind == PackageState.Kind.MISSING
@@ -73,7 +73,7 @@ final class AntReadinessEvaluator {
             return new AntReadinessResult(AntReadiness.SETUP_REQUIRED_SERVICE,
                     "Install or enable ANT Radio Service");
         }
-        if (snapshot.usbHostSupported && hasExternal(snapshot)) {
+        if (snapshot.usbHostSupported && snapshot.hasAdapter(AntAdapterSnapshot.Kind.EXTERNAL)) {
             return new AntReadinessResult(AntReadiness.SETUP_REQUIRED_SERVICE, "Install ANT USB Service");
         }
         if (snapshot.serviceState == AntSupportSnapshot.ServiceState.NO_ADAPTER
@@ -83,16 +83,6 @@ final class AntReadinessEvaluator {
                     "Connect a compatible ANT adapter");
         }
         return new AntReadinessResult(AntReadiness.UNKNOWN_ERROR, "ANT support facts are contradictory");
-    }
-
-    private static boolean hasBuiltIn(AntSupportSnapshot snapshot) {
-        for (AntAdapterSnapshot adapter : snapshot.adapters) if (adapter.builtIn) return true;
-        return false;
-    }
-
-    private static boolean hasExternal(AntSupportSnapshot snapshot) {
-        for (AntAdapterSnapshot adapter : snapshot.adapters) if (!adapter.builtIn) return true;
-        return false;
     }
 
     private static boolean hasQueryError(AntSupportSnapshot snapshot) {
